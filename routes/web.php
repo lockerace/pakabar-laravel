@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +22,10 @@ Route::get('/', function () {
 
 Route::get('/login', [LoginController::class, "getLogin"]);
 Route::post('/login', [LoginController::class, "submitLogin"])->name('login-submit');
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function() {
+    Route::get('/', [AdminController::class, "getDashboard"]);
+    Route::get('/member', [UserController::class, "getMember"])->name('admin-member');
+    Route::post('/member', [UserController::class, "editMember"])->name('admin-member-submit');
+});
+

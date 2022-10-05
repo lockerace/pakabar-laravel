@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('no_anggota')->unique();
             $table->string('no_ktp')->unique();
             $table->integer('jabatan_id');
-            $table->string('foto');
+            $table->string('foto')->nullable();
             
         });
     }
