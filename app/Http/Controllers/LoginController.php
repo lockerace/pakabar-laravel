@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;   
 
 class LoginController extends Controller
 {
@@ -26,6 +27,8 @@ class LoginController extends Controller
                 'no_anggota' => ['The provided credentials are incorrect.'],
             ]);
         }
+
+        Auth::login($user);
  
         return $user->createToken("")->plainTextToken;
 

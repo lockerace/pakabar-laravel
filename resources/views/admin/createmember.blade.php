@@ -21,16 +21,18 @@
         </style>
     </head>
     <body class="antialiased">
-        <table class="table table-bordered">
-            <tr>
-                <th>Nama</th>
-                <th>Nomor Anggota</th>
-            </tr>
-            @foreach($data as $d)
-            <tr>
-                <td>{{ $d->name }}</td>
-                <td>{{ $d->no_anggota }}</td>
-            </tr>
-            @endforeach
+        <h3>Tambah Member Baru</h3>
+        <form action="{{ route('admin-member-submit') }}" method="post">
+            @csrf
+            <input name="email" placeholder="Email" type="email" required="required" />
+            <input name="name" placeholder="Nama Anggota" required="required" />
+            <input name="no_anggota" placeholder="Nomor Anggota" required="required" />
+            <input name="password" placeholder="Password" type="password" required="required" />
+            <input name="no_ktp" placeholder="Nomor KTP" required="required" />
+            <input name="jabatan_id" placeholder="ID Jabatan" required="required" />
+            
+            <button>Tambah Member</button>
+        </form>
+
     </body>
 </html>

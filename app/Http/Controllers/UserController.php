@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserRepository;
 use App\Models\NewsRepository;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -18,50 +19,58 @@ class UserController extends Controller
             'members' => $this->users->getAll()
         ];
 
-        return view('member', $data);
+        return view('admin.member', $data);
     }
 
-    function editMember(Request $request){
-        $member = $this->users->getById($request->id);
-
+    function editMember(Request $request, $id){
+        // dd($request, $id);
+        $member = $this->users->getById($id);
+      
         if($member == null){
-            $member = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => $request->password,
-                'no_anggota' => $request->no_anggota,
-                'no_ktp' => $request->no_ktp,
-                'jabatan_id' => $request->jabatan_id,
-                'foto' => $request->foto,
-            ]);
+            dd($member);
+            $member = new User;
+            $member->email = $request->email;
+            $member->name = $request->name;
+            $member->password = $request->password;
+            $member->no_anggota = $request->no_anggota;
+            $member->no_ktp = $request->no_ktp;
+            $member->jabatan_id = $request->jabatan_id;
+            $member->foto = $request->foto;
+            
             $member->save();
         } else{
-            $data = $this->validate($request, [
-                'name' => 'required',
-                'email' => 'required',
-                'password' => 'required',
-                'no_anggota' => 'required',
-                'no_ktp' => 'required',
-                'jabatan_id' => 'required',
-                'foto' => '',
-            ]);
-
-            $member->name = $data['name'];
-            $member->email = $data['email'];
-            $member->password = $data['password'];
-            $member->no_anggota = $data['no_anggota'];
-            $member->no_ktp = $data['no_ktp'];
-            $member->jabatan_id = $data['jabatan_id'];
-            $member->foto = $data['foto'];
+            
+            $member->name = $request->name;
+            $member->email = $request->email;
+            $member->password = $request->password;
+            $member->no_anggota = $request->no_anggota;
+            $member->no_ktp = $request->no_ktp;
+            $member->jabatan_id = $request->jabatan_id;
+            $member->foto = $request->foto;
 
             $member->save();
         }
 
-        return response()->redirect(route('admin-member'));
+        return response()->redirectTo(route('admin-member'));
     }
 
-    function deleteMember(Request $request){
-        $member = $this->users->getById($request->id);
+    function deleteMember($id){
+        $member = $this->users->getById($id);
         $member->delete();
+
+        return response()->redirectTo(route('admin-member'));
+    }
+
+    function addMember(){
+
+        return view('admin.createmember');
+    }
+
+    function updateMember($id){
+        $data = [
+            'members' => $this->users->getById($id),
+        ];
+
+        return view('admin.updatemember', $data);
     }
 }

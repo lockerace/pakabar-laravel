@@ -20,12 +20,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', [LoginController::class, "getLogin"]);
+Route::get('/login', [LoginController::class, "getLogin"])->name('login');
 Route::post('/login', [LoginController::class, "submitLogin"])->name('login-submit');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function() {
     Route::get('/', [AdminController::class, "getDashboard"]);
     Route::get('/member', [UserController::class, "getMember"])->name('admin-member');
-    Route::post('/member', [UserController::class, "editMember"])->name('admin-member-submit');
+    Route::get('/addmember', [UserController::class, "addMember"])->name('admin-member-submit');
+    Route::get('/updatemember/{id}', [UserController::class, "updateMember"])->name('admin-member-update');
+    Route::post('/addmember', [UserController::class, "editMember"])->name('admin-member-submit');
+    Route::post('/updatemember/{id}', [UserController::class, "editMember"])->name('admin-member-update');
+    Route::get('/deletemember/{id}', [UserController::class, "deleteMember"])->name('admin-member-delete');
+    
 });
 
