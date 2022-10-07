@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\NewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function()
     Route::get('/deletemember/{id}', [UserController::class, "deleteMember"])->name('admin-member-delete');
     Route::post('/jabatan', [UserController::class, "editJabatan"])->name('admin-jabatan-submit');
     Route::get('/deletejabatan/{id}', [UserController::class, "deleteJabatan"])->name('admin-jabatan-delete');
+    Route::get('/news', [NewsController::class, "getNews"])->name('admin-news');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -12,6 +12,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -58,6 +59,7 @@
                                     @if (Auth::user()->jabatan_id == 1)
                                       <a class="dropdown-item" href="{{ route('admin-jabatan') }}">Jabatan</a>
                                       <a class="dropdown-item" href="{{ route('admin-member') }}">Member</a>
+                                      <a class="dropdown-item" href="{{ route('admin-news') }}">News</a>
                                       <hr class="dropdown-divider">
                                     @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
