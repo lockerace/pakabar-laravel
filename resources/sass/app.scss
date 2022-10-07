@@ -6,3 +6,22 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+.slider {
+  position: relative;
+  width: 100%;
+  padding-bottom: 42.86%;
+  background-color: #E4002B;
+  color: white;
+}
+.slider-content {
+  position: absolute;
+  inset: 0;
+}
+.full-height {
+  min-height: calc(100vh - 55px);
+}
+footer {
+  background-color: #E4002B;
+  color: white;
+}
