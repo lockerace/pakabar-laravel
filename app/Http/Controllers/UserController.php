@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\UserRepository;
 use App\Models\NewsRepository;
 use App\Models\User;
@@ -23,16 +24,16 @@ class UserController extends Controller
         return view('admin.member', $data);
     }
 
-    function editMember(Request $request, $id){
-        // dd($request, $id);
-        $member = $this->users->getById($id);
+    function editMember(Request $request){
+        // dd($request->all());
+        $member = $this->users->getById($request->id);
 
         if($member == null){
             dd($member);
             $member = new User;
             $member->email = $request->email;
             $member->name = $request->name;
-            $member->password = $request->password;
+            $member->password = Hash::make($request->password);
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;
@@ -43,7 +44,7 @@ class UserController extends Controller
 
             $member->name = $request->name;
             $member->email = $request->email;
-            $member->password = $request->password;
+            $member->password = Hash::make($request->password);
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;

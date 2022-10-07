@@ -33,4 +33,10 @@ class LoginController extends Controller
         return redirect()->route('admin-member', ['token' => $user->createToken("")->plainTextToken]);
 
     }
+
+    function getLogout(){
+        Auth::logout();
+
+        return redirect()->route('home');
+    }
 }
