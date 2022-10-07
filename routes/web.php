@@ -29,6 +29,7 @@ Route::post('/logout', [LoginController::class, "getLogout"])->name('logout');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function() {
     Route::get('/', [AdminController::class, "getDashboard"])->name('dashboard');
+    Route::get('/member/foto/{path}', [UserController::class, "getFoto"])->name('admin-member-foto');
     Route::get('/member', [UserController::class, "getMember"])->name('admin-member');
     Route::post('/member', [UserController::class, "editMember"])->name('admin-member-submit');
     Route::post('/deletemember', [UserController::class, "deleteMember"])->name('admin-member-delete');

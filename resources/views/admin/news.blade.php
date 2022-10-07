@@ -3,7 +3,12 @@
 @section('content')
 <div class="container py-5">
   <h3>Data News</h3>
-  <a class="btn btn-primary mb-3" onclick="onNewsEdit()" data-bs-toggle="modal" data-bs-target="#editNewsModal" >Add News</a>
+  <div class="d-flex flex-row justify-content-end">
+      <a class="btn btn-primary mb-3 d-flex flex-row" onclick="onNewsEdit()" data-bs-toggle="modal" data-bs-target="#editNewsModal" >
+          <i class="material-icons d-block">add</i>
+          <span>Tambah</span>
+      </a>
+  </div>
   <table class="table table-bordered">
   <tr>
       <th>News</th>
@@ -15,11 +20,17 @@
       <td>{{ $d->judul }}</td>
       <td>{{ $d->konten }}</td>
       <td>
-        <a class="btn btn-primary" onclick="onNewsEdit(this)" data-news="{{$d}}" data-bs-toggle="modal" data-bs-target="#editNewsModal">Edit</a>
+        <a class="btn btn-link text-primary text-decoration-none d-flex flex-row" onclick="onNewsEdit(this)" data-news="{{$d}}" data-bs-toggle="modal" data-bs-target="#editNewsModal">
+          <i class="material-icons d-block">edit</i>
+          <span>Edit</span>
+        </a>
         <form action="{{ route('admin-news-delete') }}" method="post">
-        @csrf
+            @csrf
             <input type="hidden" name="id" value="{{$d->id}}"/>
-            <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Hapus</button>
+            <button class="btn btn-link text-danger text-decoration-none d-flex flex-row" onclick="return confirm('Are you sure?')">
+              <i class="material-icons d-block">delete</i>
+              <span>Hapus<span>
+            </button>
         </form>
       </td>
   </tr>
