@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Auth;   
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -21,7 +21,7 @@ class LoginController extends Controller
         ]);
 
         $user = User::where('no_anggota', $request->no_anggota)->first();
- 
+
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'no_anggota' => ['The provided credentials are incorrect.'],
@@ -29,8 +29,8 @@ class LoginController extends Controller
         }
 
         Auth::login($user);
- 
-        return $user->createToken("")->plainTextToken;
+
+        return redirect()->route('admin-member', ['token' => $user->createToken("")->plainTextToken]);
 
     }
 }

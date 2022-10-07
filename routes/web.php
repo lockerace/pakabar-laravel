@@ -17,11 +17,13 @@ use App\Http\Controllers\AdminController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('home');
 });
 
 Route::get('/login', [LoginController::class, "getLogin"])->name('login');
 Route::post('/login', [LoginController::class, "submitLogin"])->name('login-submit');
+
+Route::get('/logout', [LoginController::class, "getLogout"])->name('logout');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function() {
     Route::get('/', [AdminController::class, "getDashboard"]);
@@ -31,6 +33,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function()
     Route::post('/addmember', [UserController::class, "editMember"])->name('admin-member-submit');
     Route::post('/updatemember/{id}', [UserController::class, "editMember"])->name('admin-member-update');
     Route::get('/deletemember/{id}', [UserController::class, "deleteMember"])->name('admin-member-delete');
-    
+
 });
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

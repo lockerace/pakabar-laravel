@@ -14,7 +14,8 @@ class UserController extends Controller
         $this->news = $newsRepository;
     }
 
-    function getMember(){
+    function getMember($token = null){
+        \Log::info($token);
         $data = [
             'members' => $this->users->getAll()
         ];
@@ -25,7 +26,7 @@ class UserController extends Controller
     function editMember(Request $request, $id){
         // dd($request, $id);
         $member = $this->users->getById($id);
-      
+
         if($member == null){
             dd($member);
             $member = new User;
@@ -36,10 +37,10 @@ class UserController extends Controller
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;
             $member->foto = $request->foto;
-            
+
             $member->save();
         } else{
-            
+
             $member->name = $request->name;
             $member->email = $request->email;
             $member->password = $request->password;
