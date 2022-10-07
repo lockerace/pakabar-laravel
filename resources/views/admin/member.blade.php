@@ -3,7 +3,7 @@
 @section('content')
 <h3>Data Member</h3>
 <a class="btn btn-primary" onclick="onMemberEdit()" data-bs-toggle="modal" data-bs-target="#editMemberModal" >Add Member</a>
-
+<br><br>
 <table class="table table-bordered">
 <tr>
     <th>Nama</th>
