@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,5 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function()
     Route::post('/deletenews', [NewsController::class, "deleteNews"])->name('admin-news-delete');
 });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/news/{id}', [NewsController::class, "getNewsDetail"])->name('news');

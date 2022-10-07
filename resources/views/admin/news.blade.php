@@ -27,7 +27,7 @@
   </table>
   <form action="{{ route('admin-news-submit') }}" method="post">
   <div id="editNewsModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">News</h5>
@@ -42,7 +42,8 @@
               </div>
               <div class="mb-3">
                 <label for="newsKonten" class="form-label">Konten: </label>
-                <textarea id="newsKonten" class="form-control" rows="3" name="konten" placeholder="Isi" required="required"></textarea>
+                <div class="editor" data-id="newsKonten"></div>
+                <input id="newsKonten" class="form-control" type="hidden" name="konten" placeholder="Isi" required="required"></input>
               </div>
               <input id="newsId" name="id" type="hidden" value=""/>
         </div>

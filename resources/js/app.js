@@ -42,6 +42,7 @@ window.onJabatanEdit = (event)=>{
     id.value = jabatan.id;
 }
 
+var newsKontenEditor;
 window.onNewsEdit = (event)=>{    
     var news = {
         judul:"",
@@ -57,5 +58,22 @@ window.onNewsEdit = (event)=>{
 
     judul.value = news.judul;
     konten.value = news.konten;
+    newsKontenEditor.data.set(news.konten);
     id.value = news.id;
 }
+
+ClassicEditor
+.create( document.querySelector( '.editor' ) )
+.then(editor =>{
+    var konten = document.getElementById(editor.sourceElement.dataset.id);
+    if (editor.sourceElement.dataset.id == 'newsKonten') {
+        newsKontenEditor = editor
+    }
+    editor.model.document.on( 'change:data', () => {
+        var editorData = editor.getData();
+        konten.value = editorData
+    })
+})
+.catch( error => {
+    console.error( error );
+} );

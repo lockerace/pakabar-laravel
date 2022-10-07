@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\NewsRepository;
+use App\Models\News;
 
 class HomeController extends Controller
 {
@@ -11,8 +13,17 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    function __construct(NewsRepository $newsRepository) {
+        $this->news = $newsRepository;
+    }
+
     public function index()
     {
-        return view('home');
+        $data = [
+            'news' => $this->news->getAll(),
+        ];
+        return view('home', $data);
     }
+
 }
