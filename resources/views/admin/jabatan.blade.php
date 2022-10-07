@@ -24,14 +24,16 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <h5 class="modal-title">Jabatan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div class="modal-body">
             @csrf
-            <input id="jabatanName" name="name" placeholder="Nama Jabatan" required="required" />
+            <div class="mb-3">
+              <label for="jabatanName" class="form-label">Nama Jabatan: </label>
+              <input id="jabatanName" class="form-control" name="name" placeholder="Nama Jabatan" required="required" />
+            </div>
             <input id="jabatanId" name="id" type="hidden" value=""/>
       </div>
       <div class="modal-footer">

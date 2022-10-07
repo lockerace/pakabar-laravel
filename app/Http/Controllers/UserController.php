@@ -21,7 +21,8 @@ class UserController extends Controller
     function getMember($token = null){
         \Log::info($token);
         $data = [
-            'members' => $this->users->getAll()
+            'members' => $this->users->getAll(),
+            'jabatan' => $this->jabatan->getAll(),
         ];
 
         return view('admin.member', $data);

@@ -24,21 +24,42 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <h5 class="modal-title">Member</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div class="modal-body">
             @csrf
-            <input id="memberEmail" name="email" placeholder="Email" type="email" required="required" />
-            <input id="memberName" name="name" placeholder="Nama Anggota" required="required" />
-            <input id="memberNoAnggota" name="no_anggota" placeholder="Nomor Anggota" required="required" />
-            <input id="memberPassword" name="password" placeholder="Password" type="password" required="required" />
-            <input id="memberNoKtp" name="no_ktp" placeholder="Nomor KTP" required="required" />
-            <input id="memberJabatan" name="jabatan_id" placeholder="ID Jabatan" required="required" />
-            <input id="memberId" name="id" type="hidden" value=""/>
-      </div>
+            <div class="mb-3">
+              <label for="memberEmail" class="form-label">Email address: </label>
+                <input id="memberEmail" class="form-control" name="email" placeholder="Email" type="email" required="required" />
+            </div>
+            <div class="mb-3">
+              <label for="memberName" class="form-label">Member Name: </label>
+                <input id="memberName" class="form-control" name="name" placeholder="Nama Anggota" required="required" />
+            </div>
+            <div class="mb-3">
+              <label for="memberNoAnggota" class="form-label">No Anggota: </label>
+                <input id="memberNoAnggota" class="form-control" name="no_anggota" placeholder="Nomor Anggota" required="required" />
+            </div>
+            <div class="mb-3">
+              <label for="memberPassword" class="form-label">Password: </label>
+                <input id="memberPassword" class="form-control" name="password" placeholder="Password" type="password" required="required" />
+            </div>
+            <div class="mb-3">
+              <label for="memberNoKtp" class="form-label">No KTP: </label>
+                <input id="memberNoKtp" class="form-control" name="no_ktp" placeholder="Nomor KTP" required="required" />
+            </div>
+            <div class="mb-3">
+              <label for="memberJabatan" class="form-label">Jabatan: </label>
+                <select id="memberJabatan" class="form-select" name="jabatan_id">
+                  @foreach($jabatan as $d)
+                  <option value="{{ $d->id }}">{{ $d->name }}</option>
+                  @endforeach
+                </select>
+            </div>
+          <input id="memberId" name="id" type="hidden" value=""/>
+    </div>
       <div class="modal-footer">
         <button  class="btn btn-primary">Save changes</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
