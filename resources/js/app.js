@@ -41,3 +41,21 @@ window.onJabatanEdit = (event)=>{
     name.value = jabatan.name;
     id.value = jabatan.id;
 }
+
+window.onNewsEdit = (event)=>{    
+    var news = {
+        judul:"",
+        konten:"",
+        id:"",
+    };
+
+    if(event)
+        news = JSON.parse(event.dataset.news);
+    var judul = document.getElementById('newsJudul');
+    var konten = document.getElementById('newsKonten');
+    var id = document.getElementById('newsId');
+
+    judul.value = news.judul;
+    konten.value = news.konten;
+    id.value = news.id;
+}

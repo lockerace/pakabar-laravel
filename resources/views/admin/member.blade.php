@@ -16,7 +16,11 @@
       <td>{{ $d->no_anggota }}</td>
       <td>
         <a class="btn btn-primary" onclick="onMemberEdit(this)" data-member="{{$d}}" data-bs-toggle="modal" data-bs-target="#editMemberModal">Edit</a>
-        <a class="btn btn-danger" onclick="return confirm('Are you sure?')" href="{{ route('admin-member-delete', $d->id) }}">Hapus</a>
+        <form action="{{ route('admin-member-delete') }}" method="post">
+        @csrf
+            <input type="hidden" name="id" value="{{$d->id}}"/>
+            <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Hapus</button>
+        </form>
       </td>
   </tr>
   @endforeach

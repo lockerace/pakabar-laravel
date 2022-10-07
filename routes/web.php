@@ -29,12 +29,14 @@ Route::post('/logout', [LoginController::class, "getLogout"])->name('logout');
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function() {
     Route::get('/', [AdminController::class, "getDashboard"])->name('dashboard');
     Route::get('/member', [UserController::class, "getMember"])->name('admin-member');
-    Route::get('/jabatan', [UserController::class, "getJabatan"])->name('admin-jabatan');
     Route::post('/member', [UserController::class, "editMember"])->name('admin-member-submit');
-    Route::get('/deletemember/{id}', [UserController::class, "deleteMember"])->name('admin-member-delete');
+    Route::post('/deletemember', [UserController::class, "deleteMember"])->name('admin-member-delete');
+    Route::get('/jabatan', [UserController::class, "getJabatan"])->name('admin-jabatan');
     Route::post('/jabatan', [UserController::class, "editJabatan"])->name('admin-jabatan-submit');
-    Route::get('/deletejabatan/{id}', [UserController::class, "deleteJabatan"])->name('admin-jabatan-delete');
+    Route::post('/deletejabatan', [UserController::class, "deleteJabatan"])->name('admin-jabatan-delete');
     Route::get('/news', [NewsController::class, "getNews"])->name('admin-news');
+    Route::post('/news', [NewsController::class, "editNews"])->name('admin-news-submit');
+    Route::post('/deletenews', [NewsController::class, "deleteNews"])->name('admin-news-delete');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

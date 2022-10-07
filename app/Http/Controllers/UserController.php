@@ -60,8 +60,8 @@ class UserController extends Controller
         return response()->redirectTo(route('admin-member'));
     }
 
-    function deleteMember($id){
-        $member = $this->users->getById($id);
+    function deleteMember(Request $request){
+        $member = $this->users->getById($request->id);
         $member->delete();
 
         return response()->redirectTo(route('admin-member'));
@@ -92,8 +92,8 @@ class UserController extends Controller
         return response()->redirectTo(route('admin-jabatan'));
     }
 
-    function deleteJabatan($id){
-        $jabatan = $this->jabatan->getById($id);
+    function deleteJabatan(Request $request){
+        $jabatan = $this->jabatan->getById($request->id);
         $jabatan->delete();
 
         return response()->redirectTo(route('admin-jabatan'));
