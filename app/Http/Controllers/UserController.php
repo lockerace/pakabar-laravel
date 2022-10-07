@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\UserRepository;
+use App\Models\JabatanRepository;
 use App\Models\NewsRepository;
 use App\Models\User;
+use App\Models\Jabatan;
 
 class UserController extends Controller
 {
-    function __construct(UserRepository $userRepository, NewsRepository $newsRepository) {
+    function __construct(UserRepository $userRepository, NewsRepository $newsRepository, JabatanRepository $jabatanRepository) {
         $this->users = $userRepository;
         $this->news = $newsRepository;
+        $this->jabatan = $jabatanRepository;
     }
 
     function getMember($token = null){
@@ -29,7 +32,7 @@ class UserController extends Controller
         $member = $this->users->getById($request->id);
 
         if($member == null){
-            dd($member);
+            // dd($member);
             $member = new User;
             $member->email = $request->email;
             $member->name = $request->name;
@@ -63,16 +66,35 @@ class UserController extends Controller
         return response()->redirectTo(route('admin-member'));
     }
 
-    function addMember(){
-
-        return view('admin.createmember');
-    }
-
-    function updateMember($id){
+    function getJabatan(){
         $data = [
-            'members' => $this->users->getById($id),
+            'jabatan' => $this->jabatan->getAll()
         ];
 
-        return view('admin.updatemember', $data);
+        return view('admin.jabatan', $data);
+    }
+
+    function editJabatan(Request $request){
+        // dd($request->all());
+        $jabatan = $this->jabatan->getById($request->id);
+
+        if($jabatan == null){
+            // dd($jabatan);
+            $jabatan = new Jabatan;
+            $jabatan->name = $request->name;
+            $jabatan->save();
+        } else{
+            $jabatan->name = $request->name;
+            $jabatan->save();
+        }
+
+        return response()->redirectTo(route('admin-jabatan'));
+    }
+
+    function deleteJabatan($id){
+        $jabatan = $this->jabatan->getById($id);
+        $jabatan->delete();
+
+        return response()->redirectTo(route('admin-jabatan'));
     }
 }

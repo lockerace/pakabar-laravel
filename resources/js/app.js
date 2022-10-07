@@ -26,3 +26,18 @@ window.onMemberEdit = (event)=>{
     jabatan_id.value = member.jabatan_id;
     id.value = member.id;
 }
+
+window.onJabatanEdit = (event)=>{    
+    var jabatan = {
+        name:"",
+        id:"",
+    };
+
+    if(event)
+        jabatan = JSON.parse(event.dataset.jabatan);
+    var name = document.getElementById('jabatanName');
+    var id = document.getElementById('jabatanId');
+
+    name.value = jabatan.name;
+    id.value = jabatan.id;
+}
