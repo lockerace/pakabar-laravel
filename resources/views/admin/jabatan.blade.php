@@ -52,8 +52,8 @@
                         <input id="jabatanId" name="id" type="hidden" value=""/>
                     </div>
                     <div class="modal-footer">
-                        <button  class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button  class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     </div>
                 </div>
             </div>

@@ -9,4 +9,7 @@ class UserRepository {
     function getById($id) {
         return User::where('id', $id)->first();
     }
+    function getFounder(){
+        return User::where('jabatan_id', 3)->get();
+    }
 }

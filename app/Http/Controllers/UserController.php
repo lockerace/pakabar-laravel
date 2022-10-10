@@ -106,4 +106,22 @@ class UserController extends Controller
     function getFoto($path) {
         return Storage::download('foto/'.$path);
     }
+
+    function getProfile(Request $request){
+        $data = [
+            'members' => $this->users->getById($request->user()->id),
+            'jabatan' => $this->jabatan->getAll(),
+        ];
+        return view('profile', $data);
+    }
+
+    function updateProfile(Request $request){
+        $member = $this->users->getById($request->user()->id);
+        $member->email = $request->email;
+        $member->password = Hash::make($request->password);
+
+        $member->save();
+    
+        return redirect(route('member-profile'));
+    }
 }

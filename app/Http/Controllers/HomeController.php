@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\NewsRepository;
+use App\Models\UserRepository;
 use App\Models\News;
 
 class HomeController extends Controller
@@ -14,8 +15,9 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    function __construct(NewsRepository $newsRepository) {
+    function __construct(NewsRepository $newsRepository, UserRepository $userRepository) {
         $this->news = $newsRepository;
+        $this->user = $userRepository;
     }
 
     public function index()
@@ -27,7 +29,11 @@ class HomeController extends Controller
     }
 
     public function aboutUs(){
-        return view('aboutus');
+        $data = [
+            'founder' => $this->user->getFounder(),
+        ];
+
+        return view('aboutus', $data);
     }
 
 }

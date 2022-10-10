@@ -21,6 +21,9 @@ class JabatanSeeder extends Seeder
         ], 
         [
             'name' => 'member'
+        ],
+        [
+            'name' => 'founder'
         ]);
     }
 }

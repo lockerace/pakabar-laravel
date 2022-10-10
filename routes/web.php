@@ -44,3 +44,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/news/{id}', [NewsController::class, "getNewsDetail"])->name('news');
 Route::get('/aboutus', [HomeController::class, 'aboutUs'])->name('about-us');
+Route::get('/member/foto/{path}', [UserController::class, "getFoto"])->name('member-foto');
+Route::get('/changeprofile', [UserController::class, "getProfile"])->name('profile');
+Route::post('/changeprofile', [UserController::class, "updateProfile"])->name('profile-submit');
