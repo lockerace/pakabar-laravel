@@ -27,7 +27,7 @@ Route::post('/login', [LoginController::class, "submitLogin"])->name('login-subm
 
 Route::post('/logout', [LoginController::class, "getLogout"])->name('logout');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function() {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly']], function() {
     Route::get('/', [AdminController::class, "getDashboard"])->name('dashboard');
     Route::get('/member', [UserController::class, "getMember"])->name('admin-member');
     Route::post('/member', [UserController::class, "editMember"])->name('admin-member-submit');
@@ -42,3 +42,4 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function()
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/news/{id}', [NewsController::class, "getNewsDetail"])->name('news');
+Route::get('/aboutus', [HomeController::class, 'aboutUs'])->name('about-us');
