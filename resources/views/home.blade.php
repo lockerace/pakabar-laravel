@@ -11,10 +11,10 @@
       </div>
       <ul class="list-group">
         @foreach($news as $d)
-        <a href="news/{{$d->id}}"><li class="list-group-item d-flex justify-content-between align-items-center">{{ $d->judul }}
-          <span class="badge bg-primary rounded-pill">{{ $d->created_at }}</span></li></a>
+          <a href="news/{{$d->id}}"><li class="list-group-item d-flex justify-content-between align-items-center">{{ $d->judul }}
+            <span class="badge bg-primary rounded-pill">{{ $d->created_at }}</span></li></a>
         @endforeach
-</ul>
+      </ul>
   </div>
   <footer>
     <div class="py-1 text-center">&copy; {{ date('Y') }}. All rights reserved.</div>

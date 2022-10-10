@@ -13,13 +13,21 @@
     <div class="row">
         <div class="col col-md-4">
             <div class="card">
-                <img src="member/{{$members->foto}}" class="card-img-top" alt="...">
+                @if (empty($members->foto))
+                    <div class="w-100 ratio-1 position-relative">
+                        <div class="slider-content d-flex justify-content-center align-items-center">
+                            <i class="material-icons d-block display-1">person</i>
+                        </div>
+                    </div>
+                @else
+                    <img src="member/{{$members->foto}}" class="card-img-top" alt="...">
+                @endif
                 <div class="card-body">
                     <h5 class="card-title text-center">{{ $members->name }}</h5>
                 </div>
             </div>
-        </div> 
-     
+        </div>
+
         <div class="col col-md-8">
             <div class="mb-3">
                 <label class="form-label">Email</label>
