@@ -37,6 +37,8 @@ class UserController extends Controller
             $member = new User;
             $member->email = $request->email;
             $member->name = $request->name;
+            $member->alamat = $request->alamat;
+            $member->no_telp = $request->no_telp;
             $member->password = Hash::make($request->password);
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
@@ -50,6 +52,8 @@ class UserController extends Controller
 
             $member->name = $request->name;
             $member->email = $request->email;
+            $member->alamat = $request->alamat;
+            $member->no_telp = $request->no_telp;
             $member->password = Hash::make($request->password);
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
@@ -122,6 +126,6 @@ class UserController extends Controller
 
         $member->save();
     
-        return redirect(route('member-profile'));
+        return redirect(route('profile'));
     }
 }

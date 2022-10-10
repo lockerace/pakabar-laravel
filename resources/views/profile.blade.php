@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h3>Profile Member</h3>
+    <h3>Profil Anggota</h3>
     <div class="d-flex flex-row justify-content-end">
         <a class="btn btn-primary mb-3 d-flex flex-row" onclick="onMemberEdit(this)" data-member="{{$members}}" data-bs-toggle="modal" data-bs-target="#editMemberModal" >
             <i class="material-icons d-block">edit</i>
@@ -30,6 +30,14 @@
                 <input disabled class="form-control" value="{{$members->name}}" placeholder="Email" />
             </div>
             <div class="mb-3">
+                <label class="form-label">Alamat</label>
+                <input disabled class="form-control" value="{{$members->alamat}}" placeholder="Email" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nomor Telepon</label>
+                <input disabled class="form-control" value="{{$members->no_telp}}" placeholder="Email" />
+            </div>
+            <div class="mb-3">
                 <label class="form-label">Nomor Anggota</label>
                 <input disabled class="form-control" value="{{$members->no_anggota}}" placeholder="Email" />
             </div>
@@ -49,7 +57,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Member</h5>
+                        <h5 class="modal-title">Edit Profil</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
@@ -60,28 +68,8 @@
                             <input id="memberEmail" class="form-control" name="email" placeholder="Email" type="email" required="required" />
                         </div>
                         <div class="mb-3">
-                            <label for="memberName" class="form-label">Nama Anggota: </label>
-                            <input disabled id="memberName" class="form-control" name="name" placeholder="Nama Anggota" required="required" />
-                        </div>
-                        <div class="mb-3">
-                            <label for="memberNoAnggota" class="form-label">No Anggota: </label>
-                            <input disabled id="memberNoAnggota" class="form-control" name="no_anggota" placeholder="Nomor Anggota" required="required"/>
-                        </div>
-                        <div class="mb-3">
                             <label for="memberPassword" class="form-label">Password: </label>
                             <input id="memberPassword" class="form-control" name="password" placeholder="Password" type="password" required="required" />
-                        </div>
-                        <div class="mb-3">
-                            <label for="memberNoKtp" class="form-label">No KTP: </label>
-                            <input disabled id="memberNoKtp" class="form-control" name="no_ktp" placeholder="Nomor KTP" required="required"/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="memberJabatan" class="form-label">Jabatan: </label>
-                            <select disabled id="memberJabatan" class="form-select" name="jabatan_id">
-                                @foreach($jabatan as $d)
-                                <option value="{{ $d->id }}">{{ $d->name }}</option>
-                                @endforeach
-                            </select>
                         </div>
                         <input id="memberId" name="id" type="hidden" value=""/>
                     </div>

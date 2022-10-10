@@ -4,6 +4,8 @@ window.onMemberEdit = (event)=>{
     var member = {
         email:"",
         name:"",
+        alamat:"",
+        no_telp:"",
         no_anggota:"",
         no_ktp:"",
         jabatan_id:"",
@@ -14,6 +16,8 @@ window.onMemberEdit = (event)=>{
         member = JSON.parse(event.dataset.member);
     var email = document.getElementById('memberEmail');
     var name = document.getElementById('memberName');
+    var alamat = document.getElementById('memberAlamat');
+    var no_telp = document.getElementById('memberNoTelp');
     var no_anggota = document.getElementById('memberNoAnggota');
     var no_ktp = document.getElementById('memberNoKtp');
     var jabatan_id = document.getElementById('memberJabatan');
@@ -22,6 +26,8 @@ window.onMemberEdit = (event)=>{
 
     email.value = member.email;
     name.value = member.name;
+    alamat.value = member.alamat;
+    no_telp.value = member.no_telp;
     no_anggota.value = member.no_anggota;
     no_ktp.value = member.no_ktp;
     jabatan_id.value = member.jabatan_id;

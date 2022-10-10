@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="container py-5">
-    <h3>Data Member</h3>
+    <h3>Data Anggota</h3>
     <div class="d-flex flex-row justify-content-end">
         <a class="btn btn-primary mb-3 d-flex flex-row" onclick="onMemberEdit()" data-bs-toggle="modal" data-bs-target="#editMemberModal" >
             <i class="material-icons d-block">add</i>
-            <span>Tambah</span>
+            <span>Tambah Anggota</span>
         </a>
     </div>
     <table class="table table-bordered">
@@ -52,6 +52,14 @@
                         <div class="mb-3">
                             <label for="memberName" class="form-label">Nama Anggota: </label>
                             <input id="memberName" class="form-control" name="name" placeholder="Nama Anggota" required="required" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="memberAlamat" class="form-label">Alamat: </label>
+                            <input id="memberAlamat" class="form-control" name="alamat" placeholder="Alamat" required="required" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="memberNoTelp" class="form-label">No Telpon: </label>
+                            <input id="memberNoTelp" class="form-control" name="no_telp" placeholder="Nomor Telepon" required="required" />
                         </div>
                         <div class="mb-3">
                             <label for="memberNoAnggota" class="form-label">No Anggota: </label>
