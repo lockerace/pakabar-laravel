@@ -28,6 +28,7 @@ class NewsController extends Controller
     function getNews() {
         $data = [
             'news' => $this->news->getAll(),
+            'deleteUrl' => route('admin-news-delete'),
         ];
 
         return view('admin.news', $data);

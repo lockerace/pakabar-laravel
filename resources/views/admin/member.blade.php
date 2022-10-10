@@ -25,7 +25,7 @@
                   <i class="material-icons d-block">edit</i>
                   <span>Edit</span>
                 </a>
-                <a class="btn btn-link text-danger text-decoration-none d-flex flex-row" onclick="return confirm('Are you sure?')" href="{{ route('admin-member-delete', $d->id) }}">
+                <a class="btn btn-link text-danger text-decoration-none d-flex flex-row" onclick="onConfirmDelete(this)" data-deleteid="{{$d->id}}" data-bs-toggle="modal" data-bs-target="#deleteModal"">
                   <i class="material-icons d-block">delete</i>
                   <span>Hapus<span>
                 </a>
@@ -100,5 +100,6 @@
             </div>
         </div>
     </form>
+    @include('admin.modalconfirm')
 </div>
 @endsection

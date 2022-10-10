@@ -129,3 +129,10 @@ window.onSelectFileChanged = (event, id) => {
     `;
   }
 }
+
+window.onConfirmDelete=(event)=>{
+  var deleteId = event.dataset.deleteid;
+
+  var id = document.getElementById('deleteId');
+  id.value = deleteId;
+}

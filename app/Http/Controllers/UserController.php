@@ -23,6 +23,7 @@ class UserController extends Controller
         $data = [
             'members' => $this->users->getAll(),
             'jabatan' => $this->jabatan->getAll(),
+            'deleteUrl' => route('admin-member-delete'),
         ];
 
         return view('admin.member', $data);
@@ -77,7 +78,8 @@ class UserController extends Controller
 
     function getJabatan(){
         $data = [
-            'jabatan' => $this->jabatan->getAll()
+            'jabatan' => $this->jabatan->getAll(),
+            'deleteUrl' => route('admin-jabatan-delete'),
         ];
 
         return view('admin.jabatan', $data);
