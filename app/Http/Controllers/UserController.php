@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Models\UserRepository;
 use App\Models\JabatanRepository;
 use App\Models\NewsRepository;
@@ -19,7 +20,6 @@ class UserController extends Controller
     }
 
     function getMember($token = null){
-        \Log::info($token);
         $data = [
             'members' => $this->users->getAll(),
             'jabatan' => $this->jabatan->getAll(),
@@ -41,7 +41,9 @@ class UserController extends Controller
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;
-            $member->foto = $request->foto;
+            if ($request->hasFile('foto')) {
+                $member->foto = $request->foto->store('foto');
+            }
 
             $member->save();
         } else{
@@ -52,7 +54,9 @@ class UserController extends Controller
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;
-            $member->foto = $request->foto;
+            if ($request->hasFile('foto')) {
+                $member->foto = $request->foto->store('foto');
+            }
 
             $member->save();
         }
@@ -97,5 +101,9 @@ class UserController extends Controller
         $jabatan->delete();
 
         return response()->redirectTo(route('admin-jabatan'));
+    }
+
+    function getFoto($path) {
+        return Storage::download('foto/'.$path);
     }
 }

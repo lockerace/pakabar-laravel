@@ -1,6 +1,6 @@
 import './bootstrap';
 
-window.onMemberEdit = (event)=>{    
+window.onMemberEdit = (event)=>{
     var member = {
         email:"",
         name:"",
@@ -18,6 +18,7 @@ window.onMemberEdit = (event)=>{
     var no_ktp = document.getElementById('memberNoKtp');
     var jabatan_id = document.getElementById('memberJabatan');
     var id = document.getElementById('memberId');
+    var foto = document.getElementById('memberFoto');
 
     email.value = member.email;
     name.value = member.name;
@@ -25,9 +26,15 @@ window.onMemberEdit = (event)=>{
     no_ktp.value = member.no_ktp;
     jabatan_id.value = member.jabatan_id;
     id.value = member.id;
+    foto.value = "";
+
+    if (member.foto) {
+        var fotoPlace = document.getElementById('fotoPlaceholder');
+        fotoPlace.innerHTML = `<img src="/admin/member/${member.foto}" style="max-width: 100%;" />`
+    }
 }
 
-window.onJabatanEdit = (event)=>{    
+window.onJabatanEdit = (event)=>{
     var jabatan = {
         name:"",
         id:"",
@@ -43,7 +50,7 @@ window.onJabatanEdit = (event)=>{
 }
 
 var newsKontenEditor;
-window.onNewsEdit = (event)=>{    
+window.onNewsEdit = (event)=>{
     var news = {
         judul:"",
         konten:"",
@@ -77,3 +84,42 @@ ClassicEditor
 .catch( error => {
     console.error( error );
 } );
+
+
+window.selectFile = (id) => {
+  if (id) {
+    var input = document.getElementById(id);
+    input.click();
+  }
+}
+
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      resolve(reader.result);
+    };
+    reader.onerror = function (error) {
+      reject(error);
+    };
+  })
+}
+
+window.onSelectFileChanged = (event, id) => {
+  if (event.files.length > 0) {
+    getBase64(event.files[0]).then(img => {
+      var placeholder = document.getElementById(id);
+      placeholder.innerHTML = `<img src="${img}" style="max-width: 100%;" />`
+    }, err => {
+      console.error(err)
+    });
+  } else {
+    var placeholder = document.getElementById(id);
+    placeholder.innerHTML = `
+      <div class="btn input-photo d-flex justify-content-center align-items-center btn-outline-dark">
+        Pilih Foto
+      </div>
+    `;
+  }
+}
