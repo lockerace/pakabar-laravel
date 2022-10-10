@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use DB;
+use App\Models\Jabatan;
 
 class JabatanSeeder extends Seeder
 {
@@ -15,15 +16,14 @@ class JabatanSeeder extends Seeder
      */
     public function run()
     {
-        //
-        DB::table('jabatan')->insert([
-            'name' => 'admin'
-        ], 
-        [
-            'name' => 'member'
-        ],
-        [
-            'name' => 'founder'
-        ]);
+        $data = [
+            [ 'id' => 1, 'name' => 'Admin',],
+            [ 'id' => 2, 'name' => 'Member',],
+            [ 'id' => 3, 'name' => 'Founder',],
+        ];
+
+        foreach ($data as $row) {
+            Jabatan::firstOrCreate(['id' => $row['id']], $row);
+        }
     }
 }
