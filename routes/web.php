@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +26,6 @@ Route::get('/', function () {
 
 Route::get('/login', [LoginController::class, "getLogin"])->name('login');
 Route::post('/login', [LoginController::class, "submitLogin"])->name('login-submit');
-
 Route::post('/logout', [LoginController::class, "getLogout"])->name('logout');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly']], function() {
@@ -39,11 +40,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
     Route::get('/news', [NewsController::class, "getNews"])->name('admin-news');
     Route::post('/news', [NewsController::class, "editNews"])->name('admin-news-submit');
     Route::post('/deletenews', [NewsController::class, "deleteNews"])->name('admin-news-delete');
+    Route::get('/send-notification', [NotificationController::class, "sendMessage"])->name('admin-send-notif');
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/news/{id}', [NewsController::class, "getNewsDetail"])->name('news');
 Route::get('/aboutus', [HomeController::class, 'aboutUs'])->name('about-us');
 Route::get('/member/foto/{path}', [UserController::class, "getFoto"])->name('member-foto');
-Route::get('/changeprofile', [UserController::class, "getProfile"])->name('profile');
-Route::post('/changeprofile', [UserController::class, "updateProfile"])->name('profile-submit');
+
+Route::group(['prefix' => '', 'middleware' => ['auth:sanctum']], function() {
+    Route::get('/changeprofile', [UserController::class, "getProfile"])->name('profile');
+    Route::post('/changeprofile', [UserController::class, "updateProfile"])->name('profile-submit');
+    Route::get('/notification', [NotificationController::class, 'getNotification'])->name('notification');
+    Route::get('/notification/read/{id}', [NotificationController::class, 'readNotification'])->name('read-notification');
+});

@@ -136,3 +136,34 @@ window.onConfirmDelete=(event)=>{
   var id = document.getElementById('deleteId');
   id.value = deleteId;
 }
+
+window.onMessageShow=(event)=>{
+  if(event){
+      var notif = JSON.parse(event.dataset.notif);
+     
+      var title = document.getElementById('notifTitle');
+      var message = document.getElementById('notifMessage');
+      var notifRead = document.querySelectorAll('.notif-read');
+
+      title.innerHTML = notif.data.title;
+      message.innerHTML = notif.data.message;
+      for(let i=0; i<notifRead.length; i++)
+      {
+        notifRead[i].setAttribute('href', '/notification/read/' + notif.id);
+      }
+      
+  }
+}
+
+window.onMessageRead=(event)=>{
+  if(event){
+      var notif = JSON.parse(event.dataset.notif);
+
+      var title = document.getElementById('readNotifTitle');
+      var message = document.getElementById('readNotifMessage');
+
+      title.innerHTML = notif.data.title;
+      message.innerHTML = notif.data.message;
+      
+  }
+}

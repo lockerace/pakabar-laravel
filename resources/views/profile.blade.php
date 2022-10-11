@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h3>Profil Anggota</h3>
+    <h1 class="display-4">Profil Anggota</h1>
     <div class="d-flex flex-row justify-content-end">
         <a class="btn btn-primary mb-3 d-flex flex-row" onclick="onMemberEdit(this)" data-member="{{$members}}" data-bs-toggle="modal" data-bs-target="#editMemberModal" >
             <i class="material-icons d-block">edit</i>

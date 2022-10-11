@@ -68,6 +68,12 @@
                                       <a class="dropdown-item" href="{{ route('admin-news') }}">News</a>
                                       <hr class="dropdown-divider">
                                     @endif
+                                    <a class="dropdown-item d-flex flex-row align-items-center" href="{{ route('notification') }}">
+                                        <span class="me-1">Notifikasi</span>
+                                        @if (!empty($unread) && count($unread) > 0)
+                                            <span class="badge bg-danger">{{count($unread)}}</span>
+                                        @endif
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('profile') }}">Ubah Profil</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

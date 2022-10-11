@@ -12,4 +12,7 @@ class UserRepository {
     function getFounder(){
         return User::where('jabatan_id', 3)->get();
     }
+    function getAllMember(){
+        return User::where('jabatan_id', '!=', '1')->get();
+    }
 }
