@@ -2,9 +2,47 @@
 
 @section('content')
 <section class="full-height d-flex flex-column">
-  <div class="slider mb-5">
-    <div class="slider-content d-flex justify-content-center align-items-center fs-1">Slider</div>
+  
+
+<div id="carouselExampleIndicators" class="carousel slide w-100 " data-bs-ride="true">
+  <div class="carousel-indicators">
+    @foreach($slider as $d)
+    @if($loop->index == 0)
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true"></button>
+    @else
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{$loop->index}}"></button>
+    @endif
+    @endforeach
   </div>
+  <div class="carousel-inner">
+    @foreach($slider as $d)
+    @if($loop->index == 0)
+    <div class="carousel-item slider active">
+        <div class="slider-content">
+          <a href="{{$d->url}}"><img src="storage/{{$d->foto}}" class="d-block w-100" alt="..."></a>
+        </div>
+    </div>
+    @else
+    <div class="carousel-item slider">
+        <div class="slider-content">
+          <a href="{{$d->url}}"><img src="storage/{{$d->foto}}" class="d-block w-100" alt="..."></a>
+        </div>
+    </div>
+    @endif
+    @endforeach
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+
   <div class="flex-fill container">
       <div>
         <h2>News</h2>

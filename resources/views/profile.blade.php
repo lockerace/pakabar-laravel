@@ -90,4 +90,5 @@
         </div>
     </form>
 </div>
+@include('footer')
 @endsection

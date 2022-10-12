@@ -66,6 +66,7 @@
                                       <a class="dropdown-item" href="{{ route('admin-jabatan') }}">Jabatan</a>
                                       <a class="dropdown-item" href="{{ route('admin-member') }}">Member</a>
                                       <a class="dropdown-item" href="{{ route('admin-news') }}">News</a>
+                                      <a class="dropdown-item" href="{{ route('admin-slider') }}">Slider</a>
                                       <hr class="dropdown-divider">
                                     @endif
                                     <a class="dropdown-item d-flex flex-row align-items-center" href="{{ route('notification') }}">

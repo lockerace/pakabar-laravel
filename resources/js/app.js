@@ -37,6 +37,9 @@ window.onMemberEdit = (event)=>{
     if (member.foto) {
         var fotoPlace = document.getElementById('fotoPlaceholder');
         fotoPlace.innerHTML = `<img src="/admin/member/${member.foto}" style="max-width: 100%;" />`
+    } else{
+        var fotoPlace = document.getElementById('fotoPlaceholder');
+        fotoPlace.innerHTML = `<div class="btn input-photo d-flex justify-content-center align-items-center btn-outline-dark">Pilih Foto</div>`
     }
 }
 
@@ -166,4 +169,30 @@ window.onMessageRead=(event)=>{
       message.innerHTML = notif.data.message;
       
   }
+}
+
+window.onSliderEdit = (event)=>{
+  var slider = {
+      foto:"",
+      url:"",
+      id:"",
+  };
+
+  if(event)
+      slider = JSON.parse(event.dataset.slider);
+  var foto = document.getElementById('sliderFoto');
+  var url = document.getElementById('sliderUrl');
+  var id = document.getElementById('sliderId');
+
+  foto.value = "";
+  url.value = slider.url;
+  id.value = slider.id;
+
+  if (slider.foto) {
+    var fotoPlace = document.getElementById('fotoPlaceholder');
+    fotoPlace.innerHTML = `<img src="/storage/${slider.foto}" style="max-width: 100%;" />`
+} else{
+  var fotoPlace = document.getElementById('fotoPlaceholder');
+  fotoPlace.innerHTML = `<div class="btn input-photo d-flex justify-content-center align-items-center btn-outline-dark">Pilih Foto</div>`
+}
 }

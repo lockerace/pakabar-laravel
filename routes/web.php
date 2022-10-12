@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SliderController;
 
 
 /*
@@ -41,6 +42,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
     Route::post('/news', [NewsController::class, "editNews"])->name('admin-news-submit');
     Route::post('/deletenews', [NewsController::class, "deleteNews"])->name('admin-news-delete');
     Route::get('/send-notification', [NotificationController::class, "sendMessage"])->name('admin-send-notif');
+    Route::get('/slider/foto/{path}', [SliderController::class, "getFoto"])->name('admin-slider-foto');
+    Route::get('/slider', [SliderController::class, "getSlider"])->name('admin-slider');
+    Route::post('/slider', [SliderController::class, "editSlider"])->name('admin-slider-submit');
+    Route::post('/deleteslider', [SliderController::class, "deleteSlider"])->name('admin-slider-delete');
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\NewsRepository;
 use App\Models\UserRepository;
+use App\Models\SliderRepository;
 use App\Models\News;
 
 class HomeController extends Controller
@@ -15,15 +16,17 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    function __construct(NewsRepository $newsRepository, UserRepository $userRepository) {
+    function __construct(NewsRepository $newsRepository, UserRepository $userRepository, SliderRepository $sliderRepository) {
         $this->news = $newsRepository;
         $this->user = $userRepository;
+        $this->slider = $sliderRepository;
     }
 
     public function index()
     {
         $data = [
             'news' => $this->news->getAll(),
+            'slider' => $this->slider->getAll(),
         ];
         return view('home', $data);
     }
