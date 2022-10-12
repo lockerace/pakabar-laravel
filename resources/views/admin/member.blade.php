@@ -13,12 +13,14 @@
         <tr>
             <th>Nama</th>
             <th>Nomor Anggota</th>
+            <th>Jabatan</th>
             <th>Aksi</th>
         </tr>
         @foreach($members as $d)
         <tr>
             <td>{{ $d->name }}</td>
             <td>{{ $d->no_anggota }}</td>
+            <td>{{ $d->jabatan->name}}</td>
             <td>
               <div class="d-flex flex-row gap-2">
                 <a class="btn btn-link text-primary text-decoration-none d-flex flex-row" onclick="onMemberEdit(this)" data-member="{{$d}}" data-bs-toggle="modal" data-bs-target="#editMemberModal">

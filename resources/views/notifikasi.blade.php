@@ -28,11 +28,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="notifTitle">{{$d->data['title']}}</h5>
+                <h5 class="modal-title" id="notifTitle"></h5>
                 <a class="btn-close notif-read" aria-label="Close"></a>
             </div>
             <div class="modal-body">
-                <p id="notifMessage">{{$d->data['message']}}</p>
+                <p id="notifMessage"></p>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-secondary notif-read">Close</a>
@@ -45,11 +45,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="readNotifTitle">{{$d->data['title']}}</h5>
+                <h5 class="modal-title" id="readNotifTitle"></h5>
                 <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
             </div>
             <div class="modal-body">
-                <p id="readNotifMessage">{{$d->data['message']}}</p>
+                <p id="readNotifMessage"></p>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
