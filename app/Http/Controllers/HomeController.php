@@ -22,12 +22,15 @@ class HomeController extends Controller
         $this->slider = $sliderRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $data = [
             'news' => $this->news->getAll(),
             'slider' => $this->slider->getActive(),
         ];
+        if (!empty($request->token)) {
+            $data['token'] = $request->token;
+        }
         return view('home', $data);
     }
 

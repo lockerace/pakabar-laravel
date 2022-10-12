@@ -30,8 +30,15 @@ class LoginController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('admin-member', ['token' => $user->createToken("")->plainTextToken]);
-
+        if ($user->jabatan_id == 1) {
+            return redirect()->action(
+                [UserController::class, 'getMember'], ['token' => $user->createToken("")->plainTextToken]
+            );
+        } else {
+            return redirect()->action(
+                [HomeController::class, 'index'], ['token' => $user->createToken("")->plainTextToken]
+            );
+        }
     }
 
     function getLogout(){

@@ -46,6 +46,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
     Route::get('/slider', [SliderController::class, "getSlider"])->name('admin-slider');
     Route::post('/slider', [SliderController::class, "editSlider"])->name('admin-slider-submit');
     Route::post('/deleteslider', [SliderController::class, "deleteSlider"])->name('admin-slider-delete');
+    Route::post('/news/image-upload', [NewsController::class, "uploadImageNews"])->name('admin-news-image-upload');
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
