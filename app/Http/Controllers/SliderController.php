@@ -30,12 +30,14 @@ class SliderController extends Controller
                 $slider->foto = $request->foto->store('slider', 'public');
             }
             $slider->url = $request->url;
+            $slider->status = $request->status;
             $slider->save();
         } else{
             if ($request->hasFile('foto')) {
                 $slider->foto = $request->foto->store('slider', 'public');
             }
             $slider->url = $request->url;
+            $slider->status = $request->status;
             $slider->save();
         }
 

@@ -9,4 +9,7 @@ class SliderRepository {
     function getById($id) {
         return Slider::where('id', $id)->first();
     }
+    function getActive(){
+        return Slider::where('status', 'aktif')->orderBy('id', 'desc')->get();
+    }
 }

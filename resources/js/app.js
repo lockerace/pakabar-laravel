@@ -178,14 +178,21 @@ window.onSliderEdit = (event)=>{
       id:"",
   };
 
-  if(event)
-      slider = JSON.parse(event.dataset.slider);
   var foto = document.getElementById('sliderFoto');
   var url = document.getElementById('sliderUrl');
+  var status = document.getElementById('sliderStatus');
   var id = document.getElementById('sliderId');
+
+  if(event){
+    slider = JSON.parse(event.dataset.slider);
+    foto.removeAttribute("required");
+} else{
+    foto.setAttribute("required", "true");
+}
 
   foto.value = "";
   url.value = slider.url;
+  status.value = slider.status;
   id.value = slider.id;
 
   if (slider.foto) {

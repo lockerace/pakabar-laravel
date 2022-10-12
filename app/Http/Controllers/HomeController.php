@@ -26,7 +26,7 @@ class HomeController extends Controller
     {
         $data = [
             'news' => $this->news->getAll(),
-            'slider' => $this->slider->getAll(),
+            'slider' => $this->slider->getActive(),
         ];
         return view('home', $data);
     }

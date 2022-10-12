@@ -3,7 +3,7 @@
 @section('content')
 <section class="full-height d-flex flex-column">
   
-
+@if(count($slider) != 0)
 <div id="carouselExampleIndicators" class="carousel slide w-100 " data-bs-ride="true">
   <div class="carousel-indicators">
     @foreach($slider as $d)
@@ -40,12 +40,13 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
+@endif
 
 
 
   <div class="flex-fill container">
       <div>
-        <h2>News</h2>
+        <h2 class="display-2">News</h2>
       </div>
       <ul class="list-group">
         @foreach($news as $d)

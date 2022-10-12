@@ -13,12 +13,14 @@
   <tr>
       <th>Foto Slider</th>
       <th>Url</th>
+      <th>Status</th>
       <th>Aksi</th>
   </tr>
   @foreach($slider as $d)
   <tr>
       <td>{{ $d->foto }}</td>
       <td>{{ $d->url }}</td>
+      <td>{{ $d->status }}</td>
       <td>
       <div class="d-flex flex-row gap-2">
         <a class="btn btn-link text-primary text-decoration-none d-flex flex-row" onclick="onSliderEdit(this)" data-slider="{{$d}}" data-bs-toggle="modal" data-bs-target="#editSliderModal">
@@ -45,7 +47,7 @@
             </div>
             <div class="modal-body">
                   @csrf
-                  <div class="mb-3">
+                      <div class="mb-3">
                             <label for="sliderFoto" class="form-label">Foto: </label>
                             <div id="fotoPlaceholder" onclick="selectFile('sliderFoto')">
                               <div class="btn input-photo d-flex justify-content-center align-items-center btn-outline-dark">
@@ -53,11 +55,18 @@
                               </div>
                             </div>
                             <input id="sliderFoto" class="form-control d-none" name="foto" required="required" type="file" placeholder="Foto" accept="image/png, image/jpeg" onchange="onSelectFileChanged(this, 'fotoPlaceholder')" />
-                        </div>
-                <div class="mb-3">
+                      </div>
+                      <div class="mb-3">
                         <label for="sliderUrl" class="form-label">URL: </label>
                         <input id="sliderUrl" class="form-control" name="url" placeholder="URL Slider" required="required" />
-                    </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="sliderStatus" class="form-label">Status: </label>
+                            <select id="sliderStatus" required="required" class="form-select" name="status">
+                                <option value="aktif">Aktif</option>
+                                <option value="nonaktif">Nonaktif</option>
+                            </select>
+                      </div>
                   <input id="sliderId" name="id" type="hidden" value=""/>
             </div>
             <div class="modal-footer">
