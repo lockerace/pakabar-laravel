@@ -344,3 +344,18 @@ window.onTransactionEdit = (event)=>{
   amount.value = transaction.amount;
   id.value = transaction.id;
 }
+
+window.onNotifikasiEdit = (event)=>{
+  var notifikasi = {
+      title:"",
+      message:"",
+  };
+
+  if(event)
+      notifikasi = JSON.parse(event.dataset.notifikasi);
+  var title = document.getElementById('notifTitle');
+  var message = document.getElementById('notifMessage');
+
+  title.value = notifikasi.title;
+  message.value = notifikasi.message;
+}

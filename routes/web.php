@@ -42,7 +42,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
     Route::get('/news', [NewsController::class, "getNews"])->name('admin-news');
     Route::post('/news', [NewsController::class, "editNews"])->name('admin-news-submit');
     Route::post('/deletenews', [NewsController::class, "deleteNews"])->name('admin-news-delete');
-    Route::get('/send-notification', [NotificationController::class, "sendMessage"])->name('admin-send-notif');
+    Route::post('/send-notification', [NotificationController::class, "sendMessage"])->name('admin-send-notif');
     Route::get('/slider/foto/{path}', [SliderController::class, "getFoto"])->name('admin-slider-foto');
     Route::get('/slider', [SliderController::class, "getSlider"])->name('admin-slider');
     Route::post('/slider', [SliderController::class, "editSlider"])->name('admin-slider-submit');

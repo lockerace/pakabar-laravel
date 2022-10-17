@@ -28,13 +28,15 @@ class NotificationController extends Controller
         return view('notifikasi', $data);
     }
 
-    function sendMessage(){
+    function sendMessage(Request $request){
         $receiver = $this->users->getAll();
         $data = [
-            'title' => 'New Notification',
-            'message' => 'message . . . ',
+            'title' => $request->title,
+            'message' => $request->message,
         ];
         Notification::send($receiver, new TestNotification($data));
+
+        return redirect(route('notification'));
     }
 
     function readNotification(Request $request, $id){

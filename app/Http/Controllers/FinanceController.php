@@ -76,7 +76,7 @@ class FinanceController extends Controller
         }
         
 
-    return redirect()->route('admin-finance');
+    return redirect()->route('admin-finance', ['myOption'=>$request->bank_id]);
     }
 
 }

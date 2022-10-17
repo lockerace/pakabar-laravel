@@ -91,18 +91,18 @@
 
     <form method="get">
     <div class="d-flex flex-row justify-content-end">
-        <select class="form-control" name="myOption">
+        <select class="form-select" name="myOption" onchange="this.form.submit();">
             <option>Pilih Bank</option>
             @foreach($bank as $d)
             <option value="{{ $d->id }}" {{$my_option == $d->id ? 'selected' : ""}}>{{ $d->nama_bank }} - {{ $d->no_rekening }}</option>
             @endforeach
         </select>
-        <button class="btn btn-primary">Tampilkan</button>
     </div>
     </form>
 
   <table class="table table-bordered">
     <tr>
+        <th>ID Transaksi</th>
         <th>ID Bank</th>
         <th>Note</th>
         <th>Waktu</th>
@@ -116,6 +116,7 @@
 
     @foreach($bank_ledger as $d)
     <tr>
+        <td>{{ $d->id }}</td>
         <td>{{ $d->bank_id }}</td>
         <td>{{ $d->note }}</td>
         <td>{{ $d->created_at }}</td>
