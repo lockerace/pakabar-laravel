@@ -322,6 +322,7 @@ window.onBankEdit = (event)=>{
 window.onTransactionEdit = (event)=>{
   var transaction = {
       bank_id:"",
+      receiver_bank_id:"",
       note:"",
       isIn:"",
       amount:"",
@@ -333,12 +334,14 @@ window.onTransactionEdit = (event)=>{
   if(event)
       transaction = JSON.parse(event.dataset.transaction);
   var bank_id = document.getElementById('bankTypeId');
+  var receiver_bank_id = document.getElementById('bankReceiverId');
   var note = document.getElementById('bankNote');
   var isIn = document.getElementById('isIn');
   var amount = document.getElementById('bankAmount');
   var id = document.getElementById('transactionId');
 
   bank_id.value = transaction.bank_id;
+  receiver_bank_id.value = transaction.receiver_bank_id;
   note.value = transaction.note;
   isIn.value = transaction.isIn;
   amount.value = transaction.amount;
@@ -358,4 +361,16 @@ window.onNotifikasiEdit = (event)=>{
 
   title.value = notifikasi.title;
   message.value = notifikasi.message;
+}
+
+window.onBankLedgerStatusChanged = (event)=>{
+  var bank_receiver = document.getElementById('bankReceiver');
+  console.log(event.value);
+  if(event.value == 2){
+    bank_receiver.classList.add("d-block");
+    bank_receiver.classList.remove("d-none");
+  } else{
+    bank_receiver.classList.add("d-none");
+    bank_receiver.classList.remove("d-block");
+  }
 }

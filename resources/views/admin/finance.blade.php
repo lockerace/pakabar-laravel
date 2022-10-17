@@ -142,8 +142,24 @@
                     <div class="modal-body">
                         @csrf
                         <div class="mb-3">
+                            <label for="isIn" class="form-label">Status: </label>
+                            <select id="isIn" class="form-select" name="isIn" onchange="onBankLedgerStatusChanged(this)">
+                                <option value="0">Keluar</option>
+                                <option value="1">Masuk</option>
+                                <option value="2">Transfer</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="bankTypeId" class="form-label">ID Bank: </label>
                             <select class="form-select" id="bankTypeId" name="bank_id">
+                                @foreach($bank as $d)
+                                <option value="{{ $d->id }}" {{$my_option == $d->id ? 'selected' : ""}}>{{ $d->nama_bank }} - {{ $d->no_rekening }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3 d-none" id="bankReceiver">
+                            <label for="bankReceiverId" class="form-label">ID Bank Tujuan: </label>
+                            <select class="form-select" id="bankReceiverId" name="receiver_bank_id">
                                 @foreach($bank as $d)
                                 <option value="{{ $d->id }}" {{$my_option == $d->id ? 'selected' : ""}}>{{ $d->nama_bank }} - {{ $d->no_rekening }}</option>
                                 @endforeach
@@ -152,13 +168,6 @@
                         <div class="mb-3">
                             <label for="bankNote" class="form-label">Note: </label>
                             <input id="bankNote" class="form-control" name="note" placeholder="Tinggalkan Pesan" required="required" />
-                        </div>
-                        <div class="mb-3">
-                            <label for="isIn" class="form-label">Status: </label>
-                            <select id="isIn" class="form-select" name="isIn">
-                                <option value="0">Keluar</option>
-                                <option value="1">Masuk</option>
-                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="bankAmount" class="form-label">Jumlah: </label>

@@ -69,13 +69,38 @@ class FinanceController extends Controller
             $bank->saldo = $bankLedger->balance;
             $bank->save();
         }
-        
         if(!empty($previous)){
             $previous->next_id = $bankLedger->id;
             $previous->save();
         }
-        
+    
+    if($request->isIn == 2){
+        $previous = $this->bankLedger->getLast($request->receiver_bank_id);
+        $bankLedger = new BankLedger;
+        $bankLedger->bank_id = $request->receiver_bank_id;
+        $bankLedger->note = $request->note;
+        $bankLedger->isIn = 1;
+        $bankLedger->amount = $request->amount;
+        $bankLedger->author = $request->user()->id;
+        $bank = $this->bank->getById($request->receiver_bank_id);
+        if(!empty($previous)){
+            $bankLedger->balance = $previous->balance + $request->amount;
+        } else{
+            $bankLedger->balance = $bank->saldo + $request->amount;
+        }
+        $bankLedger->save();
 
+
+        if(!empty($bank)){
+            $bank->saldo = $bankLedger->balance;
+            $bank->save();
+        }
+        if(!empty($previous)){
+            $previous->next_id = $bankLedger->id;
+            $previous->save();
+        }
+    }
+        
     return redirect()->route('admin-finance', ['myOption'=>$request->bank_id]);
     }
 
