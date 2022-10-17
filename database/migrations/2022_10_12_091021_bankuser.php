@@ -13,8 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('slider', function (Blueprint $table) {
-            $table->string('status');  
+        Schema::create('bank', function (Blueprint $table) {
+            $table->id();
+            $table->string('no_rekening')->unique();
+            $table->string('nama_bank');
+            $table->string('name');
+            $table->string('status');
+            $table->decimal('saldo', 18, 2);
+            $table->timestamps();
         });
     }
 

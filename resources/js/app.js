@@ -203,3 +203,53 @@ window.onSliderEdit = (event)=>{
   fotoPlace.innerHTML = `<div class="btn input-photo d-flex justify-content-center align-items-center btn-outline-dark">Pilih Foto</div>`
 }
 }
+
+window.onBankEdit = (event)=>{
+  var bank = {
+      no_rekening:"",
+      nama_bank:"",
+      name:"",
+      saldo:"",
+      id:"",
+  };
+
+  if(event)
+      bank = JSON.parse(event.dataset.bank);
+  var no_rekening = document.getElementById('bankNumber');
+  var nama_bank = document.getElementById('bankName');
+  var name = document.getElementById('userName');
+  var saldo = document.getElementById('bankSaldo');
+  var id = document.getElementById('bankId');
+
+  no_rekening.value = bank.no_rekening;
+  nama_bank.value = bank.nama_bank;
+  name.value = bank.name;
+  saldo.value = bank.saldo;
+  id.value = bank.id;
+}
+
+window.onTransactionEdit = (event)=>{
+  var transaction = {
+      bank_id:"",
+      note:"",
+      isIn:"",
+      amount:"",
+      author:"",
+      balance:"",
+      nextId:"",
+  };
+
+  if(event)
+      transaction = JSON.parse(event.dataset.transaction);
+  var bank_id = document.getElementById('bankTypeId');
+  var note = document.getElementById('bankNote');
+  var isIn = document.getElementById('isIn');
+  var amount = document.getElementById('bankAmount');
+  var id = document.getElementById('transactionId');
+
+  bank_id.value = transaction.bank_id;
+  note.value = transaction.note;
+  isIn.value = transaction.isIn;
+  amount.value = transaction.amount;
+  id.value = transaction.id;
+}

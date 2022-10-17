@@ -13,11 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('slider', function (Blueprint $table) {
+        Schema::create('bank_ledger', function (Blueprint $table) {
             $table->id();
-            $table->string('foto');
-            $table->string('url');  
-            $table->string('status');  
+            $table->integer('bank_id');
+            $table->string('note');
+            $table->integer('isIn');
+            $table->decimal('amount', 18, 2);
+            $table->string('author');
+            $table->decimal('balance', 18, 2);
+            $table->integer('next_id')->nullable();
+            $table->timestamps();
         });
     }
 

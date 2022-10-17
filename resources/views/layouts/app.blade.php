@@ -63,6 +63,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     @if (Auth::user()->jabatan_id == 1)
+                                      <a class="dropdown-item" href="{{ route('admin-finance') }}">Finance</a>
                                       <a class="dropdown-item" href="{{ route('admin-jabatan') }}">Jabatan</a>
                                       <a class="dropdown-item" href="{{ route('admin-member') }}">Member</a>
                                       <a class="dropdown-item" href="{{ route('admin-news') }}">News</a>
