@@ -19,12 +19,16 @@ class UserController extends Controller
         $this->jabatan = $jabatanRepository;
     }
 
-    function getMember($token = null){
+    function getMember(Request $request){
         $data = [
             'members' => $this->users->getAll(),
             'jabatan' => $this->jabatan->getAll(),
             'deleteUrl' => route('admin-member-delete'),
         ];
+
+        if (!empty($request->token)) {
+            $data['token'] = $request->token;
+        }
 
         return view('admin.member', $data);
     }
@@ -127,7 +131,7 @@ class UserController extends Controller
         $member->password = Hash::make($request->password);
 
         $member->save();
-    
+
         return redirect(route('profile'));
     }
 }

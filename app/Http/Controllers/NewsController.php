@@ -59,4 +59,19 @@ class NewsController extends Controller
 
         return response()->redirectTo(route('admin-news'));
     }
+
+    function uploadImageNews(Request $request) {
+        if ($request->hasFile('upload')) {
+            $path = $request->file('upload')->store('news/images', 'public');
+            return response()->json([
+                'uploaded' => true,
+                'fileName' => $path,
+                'url' => '/storage/'.$path
+            ]);
+        } else {
+            return response()->json([
+                'uploaded' => false,
+            ]);
+        }
+    }
 }

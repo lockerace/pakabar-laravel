@@ -1,4 +1,91 @@
 import './bootstrap';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+const csrfToken = document.querySelector('meta[name="csrf-token"]')
+
+class MyUploadAdapter {
+    constructor( loader ) {
+        // CKEditor 5's FileLoader instance.
+        this.loader = loader;
+
+        // URL where to send files.
+        this.url = '/admin/news/image-upload';
+        this.token = localStorage.getItem("token");
+    }
+
+    // Starts the upload process.
+    upload() {
+        return new Promise( ( resolve, reject ) => {
+            this._initRequest();
+            this._initListeners( resolve, reject );
+            this._sendRequest();
+        } );
+    }
+
+    // Aborts the upload process.
+    abort() {
+        if ( this.xhr ) {
+            this.xhr.abort();
+        }
+    }
+
+    // Example implementation using XMLHttpRequest.
+    _initRequest() {
+        const xhr = this.xhr = new XMLHttpRequest();
+
+        xhr.open( 'POST', this.url, true );
+        xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken.content);
+        xhr.setRequestHeader("Authorization", 'Bearer ' + this.token);
+        xhr.responseType = 'json';
+    }
+
+    // Initializes XMLHttpRequest listeners.
+    _initListeners( resolve, reject ) {
+        const xhr = this.xhr;
+        const loader = this.loader;
+        const genericErrorText = 'Couldn\'t upload file:' + ` ${ loader.file.name }.`;
+
+        xhr.addEventListener( 'error', () => reject( genericErrorText ) );
+        xhr.addEventListener( 'abort', () => reject() );
+        xhr.addEventListener( 'load', () => {
+            const response = xhr.response;
+
+            if ( !response || response.error ) {
+                return reject( response && response.error ? response.error.message : genericErrorText );
+            }
+
+            // If the upload is successful, resolve the upload promise with an object containing
+            // at least the "default" URL, pointing to the image on the server.
+            resolve( {
+                default: response.url
+            } );
+        } );
+
+        if ( xhr.upload ) {
+            xhr.upload.addEventListener( 'progress', evt => {
+                if ( evt.lengthComputable ) {
+                    loader.uploadTotal = evt.total;
+                    loader.uploaded = evt.loaded;
+                }
+            } );
+        }
+    }
+
+    // Prepares the data and sends the request.
+    async _sendRequest() {
+        const data = new FormData();
+
+        data.append( 'upload', await this.loader.file );
+
+        this.xhr.send( data );
+    }
+}
+
+function MyCustomUploadAdapterPlugin( editor ) {
+    editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+        return new MyUploadAdapter( loader );
+    };
+}
 
 window.onMemberEdit = (event)=>{
     var member = {
@@ -78,21 +165,25 @@ window.onNewsEdit = (event)=>{
     id.value = news.id;
 }
 
-ClassicEditor
-.create( document.querySelector( '.editor' ) )
-.then(editor =>{
-    var konten = document.getElementById(editor.sourceElement.dataset.id);
-    if (editor.sourceElement.dataset.id == 'newsKonten') {
-        newsKontenEditor = editor
-    }
-    editor.model.document.on( 'change:data', () => {
-        var editorData = editor.getData();
-        konten.value = editorData
-    })
-})
-.catch( error => {
-    console.error( error );
-} );
+if (document.querySelector( '.editor' )) {
+    ClassicEditor
+        .create( document.querySelector( '.editor' ), {
+            extraPlugins: [ MyCustomUploadAdapterPlugin ],
+        })
+        .then(editor =>{
+            var konten = document.getElementById(editor.sourceElement.dataset.id);
+            if (editor.sourceElement.dataset.id == 'newsKonten') {
+                newsKontenEditor = editor
+            }
+            editor.model.document.on( 'change:data', () => {
+                var editorData = editor.getData();
+                konten.value = editorData
+            })
+        })
+        .catch( error => {
+            console.error( error );
+        } );
+}
 
 
 window.selectFile = (id) => {
@@ -143,7 +234,7 @@ window.onConfirmDelete=(event)=>{
 window.onMessageShow=(event)=>{
   if(event){
       var notif = JSON.parse(event.dataset.notif);
-     
+
       var title = document.getElementById('notifTitle');
       var message = document.getElementById('notifMessage');
       var notifRead = document.querySelectorAll('.notif-read');
@@ -154,7 +245,7 @@ window.onMessageShow=(event)=>{
       {
         notifRead[i].setAttribute('href', '/notification/read/' + notif.id);
       }
-      
+
   }
 }
 
@@ -167,7 +258,7 @@ window.onMessageRead=(event)=>{
 
       title.innerHTML = notif.data.title;
       message.innerHTML = notif.data.message;
-      
+
   }
 }
 
