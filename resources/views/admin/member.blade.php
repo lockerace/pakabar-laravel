@@ -14,6 +14,7 @@
             <th>Nama</th>
             <th>Nomor Anggota</th>
             <th>Jabatan</th>
+            <th>Status</th>
             <th>Aksi</th>
         </tr>
         @foreach($members as $d)
@@ -21,6 +22,7 @@
             <td>{{ $d->name }}</td>
             <td>{{ $d->no_anggota }}</td>
             <td>{{ $d->jabatan->name}}</td>
+            <td>{{ $d->status == 1 ? 'Diverifikasi' : 'Belum Verifikasi'}}</td>
             <td>
               <div class="d-flex flex-row gap-2">
                 <a class="btn btn-link text-primary text-decoration-none d-flex flex-row" onclick="onMemberEdit(this)" data-member="{{$d}}" data-bs-toggle="modal" data-bs-target="#editMemberModal">
@@ -31,6 +33,15 @@
                   <i class="material-icons d-block">delete</i>
                   <span>Hapus<span>
                 </a>
+                @if($d->status == 0)
+                <form action="{{ route('admin-member-verify', $d->id) }}" method="post"">
+                    @csrf
+                    <button class="btn btn-link text-success text-decoration-none d-flex flex-row"">
+                    <i class="material-icons d-block">check</i>
+                    <span>Verifikasi<span>
+                    </button>
+                </form>
+                @endif
               </div>
             </td>
         </tr>
@@ -81,6 +92,13 @@
                                 @foreach($jabatan as $d)
                                 <option value="{{ $d->id }}">{{ $d->name }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="memberStatus" class="form-label">Status: </label>
+                            <select id="memberStatus" class="form-select" name="status">
+                                <option value="0">Belum Verifikasi</option>
+                                <option value="1">Diverifikasi</option>
                             </select>
                         </div>
                         <div class="mb-3">

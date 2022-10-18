@@ -14,6 +14,10 @@ class LoginController extends Controller
         return view('login');
     }
 
+    function getRegister(){
+        return view('register');
+    }
+
     function submitLogin(Request $request){
         $request->validate([
             'no_anggota' => 'required',
@@ -39,6 +43,26 @@ class LoginController extends Controller
                 [HomeController::class, 'index'], ['token' => $user->createToken("")->plainTextToken]
             );
         }
+    }
+
+    function submitRegister(Request $request){
+        $member = new User;
+            $member->email = $request->email;
+            $member->name = $request->name;
+            $member->alamat = $request->alamat;
+            $member->no_telp = $request->no_telp;
+            $member->password = Hash::make($request->password);
+            $member->no_anggota = $request->no_anggota;
+            $member->no_ktp = $request->no_ktp;
+            $member->jabatan_id = 2;
+            if ($request->hasFile('foto')) {
+                $member->foto = $request->foto->store('foto');
+            }
+            $member->save();
+
+            Auth::login($member);
+
+            return redirect()->route('profile');
     }
 
     function getLogout(){

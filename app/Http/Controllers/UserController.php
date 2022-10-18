@@ -48,6 +48,7 @@ class UserController extends Controller
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;
+            $member->status = $request->status;
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
@@ -63,6 +64,7 @@ class UserController extends Controller
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;
+            $member->status = $request->status;
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
@@ -76,6 +78,14 @@ class UserController extends Controller
     function deleteMember(Request $request){
         $member = $this->users->getById($request->id);
         $member->delete();
+
+        return response()->redirectTo(route('admin-member'));
+    }
+
+    function verifyMember($id){
+        $member = $this->users->getById($id);
+        $member->status = 1;
+        $member->save();
 
         return response()->redirectTo(route('admin-member'));
     }

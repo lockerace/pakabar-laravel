@@ -57,6 +57,10 @@
                 <label class="form-label">Jabatan</label>
                 <input disabled class="form-control" value="{{$members->jabatan->name}}" placeholder="Email" />
             </div>
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <input disabled class="form-control" value="{{$members->status == 1 ? 'Verified' : 'Unverified'}}" placeholder="Status" />
+            </div>
         </div>
     </div>
 

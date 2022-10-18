@@ -29,6 +29,8 @@ Route::get('/', function () {
 Route::get('/login', [LoginController::class, "getLogin"])->name('login');
 Route::post('/login', [LoginController::class, "submitLogin"])->name('login-submit');
 Route::post('/logout', [LoginController::class, "getLogout"])->name('logout');
+Route::get('/register', [LoginController::class, "getRegister"])->name('register');
+Route::post('/register', [LoginController::class, "submitRegister"])->name('register-submit');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly']], function() {
     Route::get('/', [AdminController::class, "getDashboard"])->name('dashboard');
@@ -36,6 +38,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
     Route::get('/member', [UserController::class, "getMember"])->name('admin-member');
     Route::post('/member', [UserController::class, "editMember"])->name('admin-member-submit');
     Route::post('/deletemember', [UserController::class, "deleteMember"])->name('admin-member-delete');
+    Route::post('/verifymember/{id}', [UserController::class, "verifyMember"])->name('admin-member-verify');
     Route::get('/jabatan', [UserController::class, "getJabatan"])->name('admin-jabatan');
     Route::post('/jabatan', [UserController::class, "editJabatan"])->name('admin-jabatan-submit');
     Route::post('/deletejabatan', [UserController::class, "deleteJabatan"])->name('admin-jabatan-delete');

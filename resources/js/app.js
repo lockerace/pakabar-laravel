@@ -96,6 +96,7 @@ window.onMemberEdit = (event)=>{
         no_anggota:"",
         no_ktp:"",
         jabatan_id:"",
+        status:"",
         id:"",
     };
 
@@ -108,6 +109,7 @@ window.onMemberEdit = (event)=>{
     var no_anggota = document.getElementById('memberNoAnggota');
     var no_ktp = document.getElementById('memberNoKtp');
     var jabatan_id = document.getElementById('memberJabatan');
+    var status = document.getElementById('memberStatus');
     var id = document.getElementById('memberId');
     var foto = document.getElementById('memberFoto');
 
@@ -118,6 +120,7 @@ window.onMemberEdit = (event)=>{
     no_anggota.value = member.no_anggota;
     no_ktp.value = member.no_ktp;
     jabatan_id.value = member.jabatan_id;
+    status.value = member.status;
     id.value = member.id;
     foto.value = "";
 
