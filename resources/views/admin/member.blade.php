@@ -9,6 +9,18 @@
             <span>Tambah Anggota</span>
         </a>
     </div>
+
+    <form method="get">
+    <div class="d-flex flex-row justify-content-end">
+        <select class="form-select" name="myOption" onchange="this.form.submit();">
+            <option value="">Semua Jabatan</option>
+            @foreach($jabatan as $d)
+            <option value="{{ $d->id }}" {{$myOption == $d->id ? 'selected' : ""}}>{{ $d->name }}</option>
+            @endforeach
+        </select>
+    </div>
+    </form>
+
     <table class="table table-bordered">
         <tr>
             <th>Nama</th>
@@ -88,7 +100,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="memberJabatan" class="form-label">Jabatan: </label>
-                            <select id="memberJabatan" class="form-select" name="jabatan_id">
+                            <select id="memberJabatan" required="required" class="form-select" name="jabatan_id">
                                 @foreach($jabatan as $d)
                                 <option value="{{ $d->id }}">{{ $d->name }}</option>
                                 @endforeach
@@ -96,7 +108,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="memberStatus" class="form-label">Status: </label>
-                            <select id="memberStatus" class="form-select" name="status">
+                            <select id="memberStatus" required="required" class="form-select" name="status">
                                 <option value="0">Belum Verifikasi</option>
                                 <option value="1">Diverifikasi</option>
                             </select>

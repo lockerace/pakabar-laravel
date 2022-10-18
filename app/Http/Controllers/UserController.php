@@ -22,10 +22,17 @@ class UserController extends Controller
     }
 
     function getMember(Request $request){
+        $myOption = $request->myOption;
+        $members = [];
+        if(!empty($myOption))
+            $members = $this->users->getByJabatan($myOption);
+        else
+            $members = $this->users->getAll();
         $data = [
-            'members' => $this->users->getAll(),
+            'members' => $members,
             'jabatan' => $this->jabatan->getAll(),
             'deleteUrl' => route('admin-member-delete'),
+            'myOption' => $myOption,
         ];
 
         if (!empty($request->token)) {
