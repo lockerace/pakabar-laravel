@@ -39,6 +39,24 @@ class NotificationController extends Controller
         return redirect(route('notification'));
     }
 
+    function sendSuccessVerifyMessage($id){
+        $receiver = $this->users->getById($id);
+        $data = [
+            'title' => "Akun terverifikasi",
+            'message' => "Selamat akun telah diverifikasi."
+        ];
+        Notification::send($receiver, new TestNotification($data));
+    }
+
+    function sendVerifyMessage($title, $message){
+        $receiver = $this->users->getAdmin();
+        $data = [
+            'title' => $title,
+            'message' => $message,
+        ];
+        Notification::send($receiver, new TestNotification($data));
+    }
+
     function readNotification(Request $request, $id){
         $notif = $request->user()->unreadNotifications->where('id', $id);
 

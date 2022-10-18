@@ -9,8 +9,14 @@ class UserRepository {
     function getById($id) {
         return User::where('id', $id)->first();
     }
+    function getLastUser(){
+        return User::orderBy('id', 'desc')->first();
+    }
     function getFounder(){
         return User::where('jabatan_id', 3)->get();
+    }
+    function getAdmin(){
+        return User::where('jabatan_id', 1)->get();
     }
     function getAllMember(){
         return User::where('jabatan_id', '!=', '1')->get();

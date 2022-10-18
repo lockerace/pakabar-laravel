@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -10,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    function __construct(UserRepository $userRepository, NotificationController $notificationController) {
+        $this->users = $userRepository;
+        $this->notification = $notificationController;
+    }
+
     function getLogin(){
         return view('login');
     }
@@ -46,19 +52,25 @@ class LoginController extends Controller
     }
 
     function submitRegister(Request $request){
+        $lastUser = $this->users->getLastUser();
         $member = new User;
             $member->email = $request->email;
             $member->name = $request->name;
             $member->alamat = $request->alamat;
             $member->no_telp = $request->no_telp;
             $member->password = Hash::make($request->password);
-            $member->no_anggota = $request->no_anggota;
+            $member->no_anggota = "PKB" . str_pad($lastUser->id, 3, "0", STR_PAD_LEFT);
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = 2;
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
             $member->save();
+
+
+            $title = "Verifikasi Member Baru (" . $member->name . ")";
+            $message = $member->name . " telah bergabung. " . "Mohon segera diverifikasi.";
+            $this->notification->sendVerifyMessage($title, $message);
 
             Auth::login($member);
 

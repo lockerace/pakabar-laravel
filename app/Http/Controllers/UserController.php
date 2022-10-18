@@ -13,10 +13,12 @@ use App\Models\Jabatan;
 
 class UserController extends Controller
 {
-    function __construct(UserRepository $userRepository, NewsRepository $newsRepository, JabatanRepository $jabatanRepository) {
+    function __construct(UserRepository $userRepository, NewsRepository $newsRepository, JabatanRepository $jabatanRepository, NotificationController $notificationController) {
         $this->users = $userRepository;
         $this->news = $newsRepository;
         $this->jabatan = $jabatanRepository;
+        $this->notification = $notificationController;
+
     }
 
     function getMember(Request $request){
@@ -39,6 +41,7 @@ class UserController extends Controller
 
         if($member == null){
             // dd($member);
+            $lastUser = $this->users->getLastUser();
             $member = new User;
             $member->email = $request->email;
             $member->name = $request->name;
@@ -86,6 +89,8 @@ class UserController extends Controller
         $member = $this->users->getById($id);
         $member->status = 1;
         $member->save();
+
+        $this->notification->sendSuccessVerifyMessage($member->id);
 
         return response()->redirectTo(route('admin-member'));
     }
