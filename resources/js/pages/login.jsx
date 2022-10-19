@@ -29,20 +29,20 @@ export default (props) => {
     return (
         <div>
             <Header/>
-            <div class="container">
-                <div class="col-md-8 card m-auto my-5">
-                    <div class="card-header">Log In</div>
-                    <div class="card-body">
+            <div className="container">
+                <div className="col-md-8 card m-auto my-5">
+                    <div className="card-header">Log In</div>
+                    <div className="card-body">
                     <form method="post" onSubmit={onSubmit}>
-                        <div class="mb-3">
-                        <label class="form-label">Nomor Anggota</label>
-                        <input class="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" onChange={(e)=>inputChange("no_anggota", e.target.value)} />
+                        <div className="mb-3">
+                        <label className="form-label">Nomor Anggota</label>
+                        <input className="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" onChange={(e)=>inputChange("no_anggota", e.target.value)} />
                         </div>
-                        <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input class="form-control" value={formData.password} placeholder="Password" type="password" onChange={(e)=>inputChange("password", e.target.value)}/>
+                        <div className="mb-3">
+                        <label className="form-label">Password</label>
+                        <input className="form-control" value={formData.password} placeholder="Password" type="password" onChange={(e)=>inputChange("password", e.target.value)}/>
                         </div>
-                        <button class="btn btn-primary">Login</button>
+                        <button className="btn btn-primary">Login</button>
                     </form>
                     </div>
                 </div>

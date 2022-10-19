@@ -141,9 +141,12 @@ class UserController extends Controller
 
     function getProfile(Request $request){
         $data = [
-            'members' => $this->users->getById($request->user()->id),
+            'member' => $this->users->getById($request->user()->id),
             'jabatan' => $this->jabatan->getAll(),
         ];
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
         return view('profile', $data);
     }
 
@@ -154,6 +157,9 @@ class UserController extends Controller
 
         $member->save();
 
+        if($request->wantsJson()){
+            return response()->json(NULL);
+        }
         return redirect(route('profile'));
     }
 }

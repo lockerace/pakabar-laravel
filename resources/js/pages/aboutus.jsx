@@ -20,27 +20,27 @@ export default (props) => {
     return (
         <div>
             <Header/>
-            <div class="full-height d-flex flex-column">
-    <div class="flex-fill container pt-5">
-        <h1 class="display-1">About Us</h1>
+            <div className="full-height d-flex flex-column">
+    <div className="flex-fill container pt-5">
+        <h1 className="display-1">About Us</h1>
         <div>Description goes here...</div>
 
-        <div class="row pt-5">
+        <div className="row pt-5">
         { founders.length > 0 && founders.map((d, i) => (
-            <div class="col col-md-4">
-            <div class="card">
+            <div className="col col-md-4">
+            <div className="card">
                 {!d.foto && (
-                    <div class="w-100 ratio-1 position-relative">
-                    <div class="slider-content d-flex justify-content-center align-items-center">
-                        <i class="material-icons d-block display-1">person</i>
+                    <div className="w-100 ratio-1 position-relative">
+                    <div className="slider-content d-flex justify-content-center align-items-center">
+                        <i className="material-icons d-block display-1">person</i>
                     </div>
                 </div>
                 )}
                 {d.foto && (
-                    <img src={"/member/" + d.foto} class="card-img-top" alt="..."></img>
+                    <img src={"/member/" + d.foto} className="card-img-top" alt="..."></img>
                 )}    
-                <div class="card-body">
-                    <h5 class="card-title text-center">{ d.name }</h5>
+                <div className="card-body">
+                    <h5 className="card-title text-center">{ d.name }</h5>
                 </div>
             </div>
         </div>

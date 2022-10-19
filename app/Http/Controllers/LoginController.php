@@ -70,6 +70,31 @@ class LoginController extends Controller
     function submitRegister(Request $request){
         $lastUser = $this->users->getLastUser();
         $member = new User;
+        if($request->wantsJson()){
+            $member->email = $request->email;
+            $member->name = $request->name;
+            $member->alamat = $request->alamat;
+            $member->no_telp = $request->no_telp;
+            $member->password = Hash::make($request->password);
+            $member->no_anggota = "PKB" . str_pad($lastUser->id, 3, "0", STR_PAD_LEFT);
+            $member->no_ktp = $request->no_ktp;
+            $member->jabatan_id = 2;
+            if ($request->hasFile('foto')) {
+                $member->foto = $request->foto->store('foto');
+            }
+            $member->save();
+
+
+            $title = "Verifikasi Member Baru (" . $member->name . ")";
+            $message = $member->name . " telah bergabung. " . "Mohon segera diverifikasi.";
+            $this->notification->sendVerifyMessage($title, $message);
+
+            Auth::login($member);
+            
+            return response()->json([
+                'url' => '/',
+            ]);
+        } else{
             $member->email = $request->email;
             $member->name = $request->name;
             $member->alamat = $request->alamat;
@@ -91,6 +116,8 @@ class LoginController extends Controller
             Auth::login($member);
 
             return redirect()->route('profile');
+        }
+            
     }
 
     function getLogout(){

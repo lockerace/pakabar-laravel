@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\LoginController;
-
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +26,6 @@ Route::get('/home', [HomeController::class, 'index']);
 Route::get('/about', [HomeController::class, 'aboutUs']);
 Route::get('/news/{id}', [NewsController::class, 'getNewsDetail']);
 Route::post('/login', [LoginController::class, "submitLogin"]);
+Route::post('/register', [LoginController::class, "submitRegister"]);
+Route::get('/profile', [UserController::class, 'getProfile']);
+Route::post('/profile', [UserController::class, "updateProfile"]);

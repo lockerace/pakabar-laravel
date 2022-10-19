@@ -1,3 +1,4 @@
+import 'bootstrap';
 import React from 'react';
 import { createRoot } from 'react-dom/client'
 import {
@@ -10,6 +11,8 @@ import Home from './pages/home'
 import AboutUs from './pages/aboutus'
 import News from './pages/news'
 import Login from './pages/login'
+import Register from './pages/register'
+import Profile from './pages/profile'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +30,14 @@ const router = createBrowserRouter([
     {
     path: "login",
     element: <Login />,
+  },
+    {
+    path: "register",
+    element: <Register />,
+  },
+    {
+    path: "profile",
+    element: <Profile />
   },
 ], {
 	basename: "/react"

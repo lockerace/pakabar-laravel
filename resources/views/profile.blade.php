@@ -4,7 +4,7 @@
 <div class="container py-5">
     <h1 class="display-4">Profil Anggota</h1>
     <div class="d-flex flex-row justify-content-end">
-        <a class="btn btn-primary mb-3 d-flex flex-row" onclick="onMemberEdit(this)" data-member="{{$members}}" data-bs-toggle="modal" data-bs-target="#editMemberModal" >
+        <a class="btn btn-primary mb-3 d-flex flex-row" onclick="onMemberEdit(this)" data-member="{{$member}}" data-bs-toggle="modal" data-bs-target="#editMemberModal" >
             <i class="material-icons d-block">edit</i>
             <span>Edit</span>
         </a>
@@ -13,17 +13,17 @@
     <div class="row">
         <div class="col col-md-4">
             <div class="card">
-                @if (empty($members->foto))
+                @if (empty($member->foto))
                     <div class="w-100 ratio-1 position-relative">
                         <div class="slider-content d-flex justify-content-center align-items-center">
                             <i class="material-icons d-block display-1">person</i>
                         </div>
                     </div>
                 @else
-                    <img src="member/{{$members->foto}}" class="card-img-top" alt="...">
+                    <img src="member/{{$member->foto}}" class="card-img-top" alt="...">
                 @endif
                 <div class="card-body">
-                    <h5 class="card-title text-center">{{ $members->name }}</h5>
+                    <h5 class="card-title text-center">{{ $member->name }}</h5>
                 </div>
             </div>
         </div>
@@ -31,35 +31,35 @@
         <div class="col col-md-8">
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input disabled class="form-control" value="{{$members->email}}" placeholder="Email" />
+                <input disabled class="form-control" value="{{$member->email}}" placeholder="Email" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Nama Anggota</label>
-                <input disabled class="form-control" value="{{$members->name}}" placeholder="Email" />
+                <input disabled class="form-control" value="{{$member->name}}" placeholder="Email" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Alamat</label>
-                <input disabled class="form-control" value="{{$members->alamat}}" placeholder="Email" />
+                <input disabled class="form-control" value="{{$member->alamat}}" placeholder="Email" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Nomor Telepon</label>
-                <input disabled class="form-control" value="{{$members->no_telp}}" placeholder="Email" />
+                <input disabled class="form-control" value="{{$member->no_telp}}" placeholder="Email" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Nomor Anggota</label>
-                <input disabled class="form-control" value="{{$members->no_anggota}}" placeholder="Email" />
+                <input disabled class="form-control" value="{{$member->no_anggota}}" placeholder="Email" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Nomor KTP</label>
-                <input disabled class="form-control" value="{{$members->no_ktp}}" placeholder="Email" />
+                <input disabled class="form-control" value="{{$member->no_ktp}}" placeholder="Email" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Jabatan</label>
-                <input disabled class="form-control" value="{{$members->jabatan->name}}" placeholder="Email" />
+                <input disabled class="form-control" value="{{$member->jabatan->name}}" placeholder="Email" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Status</label>
-                <input disabled class="form-control" value="{{$members->status == 1 ? 'Verified' : 'Unverified'}}" placeholder="Status" />
+                <input disabled class="form-control" value="{{$member->status == 1 ? 'Verified' : 'Unverified'}}" placeholder="Status" />
             </div>
         </div>
     </div>
