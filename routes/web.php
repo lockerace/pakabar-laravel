@@ -22,7 +22,7 @@ use App\Http\Controllers\FinanceController;
 |
 */
 
-Route::get('/react/{path?}', function(){
+Route::get('/react/{path?}', function () {
     return view('react');
 })->where('path', '(.*)');
 

@@ -13,7 +13,7 @@ class NewsController extends Controller
         $this->news = $newsRepository;
     }
 
-    function getNewsDetail($id){
+    function getNewsDetail($id, Request $request){
 
         $news = $this->news->getById($id);
 
@@ -22,6 +22,9 @@ class NewsController extends Controller
             'konten' => $news->konten,
         ];
 
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
         return view('news', $data);
     }
 

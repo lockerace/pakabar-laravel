@@ -31,6 +31,9 @@ class HomeController extends Controller
         if (!empty($request->token)) {
             $data['token'] = $request->token;
         }
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
         return view('home', $data);
     }
 
@@ -42,7 +45,6 @@ class HomeController extends Controller
         if($request->wantsJson()){
             return response()->json($data);
         }
-
         return view('aboutus', $data);
     }
 
