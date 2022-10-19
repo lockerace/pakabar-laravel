@@ -94,7 +94,7 @@ class LoginController extends Controller
             $this->notification->sendVerifyMessage($title, $message);
 
             Auth::login($member);
-            
+
             return response()->json([
                 'url' => '/',
             ]);
@@ -121,10 +121,13 @@ class LoginController extends Controller
 
             return redirect()->route('profile');
         }
-            
+
     }
 
     function getLogout(Request $request){
+        if (!empty($request->user())) {
+            $request->user()->currentAccessToken()->delete();
+        }
         Auth::logout();
 
         if($request->wantsJson()){

@@ -1,11 +1,12 @@
 import React from 'react';
 import {format} from 'date-fns';
 import { applyStyles } from '@popperjs/core';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import request from '../axios';
 
 export default (props) => {
     const [user, setUser] = React.useState(null);
+    const navigate = useNavigate();
 
     const fetch = async() => {
         try {
@@ -30,6 +31,7 @@ export default (props) => {
             if(res.status == 200) {
                 localStorage.removeItem('token')
                 setUser(null)
+                navigate('/')
             }
         } catch (err) {}
     }
