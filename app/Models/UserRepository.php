@@ -7,7 +7,7 @@ class UserRepository {
         return User::orderBy('created_at', 'desc')->get();
     }
     function getById($id) {
-        return User::where('id', $id)->with('jabatan')->first();
+        return User::where('id', $id)->with(['jabatan', 'notifications', 'unreadNotifications'])->first();
     }
     function getLastUser(){
         return User::orderBy('id', 'desc')->first();

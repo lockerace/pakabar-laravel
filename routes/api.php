@@ -18,9 +18,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:sanctum')->get('/user', [LoginController::class, 'checkLogin']);
 
 Route::get('/home', [HomeController::class, 'index']);
 Route::get('/about', [HomeController::class, 'aboutUs']);
@@ -29,3 +27,4 @@ Route::post('/login', [LoginController::class, "submitLogin"]);
 Route::post('/register', [LoginController::class, "submitRegister"]);
 Route::get('/profile', [UserController::class, 'getProfile']);
 Route::post('/profile', [UserController::class, "updateProfile"]);
+Route::post('/logout', [LoginController::class, "getLogout"]);

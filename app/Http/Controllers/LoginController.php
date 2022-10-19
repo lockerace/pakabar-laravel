@@ -24,6 +24,10 @@ class LoginController extends Controller
         return view('register');
     }
 
+    function checkLogin(Request $request) {
+        return $this->users->getById($request->user()->id);
+    }
+
     function submitLogin(Request $request){
         $request->validate([
             'no_anggota' => 'required',
@@ -64,7 +68,7 @@ class LoginController extends Controller
                 );
             }
         }
-        
+
     }
 
     function submitRegister(Request $request){
@@ -120,9 +124,12 @@ class LoginController extends Controller
             
     }
 
-    function getLogout(){
+    function getLogout(Request $request){
         Auth::logout();
 
+        if($request->wantsJson()){
+            return response()->json(null);
+        }
         return redirect()->route('home');
     }
 }
