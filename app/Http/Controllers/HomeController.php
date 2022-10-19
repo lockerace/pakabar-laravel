@@ -34,10 +34,14 @@ class HomeController extends Controller
         return view('home', $data);
     }
 
-    public function aboutUs(){
+    public function aboutUs(Request $request){
         $data = [
             'founder' => $this->user->getFounder(),
         ];
+
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
 
         return view('aboutus', $data);
     }
