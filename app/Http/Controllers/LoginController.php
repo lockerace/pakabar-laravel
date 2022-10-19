@@ -40,15 +40,31 @@ class LoginController extends Controller
 
         Auth::login($user);
 
-        if ($user->jabatan_id == 1) {
-            return redirect()->action(
-                [UserController::class, 'getMember'], ['token' => $user->createToken("")->plainTextToken]
-            );
-        } else {
-            return redirect()->action(
-                [HomeController::class, 'index'], ['token' => $user->createToken("")->plainTextToken]
-            );
+        if($request->wantsJson()){
+            if ($user->jabatan_id == 1) {
+                return response()->json([
+                    'token' => $user->createToken("")->plainTextToken,
+                    'url' => '/admin',
+                ]);
+            } else{
+                return response()->json([
+                    'token' => $user->createToken("")->plainTextToken,
+                    'url' => '/',
+                ]);
+            }
+
+        } else{
+            if ($user->jabatan_id == 1) {
+                return redirect()->action(
+                    [UserController::class, 'getMember'], ['token' => $user->createToken("")->plainTextToken]
+                );
+            } else {
+                return redirect()->action(
+                    [HomeController::class, 'index'], ['token' => $user->createToken("")->plainTextToken]
+                );
+            }
         }
+        
     }
 
     function submitRegister(Request $request){

@@ -9,6 +9,7 @@ import {
 import Home from './pages/home'
 import AboutUs from './pages/aboutus'
 import News from './pages/news'
+import Login from './pages/login'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
 	{
     path: "news/:id",
     element: <News />,
+  },
+    {
+    path: "login",
+    element: <Login />,
   },
 ], {
 	basename: "/react"
