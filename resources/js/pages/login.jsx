@@ -13,7 +13,7 @@ export default (props) => {
         <div>
             <Header />
             <Login />
-        </div>    
+        </div>
 
     )
 }
@@ -24,7 +24,6 @@ const Login = (props) => {
     const onSubmit = async(event) =>{
         event.preventDefault()
         const res = await request.post('/login', formData)
-        console.log(res.data)
         if (res.status == 200 && res.data) {
             localStorage.setItem('token', res.data.token)
             navigate(res.data.url)

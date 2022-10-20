@@ -13,11 +13,14 @@ class SliderController extends Controller
         $this->slider = $sliderRepository;
     }
 
-    function getSlider(){
+    function getSlider(Request $request){
         $data = [
             'slider' => $this->slider->getAll(),
             'deleteUrl' => route('admin-slider-delete'),
         ];
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
         return view('admin.slider', $data);
     }
 
@@ -40,7 +43,9 @@ class SliderController extends Controller
             $slider->status = $request->status;
             $slider->save();
         }
-
+        if($request->wantsJson()){
+            return response()->json(null);
+        }
         return response()->redirectTo(route('admin-slider'));
     }
 
@@ -48,6 +53,9 @@ class SliderController extends Controller
         $slider = $this->slider->getById($request->id);
         $slider->delete();
 
+        if($request->wantsJson()){
+            return response()->json(null);
+        }
         return response()->redirectTo(route('admin-slider'));
     }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../components/header';
-import Confirm from '../admin/modalconfirm';
+import Confirm from '../../components/modalconfirm';
 import request from '../../axios';
 import {Link} from "react-router-dom";
 
@@ -36,7 +36,7 @@ export default (props) => {
 
 
     return (
-        <div classNameName="full-height d-flex flex-column">
+        <div className="full-height d-flex flex-column">
             <Header />
             <Member data={members} jabatan={jabatan} fetch={fetch} setDeleteId={setDeleteId} />
             <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
@@ -125,7 +125,7 @@ const Member = (props) => {
                     </tr>
                 </thead>
                 { props.data.length > 0 && props.data.map((d, i) => (
-                    <tbody>
+                    <tbody key={i}>
                         <tr>
                             <td>{ d.name }</td>
                             <td>{ d.no_anggota }</td>
@@ -156,7 +156,7 @@ const Member = (props) => {
                 )) }
             </table>
             <form onSubmit={onSubmit} method="post" >
-                <div id="editMemberModal" className="modal" tabindex="-1" role="dialog">
+                <div id="editMemberModal" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -165,50 +165,50 @@ const Member = (props) => {
                             </div>
                             <div className="modal-body">
                                 <div className="mb-3">
-                                    <label for="memberEmail" className="form-label">Email: </label>
+                                    <label htmlFor="memberEmail" className="form-label">Email: </label>
                                     <input id="memberEmail" className="form-control" value={formData.email} placeholder="Email" type="email" required="required" onChange={(e)=>inputChange("email", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
-                                    <label for="memberName" className="form-label">Nama Anggota: </label>
+                                    <label htmlFor="memberName" className="form-label">Nama Anggota: </label>
                                     <input id="memberName" className="form-control" value={formData.name} placeholder="Nama Anggota" required="required" onChange={(e)=>inputChange("name", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
-                                    <label for="memberAlamat" className="form-label">Alamat: </label>
+                                    <label htmlFor="memberAlamat" className="form-label">Alamat: </label>
                                     <input id="memberAlamat" className="form-control" value={formData.alamat} placeholder="Alamat" required="required" onChange={(e)=>inputChange("alamat", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
-                                    <label for="memberNoTelp" className="form-label">No Telpon: </label>
+                                    <label htmlFor="memberNoTelp" className="form-label">No Telpon: </label>
                                     <input id="memberNoTelp" className="form-control" value={formData.no_telp} placeholder="Nomor Telepon" required="required" onChange={(e)=>inputChange("no_telp", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
-                                    <label for="memberNoAnggota" className="form-label">No Anggota: </label>
+                                    <label htmlFor="memberNoAnggota" className="form-label">No Anggota: </label>
                                     <input id="memberNoAnggota" className="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" required="required" onChange={(e)=>inputChange("no_anggota", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
-                                    <label for="memberPassword" className="form-label">Password: </label>
+                                    <label htmlFor="memberPassword" className="form-label">Password: </label>
                                     <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" required="required" onChange={(e)=>inputChange("password", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
-                                    <label for="memberNoKtp" className="form-label">No KTP: </label>
+                                    <label htmlFor="memberNoKtp" className="form-label">No KTP: </label>
                                     <input id="memberNoKtp" className="form-control" value={formData.no_ktp} placeholder="Nomor KTP" required="required" onChange={(e)=>inputChange("no_ktp", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
-                                    <label for="memberJabatan" className="form-label">Jabatan: </label>
+                                    <label htmlFor="memberJabatan" className="form-label">Jabatan: </label>
                                     <select id="memberJabatan" required="required" className="form-select" value={formData.jabatan_id} onChange={(e)=>inputChange("jabatan_id", e.target.value)}>
                                         <option>Pilih Jabatan</option>
                                         { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
-                                            <option value={d.id} >{ d.name }</option>
+                                            <option key={i} value={d.id} >{ d.name }</option>
                                         )) }
                                     </select>
                                 </div>
                                 <div className="mb-3">
-                                    <label for="memberStatus" className="form-label">Status: </label>
+                                    <label htmlFor="memberStatus" className="form-label">Status: </label>
                                     <select id="memberStatus" required="required" className="form-select" value={formData.status} onChange={(e)=>inputChange("status", e.target.value)}>
                                         <option value="0">Belum Verifikasi</option>
                                         <option value="1">Diverifikasi</option>
                                     </select>
                                 </div>
-                                
+
                                 <input id="memberId" name="id" type="hidden" value=""/>
                             </div>
                             <div className="modal-footer">

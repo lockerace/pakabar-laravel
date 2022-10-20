@@ -15,6 +15,8 @@ import Register from './pages/register'
 import Profile from './pages/profile'
 import Jabatan from './pages/admin/jabatan'
 import Member from './pages/admin/member'
+import Slider from './pages/admin/slider'
+import AdminNews from './pages/admin/news'
 
 
 const router = createBrowserRouter([
@@ -30,15 +32,15 @@ const router = createBrowserRouter([
     path: "news/:id",
     element: <News />,
   },
-    {
+  {
     path: "login",
     element: <Login />,
   },
-    {
+  {
     path: "register",
     element: <Register />,
   },
-    {
+  {
     path: "profile",
     element: <Profile />
   },
@@ -46,13 +48,21 @@ const router = createBrowserRouter([
     path: "admin",
     children: [
       {
-        path: "jabatan", 
+        path: "jabatan",
         element: <Jabatan />,
-    },
+      },
+        {
+          path: "member",
+          element: <Member />,
+      },
       {
-        path: "member",
-        element: <Member />,
-    },
+        path: "slider",
+        element: <Slider />
+      },
+      {
+        path: "news",
+        element: <AdminNews />
+      }
     ]
   },
 ], {

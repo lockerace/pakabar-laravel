@@ -368,7 +368,6 @@ window.onNotifikasiEdit = (event)=>{
 
 window.onBankLedgerStatusChanged = (event)=>{
   var bank_receiver = document.getElementById('bankReceiver');
-  console.log(event.value);
   if(event.value == 2){
     bank_receiver.classList.add("d-block");
     bank_receiver.classList.remove("d-none");

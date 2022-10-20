@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../components/header';
-import Confirm from '../admin/modalconfirm';
+import Confirm from '../../components/modalconfirm';
 import request from '../../axios';
 import {Link} from "react-router-dom";
 
@@ -87,7 +87,7 @@ const Jabatan = (props) => {
                 </thead>
                 <tbody>
                     { props.data.length > 0 && props.data.map((d, i) => (
-                        <tr>
+                        <tr key={i}>
                             <td>{ d.name }</td>
                             <td>{ d.id }</td>
                             <td>
@@ -107,23 +107,23 @@ const Jabatan = (props) => {
                 </tbody>
             </table>
             <form onSubmit={onSubmit} method="post">
-                <div id="editJabatanModal" class="modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Edit Jabatan</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div id="editJabatanModal" className="modal" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Edit Jabatan</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="jabatanName" class="form-label">Nama Jabatan: </label>
-                                    <input id="jabatanName" class="form-control" value={formData.name} placeholder="Nama Jabatan" required="required" onChange={(e)=>inputChange("name", e.target.value)} />
+                            <div className="modal-body">
+                                <div className="mb-3">
+                                    <label htmlFor="jabatanName" className="form-label">Nama Jabatan: </label>
+                                    <input id="jabatanName" className="form-control" value={formData.name} placeholder="Nama Jabatan" required="required" onChange={(e)=>inputChange("name", e.target.value)} />
                                 </div>
                                 <input id="jabatanId" value={formData.id} type="hidden"/>
                             </div>
-                            <div class="modal-footer">
-                                <button  class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <div className="modal-footer">
+                                <button  className="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                             </div>
                         </div>
                     </div>

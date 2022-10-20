@@ -28,7 +28,6 @@ const Register = (props) => {
     const onSubmit = async(event) =>{
         event.preventDefault()
         const res = await request.post('/register', formData)
-        console.log(res.data)
         if (res.status == 200 && res.data) {
             navigate(res.data.url);
         }

@@ -28,12 +28,15 @@ class NewsController extends Controller
         return view('news', $data);
     }
 
-    function getNews() {
+    function getNews(Request $request) {
         $data = [
             'news' => $this->news->getAll(),
             'deleteUrl' => route('admin-news-delete'),
         ];
 
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
         return view('admin.news', $data);
     }
 
@@ -53,6 +56,9 @@ class NewsController extends Controller
             $news->save();
         }
 
+        if($request->wantsJson()){
+            return response()->json(null);
+        }
         return response()->redirectTo(route('admin-news'));
     }
 
@@ -60,6 +66,9 @@ class NewsController extends Controller
         $news = $this->news->getById($request->id);
         $news->delete();
 
+        if($request->wantsJson()){
+            return response()->json(null);
+        }
         return response()->redirectTo(route('admin-news'));
     }
 

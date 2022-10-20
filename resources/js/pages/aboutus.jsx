@@ -34,7 +34,7 @@ const About = (props) => {
 
             <div className="row pt-5">
                 { props.data.length > 0 && props.data.map((d, i) => (
-                    <div className="col col-md-4">
+                    <div key={i} className="col col-md-4">
                         <div className="card">
                             {!d.foto && (
                                 <div className="w-100 ratio-1 position-relative">
@@ -45,7 +45,7 @@ const About = (props) => {
                             )}
                             {d.foto && (
                                 <img src={"/member/" + d.foto} className="card-img-top" alt="..."></img>
-                            )}    
+                            )}
                             <div className="card-body">
                                 <h5 className="card-title text-center">{ d.name }</h5>
                             </div>

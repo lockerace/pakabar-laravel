@@ -123,7 +123,7 @@ const Members = (props) => {
         </div>
 
         <form onSubmit={onSubmit} method="post">
-            <div id="editMemberModal" className="modal" tabindex="-1" role="dialog">
+            <div id="editMemberModal" className="modal" tabIndex="-1" role="dialog">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -132,11 +132,11 @@ const Members = (props) => {
                         </div>
                         <div className="modal-body">
                             <div className="mb-3">
-                                <label for="memberEmail" className="form-label">Email: </label>
+                                <label htmlFor="memberEmail" className="form-label">Email: </label>
                                 <input id="memberEmail" className="form-control" value={formData.email} placeholder="Email" type="email" required="required" onChange={(e)=>inputChange("email", e.target.value)} />
                             </div>
                             <div className="mb-3">
-                                <label for="memberPassword" className="form-label">Password: </label>
+                                <label htmlFor="memberPassword" className="form-label">Password: </label>
                                 <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" required="required" onChange={(e)=>inputChange("password", e.target.value)} />
                             </div>
                             <input id="memberId" name="id" type="hidden" value=""/>
