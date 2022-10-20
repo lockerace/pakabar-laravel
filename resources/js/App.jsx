@@ -13,6 +13,8 @@ import News from './pages/news'
 import Login from './pages/login'
 import Register from './pages/register'
 import Profile from './pages/profile'
+import Jabatan from './pages/admin/jabatan'
+
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,10 @@ const router = createBrowserRouter([
     {
     path: "profile",
     element: <Profile />
+  },
+    {
+    path: "/admin/jabatan",
+    element: <Jabatan />
   },
 ], {
 	basename: "/react"

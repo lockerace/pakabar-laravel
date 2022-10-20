@@ -9,7 +9,16 @@ const initFormData = {
 }
 
 export default (props) => {
+    return (
+        <div>
+            <Header />
+            <Login />
+        </div>    
 
+    )
+}
+
+const Login = (props) => {
     const navigate = useNavigate();
     const [formData, setFormData] = React.useState(initFormData)
     const onSubmit = async(event) =>{
@@ -27,27 +36,23 @@ export default (props) => {
         setFormData(temp)
     }
     return (
-        <div>
-            <Header/>
-            <div className="container">
-                <div className="col-md-8 card m-auto my-5">
-                    <div className="card-header">Log In</div>
-                    <div className="card-body">
+        <div className="container">
+            <div className="col-md-8 card m-auto my-5">
+                <div className="card-header">Log In</div>
+                <div className="card-body">
                     <form method="post" onSubmit={onSubmit}>
                         <div className="mb-3">
-                        <label className="form-label">Nomor Anggota</label>
-                        <input className="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" onChange={(e)=>inputChange("no_anggota", e.target.value)} />
+                            <label className="form-label">Nomor Anggota</label>
+                            <input className="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" onChange={(e)=>inputChange("no_anggota", e.target.value)} />
                         </div>
                         <div className="mb-3">
-                        <label className="form-label">Password</label>
-                        <input className="form-control" value={formData.password} placeholder="Password" type="password" onChange={(e)=>inputChange("password", e.target.value)}/>
+                            <label className="form-label">Password</label>
+                            <input className="form-control" value={formData.password} placeholder="Password" type="password" onChange={(e)=>inputChange("password", e.target.value)}/>
                         </div>
                         <button className="btn btn-primary">Login</button>
                     </form>
-                    </div>
                 </div>
             </div>
-        </div>    
-
+        </div>
     )
 }

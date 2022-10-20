@@ -24,7 +24,7 @@ export default (props) => {
     }, [])
 
     return (
-        <div classNameName="full-height d-flex flex-column">
+        <div className="full-height d-flex flex-column">
             <Header />
             <Members data={members} fetch={fetch} />
             <Footer />
@@ -38,7 +38,6 @@ const Members = (props) => {
     const onSubmit = async(event) =>{
         event.preventDefault()
         const res = await request.post('/profile', formData)
-        console.log(res.data)
         if (res.status == 200 && res.data) {
             props.fetch()
         }

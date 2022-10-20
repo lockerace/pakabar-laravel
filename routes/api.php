@@ -30,3 +30,7 @@ Route::get('/about', [HomeController::class, 'aboutUs']);
 Route::get('/news/{id}', [NewsController::class, 'getNewsDetail']);
 Route::post('/login', [LoginController::class, "submitLogin"]);
 Route::post('/register', [LoginController::class, "submitRegister"]);
+
+Route::get('/jabatan', [UserController::class, 'getJabatan']);
+Route::post('/jabatan', [UserController::class, 'editJabatan']);
+Route::post('/deletejabatan', [UserController::class, 'deleteJabatan']);

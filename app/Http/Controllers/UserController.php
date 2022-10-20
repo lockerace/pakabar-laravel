@@ -102,12 +102,14 @@ class UserController extends Controller
         return response()->redirectTo(route('admin-member'));
     }
 
-    function getJabatan(){
+    function getJabatan(Request $request){
         $data = [
             'jabatan' => $this->jabatan->getAll(),
             'deleteUrl' => route('admin-jabatan-delete'),
         ];
-
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
         return view('admin.jabatan', $data);
     }
 
@@ -125,6 +127,9 @@ class UserController extends Controller
             $jabatan->save();
         }
 
+        if($request->wantsJson()){
+            return response()->json(NULL);
+        }
         return response()->redirectTo(route('admin-jabatan'));
     }
 
