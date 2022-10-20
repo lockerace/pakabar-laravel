@@ -35,10 +35,13 @@ class UserController extends Controller
             'myOption' => $myOption,
         ];
 
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
+
         if (!empty($request->token)) {
             $data['token'] = $request->token;
         }
-
         return view('admin.member', $data);
     }
 
@@ -80,6 +83,9 @@ class UserController extends Controller
             }
 
             $member->save();
+        }
+        if($request->wantsJson()){
+            return response()->json(NULL);
         }
 
         return response()->redirectTo(route('admin-member'));

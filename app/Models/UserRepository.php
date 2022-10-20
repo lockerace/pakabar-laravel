@@ -4,7 +4,7 @@ namespace App\Models;
 
 class UserRepository {
     function getAll() {
-        return User::orderBy('created_at', 'desc')->get();
+        return User::orderBy('created_at', 'desc')->with(['jabatan'])->get();
     }
     function getById($id) {
         return User::where('id', $id)->with(['jabatan', 'notifications', 'unreadNotifications'])->first();

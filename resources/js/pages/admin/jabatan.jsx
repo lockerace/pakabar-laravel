@@ -14,7 +14,7 @@ export default (props) => {
     const [deleteId, setDeleteId] = React.useState("");
 
     const fetch = async() => {
-        const res = await request.get('/jabatan')
+        const res = await request.get('/admin/jabatan')
         if(res.status == 200 && res.data) {
             if(res.data.jabatan) setJabatans(res.data.jabatan)
             if(res.data.deleteUrl) setDeleteUrl(res.data.deleteUrl)
@@ -40,7 +40,7 @@ const Jabatan = (props) => {
 
     const onSubmit = async(event) =>{
         event.preventDefault()
-        const res = await request.post('/jabatan', formData)
+        const res = await request.post('/admin/jabatan', formData)
         if (res.status == 200 && res.data) {
             props.fetch()
         }

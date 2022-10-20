@@ -126,7 +126,10 @@ class LoginController extends Controller
 
     function getLogout(Request $request){
         if (!empty($request->user())) {
-            $request->user()->currentAccessToken()->delete();
+            $token = $request->user()->currentAccessToken();
+            if(method_exists($token, 'delete')) {
+                $token->delete();
+            };
         }
         Auth::logout();
 

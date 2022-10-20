@@ -31,6 +31,11 @@ Route::get('/news/{id}', [NewsController::class, 'getNewsDetail']);
 Route::post('/login', [LoginController::class, "submitLogin"]);
 Route::post('/register', [LoginController::class, "submitRegister"]);
 
-Route::get('/jabatan', [UserController::class, 'getJabatan']);
-Route::post('/jabatan', [UserController::class, 'editJabatan']);
-Route::post('/deletejabatan', [UserController::class, 'deleteJabatan']);
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly']], function() {
+    Route::get('/member', [UserController::class, 'getMember']);    
+    Route::post('/member', [UserController::class, 'editMember']);
+    Route::post('/verifymember/{id}', [UserController::class, "verifyMember"]);
+    Route::get('/jabatan', [UserController::class, 'getJabatan']);
+    Route::post('/jabatan', [UserController::class, 'editJabatan']);
+    Route::post('/deletejabatan', [UserController::class, 'deleteJabatan']);
+});
