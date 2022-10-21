@@ -100,7 +100,7 @@ const Member = (props) => {
             temp.no_ktp = form.no_ktp
             temp.jabatan_id = form.jabatan_id
             temp.status = form.status
-            temp.fotoUrl = "/admin/member/" + form.foto
+            temp.fotoUrl = form.foto ? "/admin/member/" + form.foto : ''
             temp.id = form.id
         } else{
             temp.email = ""
