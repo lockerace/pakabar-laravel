@@ -7,6 +7,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\FinanceController;
 
 /*
@@ -23,8 +24,6 @@ use App\Http\Controllers\FinanceController;
 Route::middleware('auth:sanctum')->get('/user', [LoginController::class, 'checkLogin']);
 
 Route::group(['middleware' => ['auth.optional']], function() {
-    Route::get('/profile', [UserController::class, 'getProfile']);
-    Route::post('/profile', [UserController::class, "updateProfile"]);
     Route::post('/logout', [LoginController::class, "getLogout"]);
 });
 Route::get('/home', [HomeController::class, 'index']);
@@ -50,8 +49,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
     Route::post('/news', [NewsController::class, "editNews"]);
     Route::post('/deletenews', [NewsController::class, "deleteNews"]);
     Route::post('/news/image-upload', [NewsController::class, "uploadImageNews"]);
-
     Route::get('/finance', [FinanceController::class, "getBank"]);
     Route::post('/finance', [FinanceController::class, "editBank"]);
     Route::post('/finance/ledger', [FinanceController::class, "editBankLedger"]);
+
+    Route::post('/send-notification', [NotificationController::class, "sendMessage"])->name('admin-send-notif');
+});
+
+Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::get('/profile', [UserController::class, 'getProfile']);
+    Route::post('/profile', [UserController::class, "updateProfile"]);
+
+    Route::get('/notification', [NotificationController::class, 'getNotification']);
+    Route::get('/notification/read/{id}', [NotificationController::class, 'readNotification']);
 });

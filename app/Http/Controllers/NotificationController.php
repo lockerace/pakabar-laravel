@@ -25,6 +25,9 @@ class NotificationController extends Controller
         $data = [
             'notifikasi' => $request->user()->notifications()->paginate(15),
         ];
+        if($request->wantsJson()){
+            return response()->json($data);
+        }
         return view('notifikasi', $data);
     }
 
@@ -36,6 +39,9 @@ class NotificationController extends Controller
         ];
         Notification::send($receiver, new TestNotification($data));
 
+        if($request->wantsJson()){
+            return response()->json(null);
+        }
         return redirect(route('notification'));
     }
 
@@ -62,6 +68,10 @@ class NotificationController extends Controller
 
         if(!empty($notif)){
             $notif->markAsRead();
+        }
+
+        if($request->wantsJson()){
+            return response()->json(null);
         }
 
         return redirect(route('notification'));
