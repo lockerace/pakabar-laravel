@@ -17,20 +17,27 @@ class FinanceController extends Controller
 
     function getBank(Request $request) {
         $myOption = $request->myOption;
+        // $bank_ledger = $this->bankLedger->getAll();
         $bank_ledger = [];
         if(!empty($myOption)){
-            $bank_ledger = $this->bankLedger->getByBank($myOption);
+            if($myOption == 0)
+                $bank_ledger = $this->bankLedger->getAll();
+            else
+                $bank_ledger = $this->bankLedger->getByBank($myOption);
         }
         $data = [
             'bank' => $this->bank->getAll(),
             'bank_ledger' => $bank_ledger,
             'my_option' => $myOption,
-            // 'deleteUrl' => route('admin-news-delete'),
         ];
+
+        if($request->wantsJson()) {
+            return response()->json($data);
+        }
         return view('admin.finance', $data);
     }
 
-    function editBank(Request $request){
+    function editBank(Request $request) {
             $bank = new Bank;
             $bank->no_rekening = $request->no_rekening;
             $bank->nama_bank = $request->nama_bank;
@@ -39,10 +46,14 @@ class FinanceController extends Controller
             $bank->saldo = $request->saldo;
             $bank->save();
 
+            if($request->wantsJson()) {
+                return response()->json(NULL);
+            }
+
         return response()->redirectTo(route('admin-finance'));
     }
 
-    function editBankLedger(Request $request){
+    function editBankLedger(Request $request) {
         $previous = $this->bankLedger->getLast($request->bank_id);
         $bankLedger = new BankLedger;
         $bankLedger->bank_id = $request->bank_id;
@@ -99,6 +110,10 @@ class FinanceController extends Controller
             $previous->next_id = $bankLedger->id;
             $previous->save();
         }
+    }
+
+    if($request->wantsJson()) {
+        return response()->json(NULL);
     }
         
     return redirect()->route('admin-finance', ['myOption'=>$request->bank_id]);

@@ -17,6 +17,7 @@ import Jabatan from './pages/admin/jabatan'
 import Member from './pages/admin/member'
 import Slider from './pages/admin/slider'
 import AdminNews from './pages/admin/news'
+import Finance from './pages/admin/finance'
 
 
 const router = createBrowserRouter([
@@ -51,7 +52,7 @@ const router = createBrowserRouter([
         path: "jabatan",
         element: <Jabatan />,
       },
-        {
+      {
           path: "member",
           element: <Member />,
       },
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: "news",
         element: <AdminNews />
+      },
+      {
+        path: "finance",
+        element: <Finance />
       }
     ]
   },
