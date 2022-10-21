@@ -19,7 +19,7 @@ export default (props) => {
 
   React.useEffect(() => {
     if (props.value) {
-      setUrl('/storage/' + props.value)
+      setUrl(props.value)
     } else {
       setUrl('')
     }

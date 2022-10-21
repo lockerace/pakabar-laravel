@@ -90,6 +90,8 @@ const initFormData = {
 const EditNewsForm = (props) => {
   const [formData, _setFormData] = React.useState(initFormData);
   const formDataRef = React.useRef(formData);
+  const modalRef = React.useRef();
+
   const setFormData = (val) => {
     formDataRef.current = val
     _setFormData(val)
@@ -99,6 +101,8 @@ const EditNewsForm = (props) => {
     event.preventDefault();
     const res = await request.post('/admin/news', formData)
     if (res.status == 200 && res.data) {
+        if(modalRef.current)
+            modalRef.current.click()
         props.fetch()
     }
   }
@@ -129,7 +133,7 @@ const EditNewsForm = (props) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">News</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <button type="button" className="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close">
               </button>
             </div>
             <div className="modal-body">

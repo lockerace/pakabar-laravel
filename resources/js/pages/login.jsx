@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../components/header';
+import Footer from '../components/footer';
 import request from '../axios';
 import {Link, useNavigate} from "react-router-dom";
 
@@ -12,7 +13,10 @@ export default (props) => {
     return (
         <div>
             <Header />
-            <Login />
+            <section className="full-height d-flex flex-column">
+                <Login />
+            </section>
+            <Footer />
         </div>
 
     )

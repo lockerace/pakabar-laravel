@@ -48,7 +48,7 @@ class LoginController extends Controller
             if ($user->jabatan_id == 1) {
                 return response()->json([
                     'token' => $user->createToken("")->plainTextToken,
-                    'url' => '/admin',
+                    'url' => '/admin/member',
                 ]);
             } else{
                 return response()->json([

@@ -3,10 +3,13 @@ import Header from '../../components/header';
 import Confirm from '../../components/modalconfirm';
 import request from '../../axios';
 import {Link} from "react-router-dom";
+import ImageInput from '../../components/imageinput'
 
 const initFormData = {
     email:"",
     name:"",
+    foto:"",
+    fotoUrl:"",
     alamat:"",
     no_telp:"",
     no_anggota:"",
@@ -36,10 +39,12 @@ export default (props) => {
 
 
     return (
-        <div className="full-height d-flex flex-column">
+        <div>
             <Header />
-            <Member data={members} jabatan={jabatan} fetch={fetch} setDeleteId={setDeleteId} />
-            <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
+            <section className="full-height d-flex flex-column">
+                <Member data={members} jabatan={jabatan} fetch={fetch} setDeleteId={setDeleteId} />
+                <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
+            </section>
         </div>
     )
 }
@@ -51,7 +56,18 @@ const Member = (props) => {
 
     const onSubmit = async(event) =>{
         event.preventDefault()
-        const res = await request.post('/admin/member', formData)
+        const data = new FormData()
+        data.append('name', formData.name)
+        data.append('alamat', formData.alamat)
+        data.append('email', formData.email)
+        data.append('no_telp', formData.no_telp)
+        data.append('no_anggota', formData.no_anggota)
+        data.append('no_ktp', formData.no_ktp)
+        data.append('password', formData.password)
+        data.append('jabatan_id', formData.jabatan_id)
+        data.append('status', formData.status)
+        data.append('foto', formData.foto)
+        const res = await request.post('/admin/member', data)
         if (res.status == 200 && res.data) {
             if(modalRef.current)
                 modalRef.current.click()
@@ -77,12 +93,14 @@ const Member = (props) => {
             temp.email = form.email
             temp.name = form.name
             temp.password = ""
+            temp.foto = ""
             temp.alamat = form.alamat
             temp.no_telp = form.no_telp
             temp.no_anggota = form.no_anggota
             temp.no_ktp = form.no_ktp
             temp.jabatan_id = form.jabatan_id
             temp.status = form.status
+            temp.fotoUrl = "/admin/member/" + form.foto
             temp.id = form.id
         } else{
             temp.email = ""
@@ -94,6 +112,7 @@ const Member = (props) => {
             temp.no_ktp = ""
             temp.jabatan_id = 2
             temp.status = "1"
+            temp.fotoUrl = ""
             temp.id = ""
         }
         setFormData(temp)
@@ -155,7 +174,7 @@ const Member = (props) => {
                     </tbody>
                 )) }
             </table>
-            <form onSubmit={onSubmit} method="post" >
+            <form onSubmit={onSubmit} encType="multipart/form-data" method="post" >
                 <div id="editMemberModal" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -208,7 +227,7 @@ const Member = (props) => {
                                         <option value="1">Diverifikasi</option>
                                     </select>
                                 </div>
-
+                                <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChange('foto', e)} />
                                 <input id="memberId" name="id" type="hidden" value=""/>
                             </div>
                             <div className="modal-footer">

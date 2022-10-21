@@ -24,21 +24,26 @@ export default (props) => {
     }, [])
 
     return (
-        <div className="full-height d-flex flex-column">
+        <div>
             <Header />
-            <Members data={members} fetch={fetch} />
-            <Footer />
+            <section className="full-height d-flex flex-column">
+                <Members data={members} fetch={fetch} />
+                <Footer />
+            </section>
         </div>
     )
 }
 
 const Members = (props) => {
     const [formData, setFormData] = React.useState(initFormData);
+    const modalRef = React.useRef();
 
     const onSubmit = async(event) =>{
         event.preventDefault()
         const res = await request.post('/profile', formData)
         if (res.status == 200 && res.data) {
+            if(modalRef.current)
+                modalRef.current.click()
             props.fetch()
         }
     }
@@ -128,7 +133,7 @@ const Members = (props) => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Edit Profil</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <div className="mb-3">
@@ -142,7 +147,7 @@ const Members = (props) => {
                             <input id="memberId" name="id" type="hidden" value=""/>
                         </div>
                         <div className="modal-footer">
-                            <button  className="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                            <button  className="btn btn-primary">Simpan</button>
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         </div>
                     </div>

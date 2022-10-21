@@ -1,7 +1,9 @@
 import React from 'react';
 import Header from '../components/header';
+import Footer from '../components/footer';
 import request from '../axios';
 import {Link, useNavigate} from "react-router-dom";
+import ImageInput from '../components/imageinput'
 
 const initFormData = {
     name:"",
@@ -17,17 +19,28 @@ export default (props) => {
     return (
         <div>
             <Header/>
-            <Register />
+            <section className="full-height d-flex flex-column">
+                <Register />
+                <Footer />
+            </section>
         </div>
     )
 }
 
 const Register = (props) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const [formData, setFormData] = React.useState(initFormData)
     const onSubmit = async(event) =>{
         event.preventDefault()
-        const res = await request.post('/register', formData)
+        const data = new FormData()
+        data.append('name', formData.name)
+        data.append('alamat', formData.alamat)
+        data.append('email', formData.email)
+        data.append('no_telp', formData.no_telp)
+        data.append('no_ktp', formData.no_ktp)
+        data.append('password', formData.password)
+        data.append('foto', formData.foto)
+        const res = await request.post('/register', data)
         if (res.status == 200 && res.data) {
             navigate(res.data.url);
         }
@@ -42,7 +55,7 @@ const Register = (props) => {
             <div className="col-md-8 card m-auto my-5">
                 <div className="card-header">Register</div>
                 <div className="card-body">
-                    <form onSubmit={onSubmit} method="post">
+                    <form onSubmit={onSubmit} encType="multipart/form-data" method="post">
                         <div className="mb-3">
                             <label className="form-label">Nama</label>
                             <input className="form-control" value={formData.name} required="required" placeholder="Nama" onChange={(e)=>inputChange("name", e.target.value)} />
@@ -67,7 +80,7 @@ const Register = (props) => {
                             <label className="form-label">Password</label>
                             <input className="form-control" value={formData.password} required="required" placeholder="Password" type="password" onChange={(e)=>inputChange("password", e.target.value)}/>
                         </div>
-
+                        <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChange('foto', e)} />
                         <button className="btn btn-primary">Register</button>
                     </form>
                 </div>

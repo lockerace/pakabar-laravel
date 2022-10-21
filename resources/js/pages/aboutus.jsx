@@ -18,10 +18,12 @@ export default (props) => {
     }, [])
 
     return (
-        <div className="full-height d-flex flex-column">
+        <div>
             <Header/>
-            <About data={founders} />
-            <Footer/>
+            <section className="full-height d-flex flex-column">
+                <About data={founders} />
+                <Footer/>
+            </section>
         </div>
     )
 }

@@ -27,10 +27,12 @@ export default (props) => {
 
 
     return (
-        <div className="full-height d-flex flex-column">
+        <div>
             <Header />
-            <Jabatan data={jabatans} fetch={fetch} setDeleteId={setDeleteId} />
-            <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
+            <section className="full-height d-flex flex-column">
+                <Jabatan data={jabatans} fetch={fetch} setDeleteId={setDeleteId} />
+                <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
+            </section>
         </div>
     )
 }

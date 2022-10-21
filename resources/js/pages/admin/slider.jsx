@@ -87,6 +87,7 @@ const initFormData = {
 
 const EditSliderForm = (props) => {
   const [formData, setFormData] = React.useState(initFormData);
+  const modalRef = React.useRef();
 
   const onSubmit = async(event) => {
     event.preventDefault();
@@ -97,6 +98,8 @@ const EditSliderForm = (props) => {
     data.append('status', formData.status)
     const res = await request.post('/admin/slider', data)
     if (res.status == 200 && res.data) {
+        if(modalRef.current)
+            modalRef.current.click()
         props.fetch()
     }
   }
@@ -108,7 +111,7 @@ const EditSliderForm = (props) => {
       temp.foto = '';
       temp.url = props.data.url
       temp.status = props.data.status
-      temp.fotoUrl = props.data.foto
+      temp.fotoUrl = "/storage/" + props.data.foto
       setFormData(temp)
     } else {
       const temp = {...initFormData}
@@ -129,7 +132,7 @@ const EditSliderForm = (props) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Slider</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" className="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChanged('foto', e)} />
