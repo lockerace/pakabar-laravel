@@ -2,35 +2,17 @@ import React from 'react';
 import {format} from 'date-fns';
 import { applyStyles } from '@popperjs/core';
 import {Link, useNavigate} from "react-router-dom";
-import request from '../axios';
+import request from '../axios'
 
 export default (props) => {
-    const [user, setUser] = React.useState(null);
     const navigate = useNavigate();
-
-    const fetch = async() => {
-        try {
-            const res = await request.get('/user')
-            if(res.status == 200 && res.data) {
-                if(res.data) setUser(res.data)
-            }
-        } catch (err) {
-            if (err.response && err.response.status == 401) {
-              setUser(null)
-            }
-        }
-    }
-
-    React.useEffect(() => {
-        fetch()
-    }, [])
 
     const logOut = async() => {
         try {
             const res = await request.post('/logout')
             if(res.status == 200) {
                 localStorage.removeItem('token')
-                setUser(null)
+                props.fetch()
                 navigate('/')
             }
         } catch (err) {}
@@ -54,7 +36,7 @@ export default (props) => {
                         </li>
                     </ul>
 
-                    <UserMenu user={user} logOut={logOut} />
+                    <UserMenu user={props.auth} logOut={logOut} />
                 </div>
             </div>
         </nav>
@@ -107,7 +89,3 @@ const UserMenu = (props) => {
       )
   }
 }
-
-// @if (!empty($unread) && count($unread) > 0)
-//     <span className="badge bg-danger">{{count($unread)}}</span>
-// @endif

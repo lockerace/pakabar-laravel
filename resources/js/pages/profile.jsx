@@ -1,6 +1,5 @@
 import React from 'react';
 import Footer from '../components/footer';
-import Header from '../components/header';
 import request from '../axios'
 import { Link, Navigate } from "react-router-dom";
 
@@ -24,13 +23,10 @@ export default (props) => {
     }, [])
 
     return (
-        <div>
-            <Header />
-            <section className="full-height d-flex flex-column">
-                <Members data={members} fetch={fetch} />
-                <Footer />
-            </section>
-        </div>
+      <section className="full-height d-flex flex-column">
+          <Members data={members} fetch={fetch} />
+          <Footer />
+      </section>
     )
 }
 

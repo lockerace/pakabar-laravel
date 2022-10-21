@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/header';
 import request from '../../axios';
 import Confirm from '../../components/modalconfirm';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -35,48 +34,45 @@ export default (props) => {
   }
 
   return (
-    <div>
-      <Header/>
-      <div className="full-height container py-5 d-flex flex-column">
-        <h3>Data News</h3>
-        <div className="d-flex flex-row justify-content-end">
-            <a className="btn btn-primary mb-3 d-flex flex-row" onClick={onEdit()} data-bs-toggle="modal" data-bs-target="#editNewsModal" >
-                <i className="material-icons d-block">add</i>
-                <span>Tambah</span>
-            </a>
-        </div>
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>News</th>
-              <th>Konten</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-          { news && news.length > 0 && news.map((d, i) => (
-            <tr key={i}>
-              <td>{ d.judul }</td>
-              <td>{ d.konten }</td>
-              <td>
-              <div className="d-flex flex-row gap-2">
-                <a className="btn btn-link text-primary text-decoration-none d-flex flex-row" onClick={onEdit(d)} data-bs-toggle="modal" data-bs-target="#editNewsModal">
-                  <i className="material-icons d-block">edit</i>
-                  <span>Edit</span>
-                </a>
-                <a className="btn btn-link text-danger text-decoration-none d-flex flex-row" onClick={onDelete(d.id)} data-bs-toggle="modal" data-bs-target="#deleteModal">
-                  <i className="material-icons d-block">delete</i>
-                  <span>Hapus</span>
-                </a>
-              </div>
-              </td>
-            </tr>
-          ))}
-          </tbody>
-        </table>
-        <EditNewsForm data={editData} fetch={fetch} />
-        <Confirm deleteUrl="/admin/deletenews" id={deleteId} callBack={fetch} />
+    <div className="full-height container py-5 d-flex flex-column">
+      <h3>Data News</h3>
+      <div className="d-flex flex-row justify-content-end">
+          <a className="btn btn-primary mb-3 d-flex flex-row" onClick={onEdit()} data-bs-toggle="modal" data-bs-target="#editNewsModal" >
+              <i className="material-icons d-block">add</i>
+              <span>Tambah</span>
+          </a>
       </div>
+      <table className="table table-bordered">
+        <thead>
+          <tr>
+            <th>News</th>
+            <th>Konten</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+        { news && news.length > 0 && news.map((d, i) => (
+          <tr key={i}>
+            <td>{ d.judul }</td>
+            <td>{ d.konten }</td>
+            <td>
+            <div className="d-flex flex-row gap-2">
+              <a className="btn btn-link text-primary text-decoration-none d-flex flex-row" onClick={onEdit(d)} data-bs-toggle="modal" data-bs-target="#editNewsModal">
+                <i className="material-icons d-block">edit</i>
+                <span>Edit</span>
+              </a>
+              <a className="btn btn-link text-danger text-decoration-none d-flex flex-row" onClick={onDelete(d.id)} data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <i className="material-icons d-block">delete</i>
+                <span>Hapus</span>
+              </a>
+            </div>
+            </td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+      <EditNewsForm data={editData} fetch={fetch} />
+      <Confirm deleteUrl="/admin/deletenews" id={deleteId} callBack={fetch} />
     </div>
   )
 }

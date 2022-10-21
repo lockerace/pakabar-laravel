@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/header';
 import request from '../../axios';
 import Confirm from '../../components/modalconfirm';
 import ImageInput from '../../components/imageinput'
@@ -29,50 +28,47 @@ export default (props) => {
   }
 
   return (
-    <div>
-      <Header/>
-      <div className="full-height container py-5 d-flex flex-column">
-        <h3>Data Slider</h3>
-        <div className="d-flex flex-row justify-content-end">
-            <a className="btn btn-primary mb-3 d-flex flex-row" onClick={onEdit()} data-bs-toggle="modal" data-bs-target="#editSliderModal" >
-                <i className="material-icons d-block">add</i>
-                <span>Tambah</span>
-            </a>
-        </div>
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-                <th>Foto Slider</th>
-                <th>Url</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-          { sliders && sliders.length > 0 && sliders.map((d, i) => (
-            <tr key={i}>
-                <td>{ d.foto }</td>
-                <td>{ d.url }</td>
-                <td>{ d.status }</td>
-                <td>
-                  <div className="d-flex flex-row gap-2">
-                    <a className="btn btn-link text-primary text-decoration-none d-flex flex-row" onClick={onEdit(d)} data-bs-toggle="modal" data-bs-target="#editSliderModal">
-                      <i className="material-icons d-block">edit</i>
-                      <span>Edit</span>
-                    </a>
-                    <a className="btn btn-link text-danger text-decoration-none d-flex flex-row" onClick={onDelete(d.id)} data-bs-toggle="modal" data-bs-target="#deleteModal">
-                      <i className="material-icons d-block">delete</i>
-                      <span>Hapus</span>
-                    </a>
-                  </div>
-                </td>
-            </tr>
-          ))}
-          </tbody>
-        </table>
-        <EditSliderForm data={editData} fetch={fetch} />
-        <Confirm deleteUrl="/admin/deleteslider" id={deleteId} callBack={fetch} />
+    <div className="full-height container py-5 d-flex flex-column">
+      <h3>Data Slider</h3>
+      <div className="d-flex flex-row justify-content-end">
+          <a className="btn btn-primary mb-3 d-flex flex-row" onClick={onEdit()} data-bs-toggle="modal" data-bs-target="#editSliderModal" >
+              <i className="material-icons d-block">add</i>
+              <span>Tambah</span>
+          </a>
       </div>
+      <table className="table table-bordered">
+        <thead>
+          <tr>
+              <th>Foto Slider</th>
+              <th>Url</th>
+              <th>Status</th>
+              <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+        { sliders && sliders.length > 0 && sliders.map((d, i) => (
+          <tr key={i}>
+              <td>{ d.foto }</td>
+              <td>{ d.url }</td>
+              <td>{ d.status }</td>
+              <td>
+                <div className="d-flex flex-row gap-2">
+                  <a className="btn btn-link text-primary text-decoration-none d-flex flex-row" onClick={onEdit(d)} data-bs-toggle="modal" data-bs-target="#editSliderModal">
+                    <i className="material-icons d-block">edit</i>
+                    <span>Edit</span>
+                  </a>
+                  <a className="btn btn-link text-danger text-decoration-none d-flex flex-row" onClick={onDelete(d.id)} data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i className="material-icons d-block">delete</i>
+                    <span>Hapus</span>
+                  </a>
+                </div>
+              </td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+      <EditSliderForm data={editData} fetch={fetch} />
+      <Confirm deleteUrl="/admin/deleteslider" id={deleteId} callBack={fetch} />
     </div>
   )
 }

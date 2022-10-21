@@ -1,6 +1,5 @@
 import React from 'react';
 import Footer from '../components/footer';
-import Header from '../components/header';
 import request from '../axios';
 
 export default (props) => {
@@ -18,13 +17,10 @@ export default (props) => {
     }, [])
 
     return (
-        <div>
-            <Header/>
-            <section className="full-height d-flex flex-column">
-                <About data={founders} />
-                <Footer/>
-            </section>
-        </div>
+      <section className="full-height d-flex flex-column">
+          <About data={founders} />
+          <Footer/>
+      </section>
     )
 }
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/header';
 import Confirm from '../../components/modalconfirm';
 import request from '../../axios';
 import {Link} from "react-router-dom";
@@ -27,13 +26,10 @@ export default (props) => {
 
 
     return (
-        <div>
-            <Header />
-            <section className="full-height d-flex flex-column">
-                <Jabatan data={jabatans} fetch={fetch} setDeleteId={setDeleteId} />
-                <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
-            </section>
-        </div>
+      <section className="full-height d-flex flex-column">
+          <Jabatan data={jabatans} fetch={fetch} setDeleteId={setDeleteId} />
+          <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
+      </section>
     )
 }
 

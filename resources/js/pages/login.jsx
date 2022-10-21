@@ -1,8 +1,7 @@
 import React from 'react';
-import Header from '../components/header';
 import Footer from '../components/footer';
 import request from '../axios';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useOutletContext} from "react-router-dom";
 
 const initFormData = {
     no_anggota:"",
@@ -10,11 +9,11 @@ const initFormData = {
 }
 
 export default (props) => {
+    const {fetchAuth} = useOutletContext();
     return (
         <div>
-            <Header />
             <section className="full-height d-flex flex-column">
-                <Login />
+                <Login fetch={fetchAuth} />
             </section>
             <Footer />
         </div>
@@ -30,6 +29,7 @@ const Login = (props) => {
         const res = await request.post('/login', formData)
         if (res.status == 200 && res.data) {
             localStorage.setItem('token', res.data.token)
+            if (props.fetch) props.fetch()
             navigate(res.data.url)
         }
     }

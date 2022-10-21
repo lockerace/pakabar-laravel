@@ -1,17 +1,16 @@
 import React from 'react';
 import Footer from '../components/footer'
-import Header from '../components/header';
 import Pagination from '../components/pagination';
 import request from '../axios'
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useOutletContext } from "react-router-dom";
 import { parseISO, formatDistanceToNow } from 'date-fns'
 import { id } from 'date-fns/locale'
 
 export default (props) => {
   const { id } = useParams();
+  const {auth, fetchAuth} = useOutletContext();
   const [data, setData] = React.useState({});
   const [message, setMessage] = React.useState();
-  const [user, setUser] = React.useState();
 
   const fetch = async(page) => {
     let url = '/notification'
@@ -24,62 +23,45 @@ export default (props) => {
     }
   }
 
-  const fetchAuth = async() => {
-      try {
-          const res = await request.get('/user')
-          if(res.status == 200 && res.data) {
-              if(res.data) setUser(res.data)
-          }
-      } catch (err) {
-          if (err.response && err.response.status == 401) {
-            setUser(null)
-          }
-      }
-  }
-
   React.useEffect(() => {
     fetch()
-    fetchAuth()
   }, [])
 
   const onPage = (page) => fetch(page)
 
   return (
-    <div>
-        <Header/>
-        <section className="full-height d-flex flex-column">
-            <div className="flex-fill container pt-5">
-              <h1 className="display-3">Notifikasi</h1>
-              { user && user.jabatan_id == 1 && <SendNotif fetch={fetch} /> }
-              { data && data.data && data.data.length > 0 && (<>
-                <ul className="list-group">
-                  { data.data.map((d, i) => (
-                      <NotifItem key={i} data={d} setMessage={setMessage} fetch={fetch} />
-                  ))}
-                </ul>
-                <Pagination data={data} onChange={onPage} />
-              </>)}
+    <section className="full-height d-flex flex-column">
+        <div className="flex-fill container pt-5">
+          <h1 className="display-3">Notifikasi</h1>
+          { auth && auth.jabatan_id == 1 && <SendNotif fetch={fetch} fetchAuth={fetchAuth} /> }
+          { data && data.data && data.data.length > 0 && (<>
+            <ul className="list-group">
+              { data.data.map((d, i) => (
+                  <NotifItem key={i} data={d} setMessage={setMessage} fetch={fetch} fetchAuth={fetchAuth} />
+              ))}
+            </ul>
+            <Pagination data={data} onChange={onPage} />
+          </>)}
 
-              <div id="messageModal" className="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
-                  <div className="modal-dialog">
-                      <div className="modal-content">
-                          <div className="modal-header">
-                              <h5 className="modal-title">{message ? message.data.title : ''}</h5>
-                              <a className="btn-close" aria-label="Close" data-bs-dismiss="modal"></a>
-                          </div>
-                          <div className="modal-body">
-                              <p>{message ? message.data.message : ''}</p>
-                          </div>
-                          <div className="modal-footer">
-                              <a href="#" className="btn btn-secondary" data-bs-dismiss="modal">Close</a>
-                          </div>
+          <div id="messageModal" className="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
+              <div className="modal-dialog">
+                  <div className="modal-content">
+                      <div className="modal-header">
+                          <h5 className="modal-title">{message ? message.data.title : ''}</h5>
+                          <a className="btn-close" aria-label="Close" data-bs-dismiss="modal"></a>
+                      </div>
+                      <div className="modal-body">
+                          <p>{message ? message.data.message : ''}</p>
+                      </div>
+                      <div className="modal-footer">
+                          <a href="#" className="btn btn-secondary" data-bs-dismiss="modal">Close</a>
                       </div>
                   </div>
               </div>
-            </div>
-            <Footer />
-        </section>
-    </div>
+          </div>
+        </div>
+        <Footer />
+    </section>
   )
 }
 
@@ -93,6 +75,7 @@ const NotifItem = (props) => {
       const res = await request.get('/notification/read/' + encodeURIComponent(data.id))
       if (res.status == 200 && res.data) {
         props.fetch()
+        props.fetchAuth()
       }
     }
   }
@@ -129,6 +112,7 @@ const SendNotif = (props) => {
           if(modalRef.current)
               modalRef.current.click()
           props.fetch()
+          props.fetchAuth()
           setFormData(initFormData)
       }
   }

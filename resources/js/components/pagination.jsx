@@ -6,7 +6,7 @@ export default (props) => {
     const onPageChanged = (page) => () => {
       if (props.onChange) props.onChange(page)
     }
-    const clearText = (text) => text.replace('&raquo;', '»').replace('&laquo;', '«')
+    const clearText = (text) => text.replace('&raquo;', '>').replace('&laquo;', '<')
     const getPage = (url) => url.substring(url.indexOf('page=') + 5)
     return (
         <div className="d-flex flex-column align-items-center flex-lg-row justify-content-lg-between">

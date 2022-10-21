@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/header';
 import request from '../../axios';
 import {Link} from "react-router-dom";
 import {format, parseISO} from 'date-fns'
@@ -39,29 +38,26 @@ export default (props) => {
     }, [])
 
     return(
-        <div>
-            <Header />
-            <section>
-                <ul class="nav nav-tabs" id="myTab">
-                    <li class="nav-item">
-                        <button class="nav-link" id="bank-tab" data-bs-toggle="tab" data-bs-target="#bank-tab-pane" >Bank</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" id="transaksi-tab" data-bs-toggle="tab" data-bs-target="#transaksi-tab-pane" >Transaksi</button>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <Bank data={banks} fetch={fetch}/>
-                    {/* <BankLedger data={bankLedgers} bank={banks} fetch={fetch}/> */}
-                </div>
-            </section>
-        </div>
+      <section>
+          <ul class="nav nav-tabs" id="myTab">
+              <li class="nav-item">
+                  <button class="nav-link active" id="bank-tab" data-bs-toggle="tab" data-bs-target="#bank-tab-pane" >Bank</button>
+              </li>
+              <li class="nav-item">
+                  <button class="nav-link" id="transaksi-tab" data-bs-toggle="tab" data-bs-target="#transaksi-tab-pane" >Transaksi</button>
+              </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+              <Bank data={banks} fetch={fetch}/>
+              {/* <BankLedger data={bankLedgers} bank={banks} fetch={fetch}/> */}
+          </div>
+      </section>
     )
 }
 
 const Bank = (props) => {
-    return (            
-                <div class="tab-pane fade" id="bank-tab-pane" role="tabpanel" aria-labelledby="bank-tab" tabindex="0">
+    return (
+                <div class="tab-pane fade show active" id="bank-tab-pane" role="tabpanel" aria-labelledby="bank-tab" tabindex="0">
                     <div class="container py-5">
                         <h3>Data Bank</h3>
                         <div class="d-flex flex-row justify-content-end">
@@ -87,7 +83,7 @@ const Bank = (props) => {
                                     <td>{ d.name }</td>
                                     <td>{ d.saldo }</td>
                                 </tr>
-                            )) } 
+                            )) }
                             </tbody>
                         </table>
                     </div>
@@ -169,7 +165,7 @@ const EditBankLedgerForm = (props) => {
         data.append('receiver_bank_id', formData.receiver_bank_id)
         data.append('note', formData.note)
         data.append('amount', formData.amount)
-        
+
         const res = await request.post('/admin/finance/ledger', data)
         if (res.status == 200 && res.data) {
             if(modalRef.current)
@@ -251,7 +247,7 @@ const EditBankForm = (props) => {
         data.append('nama_bank', formData.nama_bank)
         data.append('name', formData.name)
         data.append('saldo', formData.saldo)
-        
+
         const res = await request.post('/admin/finance', data)
         if (res.status == 200 && res.data) {
             if(modalRef.current)

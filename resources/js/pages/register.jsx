@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../components/header';
 import Footer from '../components/footer';
 import request from '../axios';
 import {Link, useNavigate} from "react-router-dom";
@@ -17,13 +16,10 @@ const initFormData = {
 
 export default (props) => {
     return (
-        <div>
-            <Header/>
-            <section className="full-height d-flex flex-column">
-                <Register />
-                <Footer />
-            </section>
-        </div>
+      <section className="full-height d-flex flex-column">
+          <Register />
+          <Footer />
+      </section>
     )
 }
 
