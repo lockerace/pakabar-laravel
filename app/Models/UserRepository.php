@@ -13,7 +13,7 @@ class UserRepository {
         return User::orderBy('id', 'desc')->first();
     }
     function getByJabatan($id){
-        return User::where('jabatan_id', $id)->get();
+        return User::where('jabatan_id', $id)->orderBy('created_at', 'desc')->with(['jabatan'])->get();
     }
     function getFounder(){
         return User::where('jabatan_id', 3)->get();

@@ -39,7 +39,7 @@ export default (props) => {
 
     return (
       <section className="full-height d-flex flex-column">
-          <Member data={members} jabatan={jabatan} fetch={fetch} setDeleteId={setDeleteId} />
+          <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} />
           <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
       </section>
     )
@@ -47,8 +47,19 @@ export default (props) => {
 
 const Member = (props) => {
     const [formData, setFormData] = React.useState(initFormData);
+    const [id_jabatan, setJabatanId] = React.useState("");
     const modalRef = React.useRef();
 
+    const fetch = async() => {
+        const res = await request.get('/admin/member?id=' + encodeURIComponent(id_jabatan))
+        if(res.status == 200 && res.data) {
+            if(res.data.members) props.setMembers(res.data.members)
+        }
+    }
+
+    React.useEffect(() => {
+        fetch()
+    }, [id_jabatan])
 
     const onSubmit = async(event) =>{
         event.preventDefault()
@@ -63,11 +74,12 @@ const Member = (props) => {
         data.append('jabatan_id', formData.jabatan_id)
         data.append('status', formData.status)
         data.append('foto', formData.foto)
+        data.append('id', formData.id)
         const res = await request.post('/admin/member', data)
         if (res.status == 200 && res.data) {
             if(modalRef.current)
                 modalRef.current.click()
-            props.fetch()
+            fetch()
         }
     }
 
@@ -75,7 +87,7 @@ const Member = (props) => {
         event.preventDefault()
         const res = await request.post('/admin/verifymember/' + encodeURIComponent(id), {})
         if (res.status == 200 && res.data) {
-            props.fetch()
+            fetch()
         }
     }
     const inputChange = (id, value) =>{
@@ -128,6 +140,17 @@ const Member = (props) => {
                     <span>Tambah Anggota</span>
                 </Link>
             </div>
+
+            <form method="get">
+                        <div className="d-flex flex-row justify-content-end">
+                            <select className="form-select" name="myOption" value={id_jabatan} onChange={(e) => setJabatanId(e.target.value)}>
+                                <option value="">Semua Jabatan</option>
+                                { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
+                                    <option value={ d.id }>{ d.name }</option>
+                                )) }
+                            </select>
+                        </div>
+                    </form>
 
             <table className="table table-bordered">
                 <thead>
@@ -224,7 +247,7 @@ const Member = (props) => {
                                     </select>
                                 </div>
                                 <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChange('foto', e)} />
-                                <input id="memberId" name="id" type="hidden" value=""/>
+                                <input id="memberId" name="id" type="hidden" value={formData.id}/>
                             </div>
                             <div className="modal-footer">
                                 <button className="btn btn-primary" >Simpan</button>

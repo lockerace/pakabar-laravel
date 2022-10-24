@@ -22,7 +22,7 @@ class UserController extends Controller
     }
 
     function getMember(Request $request){
-        $myOption = $request->myOption;
+        $myOption = $request->id;
         $members = [];
         if(!empty($myOption))
             $members = $this->users->getByJabatan($myOption);
@@ -32,7 +32,6 @@ class UserController extends Controller
             'members' => $members,
             'jabatan' => $this->jabatan->getAll(),
             'deleteUrl' => route('admin-member-delete'),
-            'myOption' => $myOption,
         ];
 
         if($request->wantsJson()){
@@ -48,7 +47,7 @@ class UserController extends Controller
     function editMember(Request $request){
         // dd($request->all());
         $member = $this->users->getById($request->id);
-
+        // dd($request->id);
         if($member == null){
             // dd($member);
             $lastUser = $this->users->getLastUser();
