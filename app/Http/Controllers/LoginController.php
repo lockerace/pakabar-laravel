@@ -75,6 +75,12 @@ class LoginController extends Controller
         $lastUser = $this->users->getLastUser();
         $member = new User;
         if($request->wantsJson()){
+            $request->validate([
+               'foto' => 'required',
+               'email' => 'unique:users',
+               'no_telp' => 'unique:users',
+               'no_ktp' => 'unique:users',
+            ]);
             $member->email = $request->email;
             $member->name = $request->name;
             $member->alamat = $request->alamat;
