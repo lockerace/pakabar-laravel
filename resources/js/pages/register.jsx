@@ -1,7 +1,7 @@
 import React from 'react';
 import Footer from '../components/footer';
 import request from '../axios';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useOutletContext} from "react-router-dom";
 import ImageInput from '../components/imageinput'
 
 const initFormData = {
@@ -15,9 +15,10 @@ const initFormData = {
 }
 
 export default (props) => {
+    const {fetchAuth} = useOutletContext();
     return (
       <section className="full-height d-flex flex-column">
-          <Register />
+          <Register fetch={fetchAuth}/>
           <Footer />
       </section>
     )
@@ -26,6 +27,8 @@ export default (props) => {
 const Register = (props) => {
     const navigate = useNavigate()
     const [formData, setFormData] = React.useState(initFormData)
+    const [errorMessage, seterrorMessage] = React.useState("")
+
     const onSubmit = async(event) =>{
         event.preventDefault()
         const data = new FormData()
@@ -36,9 +39,15 @@ const Register = (props) => {
         data.append('no_ktp', formData.no_ktp)
         data.append('password', formData.password)
         data.append('foto', formData.foto)
-        const res = await request.post('/register', data)
-        if (res.status == 200 && res.data) {
-            navigate(res.data.url);
+        try{
+            const res = await request.post('/register', data)
+            console.log(res.status)
+            if (res.status == 200 && res.data) {
+                if (props.fetch) props.fetch()
+                navigate(res.data.url);
+            }
+        } catch (err) {
+            seterrorMessage(err.response.data.message)
         }
     }
     const inputChange = (id, value) =>{
@@ -77,7 +86,12 @@ const Register = (props) => {
                             <input className="form-control" value={formData.password} required="required" placeholder="Password" type="password" onChange={(e)=>inputChange("password", e.target.value)}/>
                         </div>
                         <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChange('foto', e)} />
+                        <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                            {errorMessage}
+                            <button type="button" class="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                        </div>
                         <button className="btn btn-primary">Register</button>
+                        
                     </form>
                 </div>
             </div>
