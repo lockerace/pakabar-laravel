@@ -16,25 +16,29 @@ class FinanceController extends Controller
     }
 
     function getBank(Request $request) {
-        $myOption = $request->myOption;
-        // $bank_ledger = $this->bankLedger->getAll();
-        $bank_ledger = [];
-        if(!empty($myOption)){
-            if($myOption == 0)
-                $bank_ledger = $this->bankLedger->getAll();
-            else
-                $bank_ledger = $this->bankLedger->getByBank($myOption);
-        }
         $data = [
             'bank' => $this->bank->getAll(),
-            'bank_ledger' => $bank_ledger,
-            'my_option' => $myOption,
         ];
 
         if($request->wantsJson()) {
             return response()->json($data);
         }
         return view('admin.finance', $data);
+    }
+
+    function getBankLedger(Request $request) {
+        $myOption = $request->id;
+        $bank_ledger = [];
+        if(!empty($myOption)){
+            $bank_ledger = $this->bankLedger->getByBank($myOption);
+        }
+        $data = [
+            'bank_ledger' => $bank_ledger,
+        ];
+        
+        if($request->wantsJson()) {
+            return response()->json($data);
+        }
     }
 
     function editBank(Request $request) {

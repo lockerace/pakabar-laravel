@@ -12,7 +12,7 @@ const initFormData = {
 
 const initLedgerFormData = {
     bank_id: 1,
-    receiver_bank_id:"",
+    receiver_bank_id: 1,
     note:"",
     isIn: 0,
     amount:"",
@@ -23,14 +23,11 @@ const initLedgerFormData = {
 
 export default (props) => {
     const [banks, setBanks] = React.useState([]);
-    const [bankLedgers, setBankLedgers] = React.useState([]);
 
     const fetch = async() => {
         const res = await request.get('/admin/finance')
         if(res.status == 200 && res.data) {
-            console.log(res.data)
             if(res.data.bank) setBanks(res.data.bank)
-            if(res.data.bank_ledger) setBankLedgers(res.data.bank_ledger)
         }
     }
     React.useEffect(() => {
@@ -49,7 +46,7 @@ export default (props) => {
           </ul>
           <div class="tab-content" id="myTabContent">
               <Bank data={banks} fetch={fetch}/>
-              {/* <BankLedger data={bankLedgers} bank={banks} fetch={fetch}/> */}
+              <BankLedger bank={banks}/>
           </div>
       </section>
     )
@@ -93,7 +90,19 @@ const Bank = (props) => {
 }
 
 const BankLedger = (props) => {
+    const [bankLedgers, setBankLedgers] = React.useState([]);
     const [id, setId] = React.useState("");
+
+    const fetch = async() => {
+        const res = await request.get('/admin/finance/ledger?id=' + encodeURIComponent(id))
+        if(res.status == 200 && res.data) {
+            if(res.data.bank_ledger) setBankLedgers(res.data.bank_ledger)
+        }
+    }
+
+    React.useEffect(() => {
+        fetch()
+    }, [id])
 
     return (
             <div class="tab-pane fade" id="transaksi-tab-pane" role="tabpanel" aria-labelledby="transaksi-tab" tabindex="0">
@@ -132,7 +141,7 @@ const BankLedger = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            { props.data.length > 0 && props.data.map((d, i) => (
+                            { bankLedgers.length > 0 && bankLedgers.map((d, i) => (
                                 <tr>
                                 <td>{ d.id }</td>
                                 <td>{ d.bank_id }</td>
@@ -148,7 +157,7 @@ const BankLedger = (props) => {
                         </tbody>
                     </table>
                 </div>
-                <EditBankLedgerForm data={props.bank} fetch={props.fetch}/>
+                <EditBankLedgerForm data={props.bank} fetch={fetch}/>
             </div>
     )
 }
@@ -171,7 +180,10 @@ const EditBankLedgerForm = (props) => {
             if(modalRef.current)
                 modalRef.current.click()
             props.fetch()
-            setFormData(initLedgerFormData)
+            const temp = {...initLedgerFormData}
+            temp.bank_id = formData.bank_id
+            temp.isIn = formData.isIn
+            setFormData(temp)
         }
     }
 
@@ -179,6 +191,17 @@ const EditBankLedgerForm = (props) => {
         const temp = {...formData}
         temp[id] = value
         setFormData(temp)
+
+        if(id == 'isIn') {
+            const bank_receiver = document.getElementById('bankReceiver');
+            if(value == 2){
+              bank_receiver.classList.add("d-block");
+              bank_receiver.classList.remove("d-none");
+            } else{
+              bank_receiver.classList.add("d-none");
+              bank_receiver.classList.remove("d-block");
+            }
+        }
       }
 
     return (
