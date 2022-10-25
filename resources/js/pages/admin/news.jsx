@@ -86,6 +86,7 @@ const initFormData = {
 const EditNewsForm = (props) => {
   const [formData, _setFormData] = React.useState(initFormData);
   const formDataRef = React.useRef(formData);
+  const [errorMessage, seterrorMessage] = React.useState("");
   const modalRef = React.useRef();
 
   const setFormData = (val) => {
@@ -95,11 +96,17 @@ const EditNewsForm = (props) => {
 
   const onSubmit = async(event) => {
     event.preventDefault();
-    const res = await request.post('/admin/news', formData)
-    if (res.status == 200 && res.data) {
-        if(modalRef.current)
-            modalRef.current.click()
+
+    try {
+        const res = await request.post('/admin/news', formData)
+        if (res.status == 200 && res.data) {
+          if(modalRef.current)
+              modalRef.current.click()
         props.fetch()
+        } 
+    }
+    catch (err) {
+      seterrorMessage(err.response.data.message)
     }
   }
 
@@ -147,6 +154,10 @@ const EditNewsForm = (props) => {
                     />
               </div>
               <input id="newsId" name="id" type="hidden" value={formData.id}/>
+              <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                  {errorMessage}
+                  <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+              </div>
             </div>
             <div className="modal-footer">
               <button className="btn btn-primary">Simpan</button>

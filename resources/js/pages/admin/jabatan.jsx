@@ -35,13 +35,23 @@ export default (props) => {
 
 const Jabatan = (props) => {
     const [formData, setFormData] = React.useState(initFormData);
+    const [errorMessage, seterrorMessage] = React.useState("");
+    const modalRef = React.useRef();
 
     const onSubmit = async(event) =>{
         event.preventDefault()
-        const res = await request.post('/admin/jabatan', formData)
-        if (res.status == 200 && res.data) {
-            props.fetch()
+
+        try {
+            const res = await request.post('/admin/jabatan', formData)
+            if (res.status == 200 && res.data) {
+                if(modalRef.current)
+                    modalRef.current.click()
+                props.fetch()
+            }
+        } catch (err) {
+            seterrorMessage(err.response.data.message)
         }
+
     }
     const inputChange = (id, value) =>{
         const temp = {...formData}
@@ -91,8 +101,8 @@ const Jabatan = (props) => {
                             <td>
                                 <div className="d-flex flex-row gap-2">
                                     <Link className="btn btn-link text-primary text-decoration-none d-flex flex-row" onClick={(onEdit(d))} data-bs-toggle="modal" data-bs-target="#editJabatanModal">
-                                    <i className="material-icons d-block">edit</i>
-                                    <span>Edit</span>
+                                        <i className="material-icons d-block">edit</i>
+                                        <span>Edit</span>
                                     </Link>
                                     <Link className="btn btn-link text-danger text-decoration-none d-flex flex-row" onClick={(onDelete(d.id))} data-bs-toggle="modal" data-bs-target="#deleteModal">
                                     <i className="material-icons d-block">delete</i>
@@ -110,7 +120,7 @@ const Jabatan = (props) => {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Edit Jabatan</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" className="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
                                 <div className="mb-3">
@@ -118,9 +128,13 @@ const Jabatan = (props) => {
                                     <input id="jabatanName" className="form-control" value={formData.name} placeholder="Nama Jabatan" required="required" onChange={(e)=>inputChange("name", e.target.value)} />
                                 </div>
                                 <input id="jabatanId" value={formData.id} type="hidden"/>
+                                <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                                    {errorMessage}
+                                    <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                                </div>
                             </div>
                             <div className="modal-footer">
-                                <button  className="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                                <button  className="btn btn-primary">Simpan</button>
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                             </div>
                         </div>

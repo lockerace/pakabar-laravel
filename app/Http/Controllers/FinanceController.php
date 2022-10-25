@@ -42,6 +42,13 @@ class FinanceController extends Controller
     }
 
     function editBank(Request $request) {
+        $bank = $this->bank->getById($request->id);
+        
+        if(empty($bank)){
+            $request->validate([
+                'no_rekening' => 'unique:bank'
+            ]);
+
             $bank = new Bank;
             $bank->no_rekening = $request->no_rekening;
             $bank->nama_bank = $request->nama_bank;
@@ -49,10 +56,14 @@ class FinanceController extends Controller
             $bank->name = $request->name;
             $bank->saldo = $request->saldo;
             $bank->save();
+        } else {
+            $bank->status = $request->status;
+            $bank->save();
+        }
 
-            if($request->wantsJson()) {
-                return response()->json(NULL);
-            }
+        if($request->wantsJson()) {
+            return response()->json(NULL);
+        }
 
         return response()->redirectTo(route('admin-finance'));
     }

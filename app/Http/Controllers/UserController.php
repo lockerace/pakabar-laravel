@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use App\Models\UserRepository;
 use App\Models\JabatanRepository;
 use App\Models\NewsRepository;
@@ -45,12 +46,18 @@ class UserController extends Controller
     }
 
     function editMember(Request $request){
-        // dd($request->all());
         $member = $this->users->getById($request->id);
-        // dd($request->id);
+
         if($member == null){
-            // dd($member);
             $lastUser = $this->users->getLastUser();
+            $request->validate([
+                'foto' => 'required',
+                'email' => 'unique:users,email,',
+                'no_telp' => 'unique:users,no_telp,',
+                'no_ktp' => 'unique:users,no_ktp,',
+                'no_anggota' => 'unique:users,no_anggota,',
+            ]);
+
             $member = new User;
             $member->email = $request->email;
             $member->name = $request->name;
@@ -61,12 +68,18 @@ class UserController extends Controller
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;
             $member->status = $request->status;
+
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
-
             $member->save();
         } else{
+            $request->validate([
+                'email' => 'unique:users,email,'.$member->id,
+                'no_telp' => 'unique:users,no_telp,'.$member->id,
+                'no_ktp' => 'unique:users,no_ktp,'.$member->id,
+                'no_anggota' => 'unique:users,no_anggota,'.$member->id,
+            ]);
 
             $member->name = $request->name;
             $member->email = $request->email;
@@ -119,15 +132,21 @@ class UserController extends Controller
     }
 
     function editJabatan(Request $request){
-        // dd($request->all());
         $jabatan = $this->jabatan->getById($request->id);
 
         if($jabatan == null){
-            // dd($jabatan);
+            $request->validate([
+                'name' => 'unique:jabatan',
+            ]);
+
             $jabatan = new Jabatan;
             $jabatan->name = $request->name;
             $jabatan->save();
         } else{
+            $request->validate([
+                'name' => 'unique:jabatan,name,'.$jabatan->id,
+            ]);
+
             $jabatan->name = $request->name;
             $jabatan->save();
         }
@@ -162,6 +181,11 @@ class UserController extends Controller
 
     function updateProfile(Request $request){
         $member = $this->users->getById($request->user()->id);
+
+        $request->validate([
+            'email' => 'unique:users,email,'.$member->id,
+        ]);
+
         $member->email = $request->email;
         $member->password = Hash::make($request->password);
 

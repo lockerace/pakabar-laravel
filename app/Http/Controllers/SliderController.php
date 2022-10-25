@@ -28,6 +28,11 @@ class SliderController extends Controller
         $slider = $this->slider->getById($request->id);
 
         if($slider == null){
+            $request->validate([
+                'foto' => 'required',
+                'url' => 'required',
+            ]);
+            
             $slider = new Slider;
             if ($request->hasFile('foto')) {
                 $slider->foto = $request->foto->store('slider', 'public');

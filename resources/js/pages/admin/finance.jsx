@@ -10,6 +10,11 @@ const initFormData = {
     saldo:"",
 }
 
+const initStatusFormData = {
+    status:"aktif",
+    id:"",
+}
+
 const initLedgerFormData = {
     bank_id: 1,
     receiver_bank_id: 1,
@@ -36,15 +41,15 @@ export default (props) => {
 
     return(
       <section>
-          <ul class="nav nav-tabs" id="myTab">
-              <li class="nav-item">
-                  <button class="nav-link active" id="bank-tab" data-bs-toggle="tab" data-bs-target="#bank-tab-pane" >Bank</button>
+          <ul className="nav nav-tabs" id="myTab">
+              <li className="nav-item">
+                  <button className="nav-link active" id="bank-tab" data-bs-toggle="tab" data-bs-target="#bank-tab-pane" >Bank</button>
               </li>
-              <li class="nav-item">
-                  <button class="nav-link" id="transaksi-tab" data-bs-toggle="tab" data-bs-target="#transaksi-tab-pane" >Transaksi</button>
+              <li className="nav-item">
+                  <button className="nav-link" id="transaksi-tab" data-bs-toggle="tab" data-bs-target="#transaksi-tab-pane" >Transaksi</button>
               </li>
           </ul>
-          <div class="tab-content" id="myTabContent">
+          <div className="tab-content" id="myTabContent">
               <Bank data={banks} fetch={fetch}/>
               <BankLedger bank={banks}/>
           </div>
@@ -53,36 +58,109 @@ export default (props) => {
 }
 
 const Bank = (props) => {
+    const [formData, setFormData] = React.useState(initStatusFormData);
+    const modalRef = React.useRef();
+
+    const onSubmit = async(event) =>{
+        event.preventDefault()
+
+        try {
+            const res = await request.post('/admin/finance', formData)
+            if (res.status == 200 && res.data) {
+                if(modalRef.current)
+                    modalRef.current.click()
+                props.fetch()
+            }
+        } catch (err) {
+            seterrorMessage(err.response.data.message)
+        }
+
+    }
+    const inputChange = (id, value) =>{
+        const temp = {...formData}
+        temp[id] = value
+        setFormData(temp)
+    }
+
+    const onEdit = (form)=> () => {
+        const temp = {...formData}
+        if(form){
+            temp.status = form.status
+            temp.id = form.id
+        } else{
+            temp.status = ""
+            temp.id = ""
+        }
+        setFormData(temp)
+    }
+
     return (
-                <div class="tab-pane fade show active" id="bank-tab-pane" role="tabpanel" aria-labelledby="bank-tab" tabindex="0">
-                    <div class="container py-5">
+                <div className="tab-pane fade show active" id="bank-tab-pane" role="tabpanel" aria-labelledby="bank-tab" tabIndex="0">
+                    <div className="container py-5">
                         <h3>Data Bank</h3>
-                        <div class="d-flex flex-row justify-content-end">
-                            <Link class="btn btn-primary mb-3 d-flex flex-row" data-bs-toggle="modal" data-bs-target="#editBankModal" >
-                                <i class="material-icons d-block">add</i>
+                        <div className="d-flex flex-row justify-content-end">
+                            <Link className="btn btn-primary mb-3 d-flex flex-row" data-bs-toggle="modal" data-bs-target="#editBankModal" >
+                                <i className="material-icons d-block">add</i>
                                 <span>Tambah</span>
                             </Link>
                         </div>
-                        <table class="table table-bordered">
+                        <table className="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>No Rekening</th>
                                     <th>Bank</th>
                                     <th>Nama Pemilik</th>
+                                    <th>Status</th>
                                     <th>Saldo</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                             { props.data.length > 0 && props.data.map((d, i) => (
-                                <tr>
+                                <tr key={i}>
                                     <td>{ d.no_rekening }</td>
                                     <td>{ d.nama_bank }</td>
                                     <td>{ d.name }</td>
+                                    <td>{ d.status }</td>
                                     <td>{ d.saldo }</td>
+                                    <td>
+                                        <div className="d-flex flex-row gap-2">
+                                            <Link className="btn btn-link text-primary text-decoration-none d-flex flex-row" onClick={(onEdit(d))} data-bs-toggle="modal" data-bs-target="#editStatusModal">
+                                                <i className="material-icons d-block">edit</i>
+                                                <span>Edit</span>
+                                            </Link>
+                                        </div>
+                                    </td>
                                 </tr>
                             )) }
                             </tbody>
                         </table>
+                        <form onSubmit={onSubmit} method="post">
+                            <div id="editStatusModal" className="modal" tabIndex="-1" role="dialog">
+                                <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title">Edit Status</h5>
+                                            <button type="button" className="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <div className="mb-3">
+                                                <label htmlFor="status" className="form-label">Status: </label>
+                                                <select id="status" className="form-select" value={formData.status} onChange={e => inputChange('status', e.target.value)}>
+                                                    <option value="aktif">Aktif</option>
+                                                    <option value="nonaktif">Nonaktif</option>
+                                                </select>
+                                            </div>
+                                            <input id="transactionId" name="transactionId" type="hidden" value=""/>
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button  className="btn btn-primary">Simpan</button>
+                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <EditBankForm fetch={props.fetch} />
                 </div>
@@ -105,28 +183,28 @@ const BankLedger = (props) => {
     }, [id])
 
     return (
-            <div class="tab-pane fade" id="transaksi-tab-pane" role="tabpanel" aria-labelledby="transaksi-tab" tabindex="0">
-                <div class="container py-5">
+            <div className="tab-pane fade" id="transaksi-tab-pane" role="tabpanel" aria-labelledby="transaksi-tab" tabIndex="0">
+                <div className="container py-5">
                     <h3>Data Transaksi</h3>
-                    <div class="d-flex flex-row justify-content-end">
-                        <a class="btn btn-primary mb-3 d-flex flex-row" onclick="onTransaksiEdit()" data-bs-toggle="modal" data-bs-target="#editTransaksiModal" >
-                            <i class="material-icons d-block">add</i>
+                    <div className="d-flex flex-row justify-content-end">
+                        <Link className="btn btn-primary mb-3 d-flex flex-row" data-bs-toggle="modal" data-bs-target="#editTransaksiModal" >
+                            <i className="material-icons d-block">add</i>
                             <span>Tambah</span>
-                        </a>
+                        </Link>
                     </div>
 
                     <form method="get">
-                        <div class="d-flex flex-row justify-content-end">
-                            <select class="form-select" name="myOption" value={id} onChange={(e) => setId(e.target.value)}>
+                        <div className="d-flex flex-row justify-content-end">
+                            <select className="form-select" name="myOption" value={id} onChange={(e) => setId(e.target.value)}>
                                 <option>Pilih Bank</option>
                                 { props.bank.length > 0 && props.bank.map((d, i) => (
-                                    <option value={ d.id }>{ d.nama_bank } - { d.no_rekening }</option>
+                                    <option key={i} value={ d.id }>{ d.nama_bank } - { d.no_rekening }</option>
                                 )) }
                             </select>
                         </div>
                     </form>
 
-                    <table class="table table-bordered">
+                    <table className="table table-bordered">
                         <thead>
                             <tr>
                                 <th>ID Transaksi</th>
@@ -142,7 +220,7 @@ const BankLedger = (props) => {
                         </thead>
                         <tbody>
                             { bankLedgers.length > 0 && bankLedgers.map((d, i) => (
-                                <tr>
+                                <tr key={i}>
                                 <td>{ d.id }</td>
                                 <td>{ d.bank_id }</td>
                                 <td>{ d.note }</td>
@@ -206,51 +284,51 @@ const EditBankLedgerForm = (props) => {
 
     return (
         <form onSubmit={onSubmit} method="post">
-            <div id="editTransaksiModal" class="modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Tambah Transaksi</h5>
-                            <button type="button" class="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close"></button>
+            <div id="editTransaksiModal" className="modal" tabIndex="-1" role="dialog">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Tambah Transaksi</h5>
+                            <button type="button" className="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="isIn" class="form-label">Status: </label>
-                                <select id="isIn" class="form-select" value={formData.isIn} onChange={e => inputChanged('isIn', e.target.value)}>
+                        <div className="modal-body">
+                            <div className="mb-3">
+                                <label htmlFor="isIn" className="form-label">Status: </label>
+                                <select id="isIn" className="form-select" value={formData.isIn} onChange={e => inputChanged('isIn', e.target.value)}>
                                     <option value="0">Keluar</option>
                                     <option value="1">Masuk</option>
                                     <option value="2">Transfer</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="bankTypeId" class="form-label">ID Bank: </label>
-                                <select class="form-select" id="bankTypeId" value={formData.bank_id} onChange={e => inputChanged('bank_id', e.target.value)}>
+                            <div className="mb-3">
+                                <label htmlFor="bankTypeId" className="form-label">ID Bank: </label>
+                                <select className="form-select" id="bankTypeId" value={formData.bank_id} onChange={e => inputChanged('bank_id', e.target.value)}>
                                     { props.data.length > 0 && props.data.map((d, i) => (
-                                        <option value={ d.id }>{ d.nama_bank } - { d.no_rekening }</option>
+                                        <option key={i} value={ d.id }>{ d.nama_bank } - { d.no_rekening }</option>
                                     )) }
                                 </select>
                             </div>
-                            <div class="mb-3 d-none" id="bankReceiver">
-                                <label for="bankReceiverId" class="form-label">ID Bank Tujuan: </label>
-                                <select class="form-select" id="bankReceiverId" value={formData.receiver_bank_id} onChange={e => inputChanged('receiver_bank_id', e.target.value)}>
+                            <div className="mb-3 d-none" id="bankReceiver">
+                                <label htmlFor="bankReceiverId" className="form-label">ID Bank Tujuan: </label>
+                                <select className="form-select" id="bankReceiverId" value={formData.receiver_bank_id} onChange={e => inputChanged('receiver_bank_id', e.target.value)}>
                                     { props.data.length > 0 && props.data.map((d, i) => (
-                                        <option value={ d.id }>{ d.nama_bank } - { d.no_rekening }</option>
+                                        <option key={i} value={ d.id }>{ d.nama_bank } - { d.no_rekening }</option>
                                     )) }
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="bankNote" class="form-label">Note: </label>
-                                <input id="bankNote" class="form-control" value={formData.note} placeholder="Tinggalkan Pesan" required="required" onChange={e => inputChanged('note', e.target.value)} />
+                            <div className="mb-3">
+                                <label htmlFor="bankNote" className="form-label">Note: </label>
+                                <input id="bankNote" className="form-control" value={formData.note} placeholder="Tinggalkan Pesan" required="required" onChange={e => inputChanged('note', e.target.value)} />
                             </div>
-                            <div class="mb-3">
-                                <label for="bankAmount" class="form-label">Jumlah: </label>
-                                <input id="bankAmount" class="form-control" value={formData.amount} placeholder="Jumlah" required="required" onChange={e => inputChanged('amount', e.target.value)} />
+                            <div className="mb-3">
+                                <label htmlFor="bankAmount" className="form-label">Jumlah: </label>
+                                <input id="bankAmount" className="form-control" value={formData.amount} placeholder="Jumlah" required="required" onChange={e => inputChanged('amount', e.target.value)} />
                             </div>
                             <input id="transactionId" name="transactionId" type="hidden" value=""/>
                         </div>
-                        <div class="modal-footer">
-                            <button  class="btn btn-primary">Simpan</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <div className="modal-footer">
+                            <button  className="btn btn-primary">Simpan</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         </div>
                     </div>
                 </div>
@@ -261,6 +339,7 @@ const EditBankLedgerForm = (props) => {
 
 const EditBankForm = (props) => {
     const [formData, setFormData] = React.useState(initFormData);
+    const [errorMessage, seterrorMessage] = React.useState("");
     const modalRef = React.useRef();
 
     const onSubmit = async(event) => {
@@ -271,13 +350,18 @@ const EditBankForm = (props) => {
         data.append('name', formData.name)
         data.append('saldo', formData.saldo)
 
-        const res = await request.post('/admin/finance', data)
-        if (res.status == 200 && res.data) {
-            if(modalRef.current)
-                modalRef.current.click()
-            props.fetch()
-            setFormData(initFormData)
+        try {
+            const res = await request.post('/admin/finance', data)
+            if (res.status == 200 && res.data) {
+                if(modalRef.current)
+                    modalRef.current.click()
+                props.fetch()
+                setFormData(initFormData)
+            }
+        } catch (err) {
+            seterrorMessage(err.response.data.message)
         }
+
     }
 
     const inputChanged = (id, value) => {
@@ -288,35 +372,39 @@ const EditBankForm = (props) => {
 
     return (
         <form onSubmit={onSubmit} method="post">
-            <div id="editBankModal" class="modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Tambah Bank</h5>
-                            <button type="button" class="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close"></button>
+            <div id="editBankModal" className="modal" tabIndex="-1" role="dialog">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Tambah Bank</h5>
+                            <button type="button" className="btn-close" ref={modalRef} data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="bankNumber" class="form-label">No Rekening: </label>
-                                <input id="bankNumber" class="form-control" value={formData.no_rekening} placeholder="Nomor rekening" required="required" onChange={e => inputChanged('no_rekening', e.target.value)} />
+                        <div className="modal-body">
+                            <div className="mb-3">
+                                <label htmlFor="bankNumber" className="form-label">No Rekening: </label>
+                                <input id="bankNumber" className="form-control" value={formData.no_rekening} placeholder="Nomor rekening" required="required" onChange={e => inputChanged('no_rekening', e.target.value)} />
                             </div>
-                            <div class="mb-3">
-                                <label for="bankName" class="form-label">Nama Bank: </label>
-                                <input id="bankName" class="form-control" value={formData.nama_bank} placeholder="Nama Bank" required="required" onChange={e => inputChanged('nama_bank', e.target.value)} />
+                            <div className="mb-3">
+                                <label htmlFor="bankName" className="form-label">Nama Bank: </label>
+                                <input id="bankName" className="form-control" value={formData.nama_bank} placeholder="Nama Bank" required="required" onChange={e => inputChanged('nama_bank', e.target.value)} />
                             </div>
-                            <div class="mb-3">
-                                <label for="userName" class="form-label">Nama Pemilik: </label>
-                                <input id="userName" class="form-control" value={formData.name} placeholder="Nama Pemilik" required="required" onChange={e => inputChanged('name', e.target.value)} />
+                            <div className="mb-3">
+                                <label htmlFor="userName" className="form-label">Nama Pemilik: </label>
+                                <input id="userName" className="form-control" value={formData.name} placeholder="Nama Pemilik" required="required" onChange={e => inputChanged('name', e.target.value)} />
                             </div>
-                            <div class="mb-3">
-                                <label for="bankSaldo" class="form-label">Saldo: </label>
-                                <input id="bankSaldo" class="form-control" value={formData.saldo} placeholder="Jumlah Saldo" required="required" onChange={e => inputChanged('saldo', e.target.value)} />
+                            <div className="mb-3">
+                                <label htmlFor="bankSaldo" className="form-label">Saldo: </label>
+                                <input id="bankSaldo" className="form-control" value={formData.saldo} placeholder="Jumlah Saldo" required="required" onChange={e => inputChanged('saldo', e.target.value)} />
                             </div>
                             <input id="bankId" name="id" type="hidden" value=""/>
+                            <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                                {errorMessage}
+                                <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button  class="btn btn-primary">Simpan</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <div className="modal-footer">
+                            <button  className="btn btn-primary">Simpan</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         </div>
                     </div>
                 </div>

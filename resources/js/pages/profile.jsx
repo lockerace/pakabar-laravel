@@ -32,16 +32,23 @@ export default (props) => {
 
 const Members = (props) => {
     const [formData, setFormData] = React.useState(initFormData);
+    const [errorMessage, seterrorMessage] = React.useState("");
     const modalRef = React.useRef();
 
     const onSubmit = async(event) =>{
         event.preventDefault()
-        const res = await request.post('/profile', formData)
-        if (res.status == 200 && res.data) {
-            if(modalRef.current)
-                modalRef.current.click()
-            props.fetch()
+
+        try {
+            const res = await request.post('/profile', formData)
+            if (res.status == 200 && res.data) {
+                if(modalRef.current)
+                    modalRef.current.click()
+                props.fetch()
+            }
+        } catch (err) {
+            seterrorMessage(err.response.data.message)
         }
+        
     }
     const inputChange = (id, value) =>{
         const temp = {...formData}
@@ -141,6 +148,10 @@ const Members = (props) => {
                                 <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" required="required" onChange={(e)=>inputChange("password", e.target.value)} />
                             </div>
                             <input id="memberId" name="id" type="hidden" value=""/>
+                            <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                                {errorMessage}
+                                <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                            </div>
                         </div>
                         <div className="modal-footer">
                             <button  className="btn btn-primary">Simpan</button>

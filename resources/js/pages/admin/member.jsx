@@ -48,6 +48,7 @@ export default (props) => {
 const Member = (props) => {
     const [formData, setFormData] = React.useState(initFormData);
     const [id_jabatan, setJabatanId] = React.useState("");
+    const [errorMessage, seterrorMessage] = React.useState("")
     const modalRef = React.useRef();
 
     const fetch = async() => {
@@ -75,12 +76,18 @@ const Member = (props) => {
         data.append('status', formData.status)
         data.append('foto', formData.foto)
         data.append('id', formData.id)
-        const res = await request.post('/admin/member', data)
-        if (res.status == 200 && res.data) {
-            if(modalRef.current)
-                modalRef.current.click()
-            fetch()
+
+        try {
+            const res = await request.post('/admin/member', data)
+            if (res.status == 200 && res.data) {
+                if(modalRef.current)
+                    modalRef.current.click()
+                fetch()
+            }
+        } catch (err) {
+            seterrorMessage(err.response.data.message)
         }
+
     }
 
     const onVerify = (id) => async(event) =>{
@@ -146,7 +153,7 @@ const Member = (props) => {
                             <select className="form-select" name="myOption" value={id_jabatan} onChange={(e) => setJabatanId(e.target.value)}>
                                 <option value="">Semua Jabatan</option>
                                 { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
-                                    <option value={ d.id }>{ d.name }</option>
+                                    <option key={i} value={ d.id }>{ d.name }</option>
                                 )) }
                             </select>
                         </div>
@@ -248,6 +255,10 @@ const Member = (props) => {
                                 </div>
                                 <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChange('foto', e)} />
                                 <input id="memberId" name="id" type="hidden" value={formData.id}/>
+                                <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                                    {errorMessage}
+                                    <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                                </div>
                             </div>
                             <div className="modal-footer">
                                 <button className="btn btn-primary" >Simpan</button>

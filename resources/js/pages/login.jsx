@@ -61,7 +61,7 @@ const Login = (props) => {
                         </div>
                         <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
                             {errorMessage}
-                            <button type="button" class="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                            <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
                         </div>
                         <button className="btn btn-primary">Login</button>
                     </form>

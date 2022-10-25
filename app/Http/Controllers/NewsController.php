@@ -44,6 +44,11 @@ class NewsController extends Controller
         // dd($request->all());
         $news = $this->news->getById($request->id);
 
+        $request->validate([
+            'judul' => 'required',
+            'konten' => 'required',
+        ]);
+
         if($news == null){
             // dd($news);
             $news = new News;

@@ -6,7 +6,7 @@ import ImageInput from '../../components/imageinput'
 export default (props) => {
   const [sliders, setSliders] = React.useState([]);
   const [deleteId, setDeleteId] = React.useState('');
-  const [editData, setEditData] = React.useState()
+  const [editData, setEditData] = React.useState();
 
   const fetch = async() => {
     const res = await request.get('/admin/slider')
@@ -83,6 +83,7 @@ const initFormData = {
 
 const EditSliderForm = (props) => {
   const [formData, setFormData] = React.useState(initFormData);
+  const [errorMessage, seterrorMessage] = React.useState("");
   const modalRef = React.useRef();
 
   const onSubmit = async(event) => {
@@ -92,12 +93,18 @@ const EditSliderForm = (props) => {
     data.append('url', formData.url)
     if (formData.foto) data.append('foto', formData.foto)
     data.append('status', formData.status)
-    const res = await request.post('/admin/slider', data)
-    if (res.status == 200 && res.data) {
-        if(modalRef.current)
-            modalRef.current.click()
-        props.fetch()
+
+    try {
+        const res = await request.post('/admin/slider', data)
+        if (res.status == 200 && res.data) {
+            if(modalRef.current)
+                modalRef.current.click()
+            props.fetch()
+        }
+    } catch (err) {
+        seterrorMessage(err.response.data.message)
     }
+    
   }
 
   React.useEffect(() => {
@@ -144,6 +151,10 @@ const EditSliderForm = (props) => {
                 </select>
               </div>
               <input id="sliderId" name="id" type="hidden" value={formData.id}/>
+              <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                  {errorMessage}
+                  <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+              </div>
             </div>
             <div className="modal-footer">
               <button className="btn btn-primary">Simpan</button>

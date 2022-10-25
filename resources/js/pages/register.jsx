@@ -39,6 +39,7 @@ const Register = (props) => {
         data.append('no_ktp', formData.no_ktp)
         data.append('password', formData.password)
         data.append('foto', formData.foto)
+
         try{
             const res = await request.post('/register', data)
             console.log(res.status)
@@ -88,7 +89,7 @@ const Register = (props) => {
                         <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChange('foto', e)} />
                         <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
                             {errorMessage}
-                            <button type="button" class="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                            <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
                         </div>
                         <button className="btn btn-primary">Register</button>
                         
