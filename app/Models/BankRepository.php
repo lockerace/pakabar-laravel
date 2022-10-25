@@ -9,4 +9,7 @@ class BankRepository {
     function getById($id) {
         return Bank::where('id', $id)->first();
     }
+    function getActive() {
+        return Bank::orderBy('nama_bank', 'asc')->where('status', 'aktif')->get();
+    }
 }

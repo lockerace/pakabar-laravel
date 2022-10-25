@@ -16,8 +16,8 @@ const initStatusFormData = {
 }
 
 const initLedgerFormData = {
-    bank_id: 1,
-    receiver_bank_id: 1,
+    bank_id: "",
+    receiver_bank_id: "",
     note:"",
     isIn: 0,
     amount:"",
@@ -28,11 +28,13 @@ const initLedgerFormData = {
 
 export default (props) => {
     const [banks, setBanks] = React.useState([]);
+    const [activeBanks, setActiveBanks] = React.useState([]);
 
     const fetch = async() => {
         const res = await request.get('/admin/finance')
         if(res.status == 200 && res.data) {
             if(res.data.bank) setBanks(res.data.bank)
+            if(res.data.active_bank) setActiveBanks(res.data.active_bank)
         }
     }
     React.useEffect(() => {
@@ -51,7 +53,7 @@ export default (props) => {
           </ul>
           <div className="tab-content" id="myTabContent">
               <Bank data={banks} fetch={fetch}/>
-              <BankLedger bank={banks}/>
+              <BankLedger bank={banks} activeBank={activeBanks}/>
           </div>
       </section>
     )
@@ -235,13 +237,14 @@ const BankLedger = (props) => {
                         </tbody>
                     </table>
                 </div>
-                <EditBankLedgerForm data={props.bank} fetch={fetch}/>
+                <EditBankLedgerForm data={props.bank} activeBank={props.activeBank} fetch={fetch}/>
             </div>
     )
 }
 
 const EditBankLedgerForm = (props) => {
     const [formData, setFormData] = React.useState(initLedgerFormData);
+    const [errorMessage, seterrorMessage] = React.useState("");
     const modalRef = React.useRef();
 
     const onSubmit = async(event) => {
@@ -253,16 +256,21 @@ const EditBankLedgerForm = (props) => {
         data.append('note', formData.note)
         data.append('amount', formData.amount)
 
-        const res = await request.post('/admin/finance/ledger', data)
-        if (res.status == 200 && res.data) {
-            if(modalRef.current)
-                modalRef.current.click()
-            props.fetch()
-            const temp = {...initLedgerFormData}
-            temp.bank_id = formData.bank_id
-            temp.isIn = formData.isIn
-            setFormData(temp)
+        try{
+            const res = await request.post('/admin/finance/ledger', data)
+            if (res.status == 200 && res.data) {
+                if(modalRef.current)
+                    modalRef.current.click()
+                props.fetch()
+                const temp = {...initLedgerFormData}
+                temp.bank_id = formData.bank_id
+                temp.isIn = formData.isIn
+                setFormData(temp)
+            }
+        } catch (err) {
+            seterrorMessage(err.response.data.message)
         }
+        
     }
 
     const inputChanged = (id, value) => {
@@ -303,7 +311,8 @@ const EditBankLedgerForm = (props) => {
                             <div className="mb-3">
                                 <label htmlFor="bankTypeId" className="form-label">ID Bank: </label>
                                 <select className="form-select" id="bankTypeId" value={formData.bank_id} onChange={e => inputChanged('bank_id', e.target.value)}>
-                                    { props.data.length > 0 && props.data.map((d, i) => (
+                                    <option disabled value="">Pilih Bank</option>
+                                    { props.activeBank.length > 0 && props.activeBank.map((d, i) => (
                                         <option key={i} value={ d.id }>{ d.nama_bank } - { d.no_rekening }</option>
                                     )) }
                                 </select>
@@ -311,7 +320,8 @@ const EditBankLedgerForm = (props) => {
                             <div className="mb-3 d-none" id="bankReceiver">
                                 <label htmlFor="bankReceiverId" className="form-label">ID Bank Tujuan: </label>
                                 <select className="form-select" id="bankReceiverId" value={formData.receiver_bank_id} onChange={e => inputChanged('receiver_bank_id', e.target.value)}>
-                                    { props.data.length > 0 && props.data.map((d, i) => (
+                                    <option disabled value="">Pilih Bank</option>
+                                    { props.activeBank.length > 0 && props.activeBank.map((d, i) => (
                                         <option key={i} value={ d.id }>{ d.nama_bank } - { d.no_rekening }</option>
                                     )) }
                                 </select>
@@ -325,6 +335,10 @@ const EditBankLedgerForm = (props) => {
                                 <input id="bankAmount" className="form-control" value={formData.amount} placeholder="Jumlah" required="required" onChange={e => inputChanged('amount', e.target.value)} />
                             </div>
                             <input id="transactionId" name="transactionId" type="hidden" value=""/>
+                            <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                                {errorMessage}
+                                <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                            </div>
                         </div>
                         <div className="modal-footer">
                             <button  className="btn btn-primary">Simpan</button>

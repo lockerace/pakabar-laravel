@@ -18,6 +18,7 @@ class FinanceController extends Controller
     function getBank(Request $request) {
         $data = [
             'bank' => $this->bank->getAll(),
+            'active_bank' => $this->bank->getActive(),
         ];
 
         if($request->wantsJson()) {
@@ -69,6 +70,9 @@ class FinanceController extends Controller
     }
 
     function editBankLedger(Request $request) {
+        $request->validate([
+            'bank_id' => 'required',
+        ]);
         $previous = $this->bankLedger->getLast($request->bank_id);
         $bankLedger = new BankLedger;
         $bankLedger->bank_id = $request->bank_id;
@@ -101,6 +105,10 @@ class FinanceController extends Controller
         }
     
     if($request->isIn == 2){
+        $request->validate([
+            'bank_id' => 'required',
+            'receiver_bank_id' => 'required',
+        ]);
         $previous = $this->bankLedger->getLast($request->receiver_bank_id);
         $bankLedger = new BankLedger;
         $bankLedger->bank_id = $request->receiver_bank_id;
