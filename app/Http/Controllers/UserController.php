@@ -168,6 +168,10 @@ class UserController extends Controller
         return Storage::download('foto/'.$path);
     }
 
+    function getFotoSelfie($path) {
+        return Storage::download('fotoSelfie/'.$path);
+    }
+
     function getProfile(Request $request){
         $data = [
             'member' => $this->users->getById($request->user()->id),

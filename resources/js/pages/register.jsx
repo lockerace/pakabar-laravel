@@ -12,6 +12,7 @@ const initFormData = {
     no_ktp:"",
     password:"",
     foto:"",
+    fotoSelfie:"",
 }
 
 export default (props) => {
@@ -39,6 +40,7 @@ const Register = (props) => {
         data.append('no_ktp', formData.no_ktp)
         data.append('password', formData.password)
         data.append('foto', formData.foto)
+        data.append('fotoSelfie', formData.fotoSelfie)
 
         try{
             const res = await request.post('/register', data)
@@ -86,7 +88,8 @@ const Register = (props) => {
                             <label className="form-label">Password</label>
                             <input className="form-control" value={formData.password} required="required" placeholder="Password" type="password" onChange={(e)=>inputChange("password", e.target.value)}/>
                         </div>
-                        <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChange('foto', e)} />
+                        <ImageInput id="fotoPlaceholder" name="foto" label="Foto KTP" value={formData.fotoKtpUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
+                        <ImageInput id="fotoPlaceholder" name="fotoSelfie" label="Foto Selfie KTP" value={formData.fotoSelfieKtpUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('fotoSelfie', e)} />
                         <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
                             {errorMessage}
                             <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>

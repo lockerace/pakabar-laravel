@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->integer('status')->default(0);
+            $table->string('foto_selfie_ktp')->nullable();
         });
     }
 

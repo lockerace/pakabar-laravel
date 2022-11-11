@@ -92,6 +92,9 @@ class LoginController extends Controller
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
+            if ($request->hasFile('fotoSelfie')) {
+                $member->foto_selfie_ktp = $request->fotoSelfie->store('fotoSelfie');
+            }
             $member->save();
 
 

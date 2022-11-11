@@ -9,6 +9,8 @@ const initFormData = {
     name:"",
     foto:"",
     fotoUrl:"",
+    foto_selfie_ktp:"",
+    fotoSelfieUrl:"",
     alamat:"",
     no_telp:"",
     no_anggota:"",
@@ -75,6 +77,7 @@ const Member = (props) => {
         data.append('jabatan_id', formData.jabatan_id)
         data.append('status', formData.status)
         data.append('foto', formData.foto)
+        data.append('foto_selfie_ktp', formData.foto_selfie_ktp)
         data.append('id', formData.id)
 
         try {
@@ -107,28 +110,31 @@ const Member = (props) => {
         if(form){
             temp.email = form.email
             temp.name = form.name
-            temp.password = ""
-            temp.foto = ""
+            temp.password = ''
+            temp.foto = ''
+            temp.foto_selfie_ktp = ''
             temp.alamat = form.alamat
             temp.no_telp = form.no_telp
             temp.no_anggota = form.no_anggota
             temp.no_ktp = form.no_ktp
             temp.jabatan_id = form.jabatan_id
             temp.status = form.status
-            temp.fotoUrl = form.foto ? "/admin/member/" + form.foto : ''
+            temp.fotoUrl = form.foto ? '/member/' + form.foto : ''
+            temp.fotoSelfieUrl = form.foto_selfie_ktp ? '/member/' + form.foto_selfie_ktp : ''
             temp.id = form.id
         } else{
-            temp.email = ""
-            temp.name = ""
-            temp.password = ""
-            temp.alamat = ""
-            temp.no_telp = ""
-            temp.no_anggota = ""
-            temp.no_ktp = ""
+            temp.email = ''
+            temp.name = ''
+            temp.password = ''
+            temp.alamat = ''
+            temp.no_telp = ''
+            temp.no_anggota = ''
+            temp.no_ktp = ''
             temp.jabatan_id = 2
             temp.status = "1"
-            temp.fotoUrl = ""
-            temp.id = ""
+            temp.fotoUrl = ''
+            temp.fotoSelfieUrl = ''
+            temp.id = ''
         }
         setFormData(temp)
     }
@@ -253,7 +259,8 @@ const Member = (props) => {
                                         <option value="1">Diverifikasi</option>
                                     </select>
                                 </div>
-                                <ImageInput id="fotoPlaceholder" name="foto" label="Foto" value={formData.fotoUrl} placeholder="Pilih Foto" onChange={(e) => inputChange('foto', e)} />
+                                <ImageInput id="fotoPlaceholder" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
+                                <ImageInput id="fotoPlaceholder" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
                                 <input id="memberId" name="id" type="hidden" value={formData.id}/>
                                 <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
                                     {errorMessage}
