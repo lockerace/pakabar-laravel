@@ -56,6 +56,13 @@ class UserController extends Controller
                 'no_telp' => 'unique:users,no_telp,',
                 'no_ktp' => 'unique:users,no_ktp,',
                 'no_anggota' => 'unique:users,no_anggota,',
+            ],
+            [
+                'foto.required' => 'Foto belum terisi',
+                'email.unique' => 'Email tidak tersedia',
+                'no_telp.unique' => 'Nomor Telepon tidak tersedia',
+                'no_ktp.unique' => 'Nomor KTP tidak tersedia',
+                'no_anggota.unique' => 'Nomor Anggota tidak tersedia'
             ]);
 
             $member = new User;
@@ -137,6 +144,9 @@ class UserController extends Controller
         if($jabatan == null){
             $request->validate([
                 'name' => 'unique:jabatan',
+            ],
+            [
+                'name.unique' => 'Jabatan tidak tersedia',
             ]);
 
             $jabatan = new Jabatan;
@@ -188,6 +198,11 @@ class UserController extends Controller
 
         $request->validate([
             'email' => 'unique:users,email,'.$member->id,
+            'password' => 'required_with:conf_password|same:conf_password',
+        ],
+        [
+            'password.same' => 'Password tidak sama',
+            'password.required_with' => 'Password belum terisi'
         ]);
 
         $member->email = $request->email;

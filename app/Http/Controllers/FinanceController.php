@@ -48,6 +48,9 @@ class FinanceController extends Controller
         if(empty($bank)){
             $request->validate([
                 'no_rekening' => 'unique:bank'
+            ],
+            [
+                'no_rekening.unique' => 'Nomor Rekening tidak tersedia'
             ]);
 
             $bank = new Bank;
@@ -72,6 +75,9 @@ class FinanceController extends Controller
     function editBankLedger(Request $request) {
         $request->validate([
             'bank_id' => 'required',
+        ],
+        [
+            'bank_id.required' => 'ID Bank belum terisi'
         ]);
         $previous = $this->bankLedger->getLast($request->bank_id);
         $bankLedger = new BankLedger;
@@ -108,6 +114,10 @@ class FinanceController extends Controller
         $request->validate([
             'bank_id' => 'required',
             'receiver_bank_id' => 'required',
+        ],
+        [
+            'bank_id.required' => 'ID Bank belum terisi',
+            'receiver_bank_id.required' => 'ID Bank Tujuan belum terisi'
         ]);
         $previous = $this->bankLedger->getLast($request->receiver_bank_id);
         $bankLedger = new BankLedger;

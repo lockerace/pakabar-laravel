@@ -38,7 +38,7 @@ class LoginController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'no_anggota' => ['The provided credentials are incorrect.'],
+                'no_anggota' => ['Nomor Anggota atau Password salah.'],
             ]);
         }
 
@@ -77,9 +77,17 @@ class LoginController extends Controller
         if($request->wantsJson()){
             $request->validate([
                'foto' => 'required',
+               'fotoSelfie' => 'required',
                'email' => 'unique:users',
                'no_telp' => 'unique:users',
                'no_ktp' => 'unique:users',
+            ],
+            [
+                'foto.required' => 'Foto KTP belum terisi',
+                'fotoSelfie.required' => 'Foto Selfie KTP belum terisi',
+                'email.unique' => 'Email tidak tersedia',
+                'no_telp.unique' => 'Nomor Telepon tidak tersedia',
+                'no_ktp.unique' => 'Nomor KTP tidak tersedia'
             ]);
             $member->email = $request->email;
             $member->name = $request->name;
@@ -96,15 +104,14 @@ class LoginController extends Controller
                 $member->foto_selfie_ktp = $request->fotoSelfie->store('fotoSelfie');
             }
             $member->save();
-
+            Auth::login($member);
 
             $title = "Verifikasi Member Baru (" . $member->name . ")";
             $message = $member->name . " telah bergabung. " . "Mohon segera diverifikasi.";
             $this->notification->sendVerifyMessage($title, $message);
 
-            Auth::login($member);
-
             return response()->json([
+                'token' => $member->createToken("")->plainTextToken,
                 'url' => '/',
             ]);
         } else{

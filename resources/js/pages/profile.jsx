@@ -6,6 +6,7 @@ import { Link, Navigate } from "react-router-dom";
 const initFormData = {
     email:"",
     password:"",
+    conf_password:"",
 }
 
 export default (props) => {
@@ -163,6 +164,10 @@ const Members = (props) => {
                                 <div className="mb-3">
                                     <label htmlFor="memberPassword" className="form-label">Password: </label>
                                     <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" required="required" onChange={(e)=>inputChange("password", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberConfPassword" className="form-label">Confirm Password: </label>
+                                    <input id="memberConfPassword" className="form-control" value={formData.conf_password} placeholder="Password" type="password" required="required" onChange={(e)=>inputChange("conf_password", e.target.value)} />
                                 </div>
                                 <input id="memberId" name="id" type="hidden" value=""/>
                                 <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">

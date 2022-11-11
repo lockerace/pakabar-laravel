@@ -30,6 +30,9 @@ const Register = (props) => {
     const [formData, setFormData] = React.useState(initFormData)
     const [errorMessage, seterrorMessage] = React.useState("")
 
+    const [phoneNumber, setPhoneNumber] = React.useState(null);
+    const [idNumber, setIdNumber] = React.useState(null);
+
     const onSubmit = async(event) =>{
         event.preventDefault()
         const data = new FormData()
@@ -56,8 +59,19 @@ const Register = (props) => {
     const inputChange = (id, value) =>{
         const temp = {...formData}
         temp[id] = value
+        
+        if(id == 'no_telp') {
+            value = value.replace(/\D/g, "")
+            setPhoneNumber(value)
+            temp[id] = value
+        } else if (id == 'no_ktp') {
+            value = value.replace(/\D/g, "")
+            setIdNumber(value)
+            temp[id] = value
+        }
         setFormData(temp)
     }
+
     return(
         <div className="container">
             <div className="col-md-8 card m-auto my-5">
@@ -78,11 +92,11 @@ const Register = (props) => {
                         </div>
                         <div className="mb-3">
                             <label className="form-label">No Telepon</label>
-                            <input className="form-control" value={formData.no_telp} required="required" placeholder="No Telepon" onChange={(e)=>inputChange("no_telp", e.target.value)}/>
+                            <input className="form-control" value={phoneNumber} required="required" placeholder="No Telepon" onChange={(e)=>inputChange("no_telp", e.target.value)}/>
                         </div>
                         <div className="mb-3">
                             <label className="form-label">No KTP</label>
-                            <input className="form-control" value={formData.no_ktp} required="required" placeholder="No KTP" onChange={(e)=>inputChange("no_ktp", e.target.value)}/>
+                            <input className="form-control" value={idNumber} required="required" placeholder="No KTP" onChange={(e)=>inputChange("no_ktp", e.target.value)}/>
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Password</label>
