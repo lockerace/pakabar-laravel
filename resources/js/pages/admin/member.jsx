@@ -155,15 +155,15 @@ const Member = (props) => {
             </div>
 
             <form method="get">
-                        <div className="d-flex flex-row justify-content-end">
-                            <select className="form-select" name="myOption" value={id_jabatan} onChange={(e) => setJabatanId(e.target.value)}>
-                                <option value="">Semua Jabatan</option>
-                                { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
-                                    <option key={i} value={ d.id }>{ d.name }</option>
-                                )) }
-                            </select>
-                        </div>
-                    </form>
+                <div className="d-flex flex-row justify-content-end">
+                    <select className="form-select" name="myOption" value={id_jabatan} onChange={(e) => setJabatanId(e.target.value)}>
+                        <option value="">Semua Jabatan</option>
+                        { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
+                            <option key={i} value={ d.id }>{ d.name }</option>
+                        )) }
+                    </select>
+                </div>
+            </form>
 
             <table className="table table-bordered">
                 <thead>

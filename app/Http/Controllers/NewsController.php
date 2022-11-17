@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\NewsRepository;
+use App\Models\JabatanRepository;
 use App\Models\News;
 
 
 class NewsController extends Controller
 {
-    function __construct(NewsRepository $newsRepository) {
+    function __construct(NewsRepository $newsRepository, JabatanRepository $jabatanRepository, NotificationController $notificationController) {
         $this->news = $newsRepository;
+        $this->jabatan = $jabatanRepository;
+        $this->notification = $notificationController;
     }
 
     function getNewsDetail($id, Request $request){
@@ -31,6 +34,7 @@ class NewsController extends Controller
     function getNews(Request $request) {
         $data = [
             'news' => $this->news->getAll(),
+            'jabatan' => $this->jabatan->getAll(),
             'deleteUrl' => route('admin-news-delete'),
         ];
 
@@ -50,11 +54,14 @@ class NewsController extends Controller
         ]);
 
         if($news == null){
-            // dd($news);
             $news = new News;
             $news->judul = $request->judul;
             $news->konten = $request->konten;
             $news->save();
+
+            if($request->receiver) {
+                $this->notification->sendNewsMessage($request->receiver, $request->judul);
+            }
         } else{
             $news->judul = $request->judul;
             $news->konten = $request->konten;

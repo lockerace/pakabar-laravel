@@ -90,7 +90,7 @@ const Members = (props) => {
                                 <img src={"/member/" + props.data.foto} className="card-img-top" alt="..."></img>
                             )}
                         <div className="card-body">
-                            <h5 className="card-title text-center">{ props.data.name }</h5>
+                            <h5 className="card-title text-center">{ props.data.name } - Foto KTP</h5>
                         </div>
                     </div>
                 </div>
@@ -107,19 +107,19 @@ const Members = (props) => {
                                 <img src={"/member/" + props.data.foto_selfie_ktp} className="card-img-top" alt="..."></img>
                             )}
                         <div className="card-body">
-                            <h5 className="card-title text-center">{ props.data.name }</h5>
+                            <h5 className="card-title text-center">{ props.data.name } - Foto Selfie KTP</h5>
                         </div>
                     </div>
                 </div>
 
                 <div className="col col-md-8">
                     <div className="mb-3">
-                        <label className="form-label">Email</label>
-                        <input disabled className="form-control" value={props.data.email} />
-                    </div>
-                    <div className="mb-3">
                         <label className="form-label">Nama Anggota</label>
                         <input disabled className="form-control" value={props.data.name} />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Email</label>
+                        <input disabled className="form-control" value={props.data.email} />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Alamat</label>

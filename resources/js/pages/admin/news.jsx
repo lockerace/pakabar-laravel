@@ -10,14 +10,16 @@ const editorConfig = {
 }
 
 export default (props) => {
-  const [news, setNews] = React.useState([]);
-  const [deleteId, setDeleteId] = React.useState('');
+  const [news, setNews] = React.useState([])
+  const [jabatan, setJabatan] = React.useState([])
+  const [deleteId, setDeleteId] = React.useState('')
   const [editData, setEditData] = React.useState()
 
   const fetch = async() => {
     const res = await request.get('/admin/news')
     if(res.status == 200 && res.data) {
       if(res.data.news) setNews(res.data.news)
+      if(res.data.jabatan) setJabatan(res.data.jabatan)
     }
   }
 
@@ -71,7 +73,7 @@ export default (props) => {
         ))}
         </tbody>
       </table>
-      <EditNewsForm data={editData} fetch={fetch} />
+      <EditNewsForm data={editData} jabatan={jabatan} fetch={fetch} />
       <Confirm deleteUrl="/admin/deletenews" id={deleteId} callBack={fetch} />
     </div>
   )
@@ -81,12 +83,14 @@ const initFormData = {
   id: '',
   judul: '',
   konten: '',
+  receiver: '0',
 }
 
 const EditNewsForm = (props) => {
   const [formData, _setFormData] = React.useState(initFormData);
   const formDataRef = React.useRef(formData);
   const [errorMessage, seterrorMessage] = React.useState("");
+  const [id_jabatan, setJabatanId] = React.useState("");
   const modalRef = React.useRef();
 
   const setFormData = (val) => {
@@ -111,15 +115,22 @@ const EditNewsForm = (props) => {
   }
 
   React.useEffect(() => {
+    const receiver = document.getElementById('receiver');
     if (props.data) {
       const temp = {...formData}
       temp.id = props.data.id
       temp.judul = props.data.judul
       temp.konten = props.data.konten
       setFormData(temp)
+
+      receiver.classList.add("d-none");
+      receiver.classList.remove("d-block");
     } else {
       const temp = {...initFormData}
       setFormData(temp)
+
+      receiver.classList.add("d-block");
+      receiver.classList.remove("d-none");
     }
   }, [props.data])
 
@@ -143,6 +154,16 @@ const EditNewsForm = (props) => {
               <div className="mb-3">
                 <label htmlFor="newsJudul" className="form-label">Judul News: </label>
                 <input id="newsJudul" className="form-control" name="judul" placeholder="Judul" required="required" value={formData.judul} onChange={(e) => inputChanged('judul', e.target.value)} />
+              </div>
+              <div className="mb-3 d-none" id="receiver">
+                <label htmlFor="receiverId">Kirim Notifikasi: </label>
+                <select className="form-select" id="receiverId" value={formData.receiver} onChange={(e) => inputChanged('receiver', e.target.value)}>
+                    <option value="0">Tanpa Notifikasi</option>
+                    <option value="all">Semua</option>
+                    { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
+                        <option key={i} value={ d.id }>{ d.name }</option>
+                    )) }
+                </select>
               </div>
               <div className="mb-3">
                 <label htmlFor="newsKonten" className="form-label">Konten: </label>

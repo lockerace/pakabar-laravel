@@ -9,14 +9,16 @@ use App\Models\User;
 use Notification;
 use App\Notifications\TestNotification;
 use App\Models\UserRepository;
+use App\Models\JabatanRepository;
 use Carbon\Carbon;
 
 
 class NotificationController extends Controller
 {
 
-    function __construct(UserRepository $userRepository) {
+    function __construct(UserRepository $userRepository, JabatanRepository $jabatanRepository) {
         $this->users = $userRepository;
+        $this->jabatan = $jabatanRepository;
     }
 
     function getNotification(Request $request){
@@ -24,6 +26,8 @@ class NotificationController extends Controller
         App::setLocale('id');
         $data = [
             'notifikasi' => $request->user()->notifications()->paginate(15),
+            'jabatan' => $this->jabatan->getAll(),
+            'user' => $this->users->getAll(),
         ];
         if($request->wantsJson()){
             return response()->json($data);
@@ -32,7 +36,16 @@ class NotificationController extends Controller
     }
 
     function sendMessage(Request $request){
-        $receiver = $this->users->getAll();
+        $receiver = $request->groupReceiver;
+        
+        if($request->groupReceiver == "all") {
+            $receiver = $this->users->getAll();
+        } else if($request->groupReceiver == "single" && $request->singleReceiver != "") {
+            $receiver = $this->users->getById($request->singleReceiver);
+        } else {
+            $receiver = $this->users->getByJabatan($request->groupReceiver);
+        }
+
         $data = [
             'title' => $request->title,
             'message' => $request->message,
@@ -43,6 +56,18 @@ class NotificationController extends Controller
             return response()->json(null);
         }
         return redirect(route('notification'));
+    }
+
+    function sendNewsMessage($id, $header) {
+        if($id != 'all')
+            $receiver = $this->users->getByJabatan($id);
+        else
+            $receiver = $this->users->getAll();
+        $data = [
+            'title' => 'NEWS - ' . $header,
+            'message' => 'Berita baru',
+        ];
+        Notification::send($receiver, new TestNotification($data));
     }
 
     function sendSuccessVerifyMessage($id){

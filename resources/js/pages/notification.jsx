@@ -11,6 +11,8 @@ export default (props) => {
   const {auth, fetchAuth} = useOutletContext();
   const [data, setData] = React.useState({});
   const [message, setMessage] = React.useState();
+  const [jabatan, setJabatan] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
 
   const fetch = async(page) => {
     let url = '/notification'
@@ -20,6 +22,8 @@ export default (props) => {
     const res = await request.get(url)
     if (res.status == 200 && res.data) {
       if (res.data.notifikasi) setData(res.data.notifikasi)
+      if (res.data.jabatan) setJabatan(res.data.jabatan)
+      if (res.data.user) setUsers(res.data.user)
     }
   }
 
@@ -33,7 +37,7 @@ export default (props) => {
     <section className="full-height d-flex flex-column">
         <div className="flex-fill container pt-5">
           <h1 className="display-3">Notifikasi</h1>
-          { auth && auth.jabatan_id == 1 && <SendNotif fetch={fetch} fetchAuth={fetchAuth} /> }
+          { auth && auth.jabatan_id == 1 && <SendNotif fetch={fetch} fetchAuth={fetchAuth} jabatan={jabatan} users={users} /> }
           { data && data.data && data.data.length > 0 && (<>
             <ul className="list-group">
               { data.data.map((d, i) => (
@@ -43,7 +47,7 @@ export default (props) => {
             <Pagination data={data} onChange={onPage} />
           </>)}
 
-          <div id="messageModal" className="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
+          <div id="messageModal" className="modal" tabIndex="-1">
               <div className="modal-dialog">
                   <div className="modal-content">
                       <div className="modal-header">
@@ -93,6 +97,8 @@ const NotifItem = (props) => {
 const initFormData = {
     title: "",
     message: "",
+    groupReceiver: "all",
+    singleReceiver: "",
 }
 
 const SendNotif = (props) => {
@@ -103,6 +109,17 @@ const SendNotif = (props) => {
       const temp = {...formData}
       temp[id] = value
       setFormData(temp)
+
+      if(id == "groupReceiver") {
+        const single = document.getElementById('singleReceiver')
+        if(value == "single") {
+          single.classList.add('d-block')
+          single.classList.remove('d-none')
+        } else {
+          single.classList.add('d-none')
+          single.classList.remove('d-block')
+        }
+      }
   }
 
   const onSubmit = async(event) =>{
@@ -114,6 +131,10 @@ const SendNotif = (props) => {
           props.fetch()
           props.fetchAuth()
           setFormData(initFormData)
+
+        const single = document.getElementById('singleReceiver')
+        single.classList.add('d-none')
+        single.classList.remove('d-block')
       }
   }
 
@@ -141,6 +162,26 @@ const SendNotif = (props) => {
                         <div className="mb-3">
                             <label htmlFor="notifMessage" className="form-label">Pesan: </label>
                             <input id="notifMessage" className="form-control" name="message" placeholder="Isi pesan" required="required" value={formData.message} onChange={(e)=>inputChange("message", e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="notifGroupReceiver" className="form-label">Penerima: </label>
+                            <select className="form-select" id="notifGroupReceiver" value={formData.groupReceiver} onChange={(e) => inputChange('groupReceiver', e.target.value)}>
+                              <option value="all">Semua</option>
+                              <option value="single">Individu</option>
+                              <option disabled>- - - - - - -</option>
+                              { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
+                                  <option key={i} value={ d.id }>{ d.name }</option>
+                              )) }
+                            </select>
+                        </div>
+                        <div className="mb-3 d-none" id="singleReceiver">
+                            <label htmlFor="notifSingleReceiver" className="form-label">Penerima: </label>
+                            <select className="form-select" id="notifSingleReceiver" value={formData.singleReceiver} onChange={(e) => inputChange('singleReceiver', e.target.value)}>
+                              <option disabled value="">Pilih Penerima</option>
+                              { props.users.length > 0 && props.users.map((d, i) => (
+                                  <option key={i} value={ d.id }>{ d.name }</option>
+                              )) }
+                            </select>
                         </div>
                     </div>
                     <div className="modal-footer">
