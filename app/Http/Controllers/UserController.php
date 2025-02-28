@@ -56,15 +56,17 @@ class UserController extends Controller
                 [
                     'foto' => 'required',
                     'email' => 'unique:users,email,',
-                    'no_telp' => 'unique:users,no_telp,',
-                    'no_ktp' => 'unique:users,no_ktp,',
+                    'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,',
+                    'no_ktp' => 'required|regex:/^[0-9]+$/|unique:users,no_ktp,',
                     'no_anggota' => 'unique:users,no_anggota,',
                 ],
                 [
                     'foto.required' => 'Foto belum terisi',
                     'email.unique' => 'Email tidak tersedia',
                     'no_telp.unique' => 'Nomor Telepon tidak tersedia',
+                    'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
                     'no_ktp.unique' => 'Nomor KTP tidak tersedia',
+                    'no_ktp.regex' => 'Nomor KTP hanya boleh berisi angka',
                     'no_anggota.unique' => 'Nomor Anggota tidak tersedia'
                 ]
             );
@@ -93,8 +95,8 @@ class UserController extends Controller
         } else {
             $request->validate([
                 'email' => 'unique:users,email,' . $member->id,
-                'no_telp' => 'unique:users,no_telp,' . $member->id,
-                'no_ktp' => 'unique:users,no_ktp,' . $member->id,
+                'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,',
+                'no_ktp' => 'required|regex:/^[0-9]+$/|unique:users,no_ktp,',
                 'no_anggota' => 'unique:users,no_anggota,' . $member->id,
             ]);
 
