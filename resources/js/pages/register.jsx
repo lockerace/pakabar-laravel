@@ -61,11 +61,11 @@ const Register = (props) => {
         temp[id] = value
         
         if(id == 'no_telp') {
-            value = value.replace(/\D/g, "")
+            value = value.replace(/(?!^\+)\D/g, "")
             setPhoneNumber(value)
             temp[id] = value
         } else if (id == 'no_ktp') {
-            value = value.replace(/\D/g, "")
+            value = value.replace(/\D/g, "").slice(0, 16);
             setIdNumber(value)
             temp[id] = value
         }
@@ -106,7 +106,7 @@ const Register = (props) => {
                         <ImageInput id="fotoPlaceholder" name="fotoSelfie" label="Foto Selfie KTP" value={formData.fotoSelfieKtpUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('fotoSelfie', e)} />
                         <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
                             {errorMessage}
-                            <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
+                            <button type="button" className="btn-close" onClick={() => seterrorMessage("error")} aria-label="Close"></button>
                         </div>
                         <button className="btn btn-primary">Register</button>
                         

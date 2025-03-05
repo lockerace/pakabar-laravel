@@ -50,7 +50,9 @@ export default (props) => {
 const Member = (props) => {
     const [formData, setFormData] = React.useState(initFormData);
     const [id_jabatan, setJabatanId] = React.useState("");
-    const [errorMessage, seterrorMessage] = React.useState("")
+    const [errorMessage, seterrorMessage] = React.useState(null)
+    const [phoneNumber, setPhoneNumber] = React.useState(null);
+    const [idNumber, setIdNumber] = React.useState(null);
     const modalRef = React.useRef();
 
     const fetch = async() => {
@@ -103,6 +105,17 @@ const Member = (props) => {
     const inputChange = (id, value) =>{
         const temp = {...formData}
         temp[id] = value
+
+        if(id == 'no_telp') {
+            value = value.replace(/(?!^\+)\D/g, "")
+            setPhoneNumber(value)
+            temp[id] = value
+        } else if (id == 'no_ktp') {
+            value = value.replace(/\D/g, "").slice(0, 16);
+            setIdNumber(value)
+            temp[id] = value
+        }
+
         setFormData(temp)
     }
     const onEdit = (form)=> () => {

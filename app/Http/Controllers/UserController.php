@@ -56,8 +56,8 @@ class UserController extends Controller
                 [
                     'foto' => 'required',
                     'email' => 'unique:users,email,',
-                    'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,',
-                    'no_ktp' => 'required|regex:/^[0-9]+$/|unique:users,no_ktp,',
+                    'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,'. $request->user()->id,
+                    'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $request->user()->id,
                     'no_anggota' => 'unique:users,no_anggota,',
                 ],
                 [
@@ -65,8 +65,9 @@ class UserController extends Controller
                     'email.unique' => 'Email tidak tersedia',
                     'no_telp.unique' => 'Nomor Telepon tidak tersedia',
                     'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
-                    'no_ktp.unique' => 'Nomor KTP tidak tersedia',
-                    'no_ktp.regex' => 'Nomor KTP hanya boleh berisi angka',
+                    'no_ktp.required' => 'NIK wajib diisi!',
+                    'no_ktp.digits' => 'NIK harus 16 digit!',
+                    'no_ktp.unique' => 'NIK sudah terdaftar!',
                     'no_anggota.unique' => 'Nomor Anggota tidak tersedia'
                 ]
             );
@@ -95,9 +96,19 @@ class UserController extends Controller
         } else {
             $request->validate([
                 'email' => 'unique:users,email,' . $member->id,
-                'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,',
-                'no_ktp' => 'required|regex:/^[0-9]+$/|unique:users,no_ktp,',
+                'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,'. $member->id,
+                'no_ktp' => 'required|digits:16|unique:users,no_ktp,'. $member->id,
                 'no_anggota' => 'unique:users,no_anggota,' . $member->id,
+            ], 
+            [
+                'foto.required' => 'Foto belum terisi',
+                'email.unique' => 'Email tidak tersedia',
+                'no_telp.unique' => 'Nomor Telepon tidak tersedia',
+                'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
+                'no_ktp.required' => 'NIK wajib diisi!',
+                'no_ktp.digits' => 'NIK harus 16 digit!',
+                'no_ktp.unique' => 'NIK sudah terdaftar!',
+                'no_anggota.unique' => 'Nomor Anggota tidak tersedia'
             ]);
 
             $member->name = $request->name;

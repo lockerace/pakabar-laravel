@@ -75,19 +75,25 @@ class LoginController extends Controller
         $lastUser = $this->users->getLastUser();
         $member = new User;
         if($request->wantsJson()){
-            $request->validate([
+            $request->validate(
+                [
                'foto' => 'required',
                'fotoSelfie' => 'required',
-               'email' => 'unique:users',
-               'no_telp' => 'unique:users',
-               'no_ktp' => 'unique:users',
+               'email' => 'required|email|unique:users,email,',
+               'no_telp' => 'required|regex:/^\+?\d{10,15}$/|unique:users,no_telp,' ,
+               'no_ktp' => 'required|digits:16|unique:users,no_ktp,',
             ],
             [
                 'foto.required' => 'Foto KTP belum terisi',
                 'fotoSelfie.required' => 'Foto Selfie KTP belum terisi',
-                'email.unique' => 'Email tidak tersedia',
-                'no_telp.unique' => 'Nomor Telepon tidak tersedia',
-                'no_ktp.unique' => 'Nomor KTP tidak tersedia'
+                'email.unique' => 'Email sudah terdaftar!',
+                'email.email' => 'Format Email tidak valid',
+                'no_telp.required' => 'Nomor Telepon wajib diisi!',
+                'no_telp.regex' => 'Nomor Telepon harus terdiri dari 10 hingga 15 angka dan bisa diawali dengan "+".',
+                'no_telp.unique' => 'Nomor Telepon sudah terdaftar!',
+                'no_ktp.required' => 'NIK wajib diisi!',
+                'no_ktp.digits' => 'NIK harus 16 digit!',
+                'no_ktp.unique' => 'NIK sudah terdaftar!',
             ]);
             $member->email = $request->email;
             $member->name = $request->name;
