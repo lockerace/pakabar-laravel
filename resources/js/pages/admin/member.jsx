@@ -1,22 +1,29 @@
 import React from 'react';
 import Confirm from '../../components/modalconfirm';
 import request from '../../axios';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import ImageInput from '../../components/imageinput'
+import DatePicker from 'react-datepicker';
+import { format } from 'date-fns';
+import { el } from 'date-fns/locale';
 
 const initFormData = {
-    email:"",
-    name:"",
-    foto:"",
-    fotoUrl:"",
-    foto_selfie_ktp:"",
-    fotoSelfieUrl:"",
-    alamat:"",
-    no_telp:"",
-    no_anggota:"",
-    no_ktp:"",
+    email: "",
+    name: "",
+    foto: "",
+    fotoUrl: "",
+    foto_selfie_ktp: "",
+    fotoSelfieUrl: "",
+    alamat: "",
+    no_telp: "",
+    no_anggota: "",
+    no_ktp: "",
     jabatan_id: "",
     status: "",
+    bloodtype: "1",
+    birthday: "",
+    city_id: "",
+    state_id: "",
 }
 
 export default (props) => {
@@ -24,13 +31,20 @@ export default (props) => {
     const [jabatan, setJabatans] = React.useState([]);
     const [deleteUrl, setDeleteUrl] = React.useState("");
     const [deleteId, setDeleteId] = React.useState("");
+    const [cities, setCities] = React.useState([]);
+    const [states, setStates] = React.useState([]);
 
-    const fetch = async() => {
+
+
+    const fetch = async () => {
         const res = await request.get('/admin/member')
-        if(res.status == 200 && res.data) {
-            if(res.data.members) setMembers(res.data.members)
-            if(res.data.jabatan) setJabatans(res.data.jabatan)
-            if(res.data.deleteUrl) setDeleteUrl(res.data.deleteUrl)
+        if (res.status == 200 && res.data) {
+            if (res.data.members) setMembers(res.data.members)
+            if (res.data.jabatan) setJabatans(res.data.jabatan)
+            if (res.data.deleteUrl) setDeleteUrl(res.data.deleteUrl)
+            if (res.data.city) setCities(res.data.city)
+            if (res.data.state) setStates(res.data.state)
+
         }
     }
 
@@ -40,10 +54,10 @@ export default (props) => {
 
 
     return (
-      <section className="full-height d-flex flex-column">
-          <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} />
-          <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
-      </section>
+        <section className="full-height d-flex flex-column">
+            <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} states={states} cities={cities} />
+            <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
+        </section>
     )
 }
 
@@ -54,11 +68,12 @@ const Member = (props) => {
     const [phoneNumber, setPhoneNumber] = React.useState(null);
     const [idNumber, setIdNumber] = React.useState(null);
     const modalRef = React.useRef();
+    const [cities, setCities] = React.useState([]);
 
-    const fetch = async() => {
+    const fetch = async () => {
         const res = await request.get('/admin/member?id=' + encodeURIComponent(id_jabatan))
-        if(res.status == 200 && res.data) {
-            if(res.data.members) props.setMembers(res.data.members)
+        if (res.status == 200 && res.data) {
+            if (res.data.members) props.setMembers(res.data.members)
         }
     }
 
@@ -66,7 +81,7 @@ const Member = (props) => {
         fetch()
     }, [id_jabatan])
 
-    const onSubmit = async(event) =>{
+    const onSubmit = async (event) => {
         event.preventDefault()
         const data = new FormData()
         data.append('name', formData.name)
@@ -75,17 +90,22 @@ const Member = (props) => {
         data.append('no_telp', formData.no_telp)
         data.append('no_anggota', formData.no_anggota)
         data.append('no_ktp', formData.no_ktp)
-        data.append('password', formData.password)
+        if (formData.password) data.append('password', formData.password)
+
+        data.append('bloodtype', formData.bloodtype)
+
+        data.append('birthday', formData.birthday ? format(formData.birthday, 'yyyy-MM-dd') : '')
         data.append('jabatan_id', formData.jabatan_id)
         data.append('status', formData.status)
         data.append('foto', formData.foto)
         data.append('foto_selfie_ktp', formData.foto_selfie_ktp)
         data.append('id', formData.id)
+        data.append('city_id', formData.city_id)
 
         try {
             const res = await request.post('/admin/member', data)
             if (res.status == 200 && res.data) {
-                if(modalRef.current)
+                if (modalRef.current)
                     modalRef.current.click()
                 fetch()
             }
@@ -95,18 +115,18 @@ const Member = (props) => {
 
     }
 
-    const onVerify = (id) => async(event) =>{
+    const onVerify = (id) => async (event) => {
         event.preventDefault()
         const res = await request.post('/admin/verifymember/' + encodeURIComponent(id), {})
         if (res.status == 200 && res.data) {
             fetch()
         }
     }
-    const inputChange = (id, value) =>{
-        const temp = {...formData}
+    const inputChange = (id, value) => {
+        const temp = { ...formData }
         temp[id] = value
 
-        if(id == 'no_telp') {
+        if (id == 'no_telp') {
             value = value.replace(/(?!^\+)\D/g, "")
             setPhoneNumber(value)
             temp[id] = value
@@ -114,13 +134,22 @@ const Member = (props) => {
             value = value.replace(/\D/g, "").slice(0, 16);
             setIdNumber(value)
             temp[id] = value
+        } else if (id == 'state_id') {
+            temp[id] = value
+            if (value) {
+                const res = props.cities.filter((city) => city.state_id == value)
+                setCities(res)
+            } else {
+                setCities([])
+            }
         }
+
 
         setFormData(temp)
     }
-    const onEdit = (form)=> () => {
-        const temp = {...formData}
-        if(form){
+    const onEdit = (form) => () => {
+        const temp = { ...formData }
+        if (form) {
             temp.email = form.email
             temp.name = form.name
             temp.password = ''
@@ -135,7 +164,17 @@ const Member = (props) => {
             temp.fotoUrl = form.foto ? '/member/' + form.foto : ''
             temp.fotoSelfieUrl = form.foto_selfie_ktp ? '/member/' + form.foto_selfie_ktp : ''
             temp.id = form.id
-        } else{
+            temp.birthday = form.birthday ? new Date(form.birthday) : ''
+            temp.bloodtype = form.bloodtype ?? "1"
+            temp.city_id = form.city_id
+            temp.state_id = form.city?.state_id ?? ''
+            if (temp.state_id) {
+                const res = props.cities.filter((city) => city.state_id == temp.state_id)
+                setCities(res)
+            } else {
+                setCities([])
+            }
+        } else {
             temp.email = ''
             temp.name = ''
             temp.password = ''
@@ -148,11 +187,16 @@ const Member = (props) => {
             temp.fotoUrl = ''
             temp.fotoSelfieUrl = ''
             temp.id = ''
+            temp.birthday = ''
+            temp.bloodtype = "1"
+            temp.city_id = ''
+            temp.state_id = ''
+
         }
         setFormData(temp)
     }
 
-    const onDelete = (id)=> () => {
+    const onDelete = (id) => () => {
         props.setDeleteId(id)
     }
 
@@ -171,9 +215,9 @@ const Member = (props) => {
                 <div className="d-flex flex-row justify-content-end">
                     <select className="form-select" name="myOption" value={id_jabatan} onChange={(e) => setJabatanId(e.target.value)}>
                         <option value="">Semua Jabatan</option>
-                        { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
-                            <option key={i} value={ d.id }>{ d.name }</option>
-                        )) }
+                        {props.jabatan.length > 0 && props.jabatan.map((d, i) => (
+                            <option key={i} value={d.id}>{d.name}</option>
+                        ))}
                     </select>
                 </div>
             </form>
@@ -188,13 +232,13 @@ const Member = (props) => {
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                { props.data.length > 0 && props.data.map((d, i) => (
+                {props.data.length > 0 && props.data.map((d, i) => (
                     <tbody key={i}>
                         <tr>
-                            <td>{ d.name }</td>
-                            <td>{ d.no_anggota }</td>
-                            <td>{ d.jabatan.name}</td>
-                            <td>{ d.status == 1 ? 'Diverifikasi' : 'Belum Verifikasi'}</td>
+                            <td>{d.name}</td>
+                            <td>{d.no_anggota}</td>
+                            <td>{d.jabatan.name}</td>
+                            <td>{d.status == 1 ? 'Diverifikasi' : (d.status == 2 ? 'Tidak Aktif' : 'Belum Verifikasi')}</td>
                             <td>
                                 <div className="d-flex flex-row gap-2">
                                     <Link className="btn btn-link text-primary text-decoration-none d-flex flex-row" onClick={(onEdit(d))} data-bs-toggle="modal" data-bs-target="#editMemberModal">
@@ -208,8 +252,8 @@ const Member = (props) => {
                                     {d.status == 0 && (
                                         <form onSubmit={(onVerify(d.id))} method="post">
                                             <button className="btn btn-link text-success text-decoration-none d-flex flex-row">
-                                            <i className="material-icons d-block">check</i>
-                                            <span>Verifikasi</span>
+                                                <i className="material-icons d-block">check</i>
+                                                <span>Verifikasi</span>
                                             </button>
                                         </form>
                                     )}
@@ -217,7 +261,7 @@ const Member = (props) => {
                             </td>
                         </tr>
                     </tbody>
-                )) }
+                ))}
             </table>
             <form onSubmit={onSubmit} encType="multipart/form-data" method="post" >
                 <div id="editMemberModal" className="modal" tabIndex="-1" role="dialog">
@@ -230,52 +274,94 @@ const Member = (props) => {
                             <div className="modal-body">
                                 <div className="mb-3">
                                     <label htmlFor="memberEmail" className="form-label">Email: </label>
-                                    <input id="memberEmail" className="form-control" value={formData.email} placeholder="Email" type="email" required="required" onChange={(e)=>inputChange("email", e.target.value)} />
+                                    <input id="memberEmail" className="form-control" value={formData.email} placeholder="Email" type="email" required="required" onChange={(e) => inputChange("email", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberName" className="form-label">Nama Anggota: </label>
-                                    <input id="memberName" className="form-control" value={formData.name} placeholder="Nama Anggota" required="required" onChange={(e)=>inputChange("name", e.target.value)} />
+                                    <input id="memberName" className="form-control" value={formData.name} placeholder="Nama Anggota" required="required" onChange={(e) => inputChange("name", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberState" className="form-label">Provinsi: </label>
+                                    <select id="memberState" required="required" className="form-select" value={formData.state_id} onChange={(e) => inputChange("state_id", e.target.value)}>
+                                        <option>Pilih Provinsi</option>
+                                        {props.states.length > 0 && props.states.map((d, i) => (
+                                            <option key={i} value={d.id} >{d.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberCity" className="form-label">Kota: </label>
+                                    <select id="memberCity" required="required" className="form-select" value={formData.city_id} onChange={(e) => inputChange("city_id", e.target.value)}>
+                                        <option>Pilih Kota</option>
+                                        {cities.length > 0 && cities.map((d, i) => (
+                                            <option key={i} value={d.id} >{d.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberAlamat" className="form-label">Alamat: </label>
-                                    <input id="memberAlamat" className="form-control" value={formData.alamat} placeholder="Alamat" required="required" onChange={(e)=>inputChange("alamat", e.target.value)} />
+                                    <input id="memberAlamat" className="form-control" value={formData.alamat} placeholder="Alamat" required="required" onChange={(e) => inputChange("alamat", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberNoTelp" className="form-label">No Telpon: </label>
-                                    <input id="memberNoTelp" className="form-control" value={formData.no_telp} placeholder="Nomor Telepon" required="required" onChange={(e)=>inputChange("no_telp", e.target.value)} />
+                                    <input id="memberNoTelp" className="form-control" value={formData.no_telp} placeholder="Nomor Telepon" required="required" onChange={(e) => inputChange("no_telp", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberNoAnggota" className="form-label">No Anggota: </label>
-                                    <input id="memberNoAnggota" className="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" required="required" onChange={(e)=>inputChange("no_anggota", e.target.value)} />
+                                    <input id="memberNoAnggota" className="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" required="required" onChange={(e) => inputChange("no_anggota", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberPassword" className="form-label">Password: </label>
-                                    <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" required="required" onChange={(e)=>inputChange("password", e.target.value)} />
+                                    <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" onChange={(e) => inputChange("password", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberNoKtp" className="form-label">No KTP: </label>
-                                    <input id="memberNoKtp" className="form-control" value={formData.no_ktp} placeholder="Nomor KTP" required="required" onChange={(e)=>inputChange("no_ktp", e.target.value)} />
+                                    <input id="memberNoKtp" className="form-control" value={formData.no_ktp} placeholder="Nomor KTP" required="required" onChange={(e) => inputChange("no_ktp", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="birthday" className="form-label">Tanggal Lahir: </label>
+                                    <DatePicker
+                                        selected={formData.birthday} //when day is clicked
+                                        onChange={(e) => inputChange("birthday", e)} //only when value has changed
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        customInput={<input id="birthday" className="form-control" required="required" />}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="bloodType" className="form-label">Golongan Darah: </label>
+                                    <select id="bloodType" required="required" className="form-select" value={formData.bloodtype} onChange={(e) => inputChange("bloodtype", e.target.value)}>
+                                        <option value="1">O -</option>
+                                        <option value="2">A -</option>
+                                        <option value="3">B -</option>
+                                        <option value="4">AB -</option>
+                                        <option value="5">O +</option>
+                                        <option value="6">A +</option>
+                                        <option value="7">B +</option>
+                                        <option value="8">AB +</option>
+                                    </select>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberJabatan" className="form-label">Jabatan: </label>
-                                    <select id="memberJabatan" required="required" className="form-select" value={formData.jabatan_id} onChange={(e)=>inputChange("jabatan_id", e.target.value)}>
+                                    <select id="memberJabatan" required="required" className="form-select" value={formData.jabatan_id} onChange={(e) => inputChange("jabatan_id", e.target.value)}>
                                         <option>Pilih Jabatan</option>
-                                        { props.jabatan.length > 0 && props.jabatan.map((d, i) => (
-                                            <option key={i} value={d.id} >{ d.name }</option>
-                                        )) }
+                                        {props.jabatan.length > 0 && props.jabatan.map((d, i) => (
+                                            <option key={i} value={d.id} >{d.name}</option>
+                                        ))}
                                     </select>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberStatus" className="form-label">Status: </label>
-                                    <select id="memberStatus" required="required" className="form-select" value={formData.status} onChange={(e)=>inputChange("status", e.target.value)}>
+                                    <select id="memberStatus" required="required" className="form-select" value={formData.status} onChange={(e) => inputChange("status", e.target.value)}>
                                         <option value="0">Belum Verifikasi</option>
                                         <option value="1">Diverifikasi</option>
                                     </select>
                                 </div>
                                 <ImageInput id="fotoPlaceholder" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
                                 <ImageInput id="fotoPlaceholder" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
-                                <input id="memberId" name="id" type="hidden" value={formData.id}/>
-                                <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                                <input id="memberId" name="id" type="hidden" value={formData.id} />
+                                <div className={"alert alert-danger alert-dismissible fade" + (errorMessage ? ' show' : ' hide p-0 m-0')} role="alert">
                                     {errorMessage}
                                     <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
                                 </div>

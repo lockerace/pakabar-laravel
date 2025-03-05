@@ -49,4 +49,7 @@ class User extends Authenticatable
     function jabatan(){
         return $this->belongsTo(Jabatan::class, 'jabatan_id', 'id');
     }
+    function city(){
+        return $this->belongsTo(City::class, 'city_id', 'id');
+    }
 }

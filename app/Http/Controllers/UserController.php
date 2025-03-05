@@ -14,6 +14,10 @@ use App\Models\Jabatan;
 
 class UserController extends Controller
 {
+    protected UserRepository $users;
+    protected NewsRepository $news;
+    protected JabatanRepository $jabatan;
+    protected NotificationController $notification;
     function __construct(UserRepository $userRepository, NewsRepository $newsRepository, JabatanRepository $jabatanRepository, NotificationController $notificationController)
     {
         $this->users = $userRepository;
@@ -34,6 +38,8 @@ class UserController extends Controller
             'members' => $members,
             'jabatan' => $this->jabatan->getAll(),
             'deleteUrl' => route('admin-member-delete'),
+            'city' => $this->users->getCity(),
+            'state' => $this->users->getState(),
         ];
 
         if ($request->wantsJson()) {
@@ -56,7 +62,7 @@ class UserController extends Controller
                 [
                     'foto' => 'required',
                     'email' => 'unique:users,email,',
-                    'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,'. $request->user()->id,
+                    'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $request->user()->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $request->user()->id,
                     'no_anggota' => 'unique:users,no_anggota,',
                 ],
@@ -77,6 +83,10 @@ class UserController extends Controller
             $member->name = $request->name;
             $member->alamat = $request->alamat;
             $member->no_telp = $request->no_telp;
+            $member->bloodtype = $request->bloodtype;
+            $member->birthday = $request->birthday;
+            $member->city_id = $request->city_id;
+
 
             $member->password = Hash::make($request->password);
             if (!$request->has('no_anggota')) {
@@ -94,32 +104,40 @@ class UserController extends Controller
             }
             $member->save();
         } else {
-            $request->validate([
-                'email' => 'unique:users,email,' . $member->id,
-                'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,'. $member->id,
-                'no_ktp' => 'required|digits:16|unique:users,no_ktp,'. $member->id,
-                'no_anggota' => 'unique:users,no_anggota,' . $member->id,
-            ], 
-            [
-                'foto.required' => 'Foto belum terisi',
-                'email.unique' => 'Email tidak tersedia',
-                'no_telp.unique' => 'Nomor Telepon tidak tersedia',
-                'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
-                'no_ktp.required' => 'NIK wajib diisi!',
-                'no_ktp.digits' => 'NIK harus 16 digit!',
-                'no_ktp.unique' => 'NIK sudah terdaftar!',
-                'no_anggota.unique' => 'Nomor Anggota tidak tersedia'
-            ]);
+            $request->validate(
+                [
+                    'email' => 'unique:users,email,' . $member->id,
+                    'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
+                    'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
+                    'no_anggota' => 'unique:users,no_anggota,' . $member->id,
+                ],
+                [
+                    'foto.required' => 'Foto belum terisi',
+                    'email.unique' => 'Email tidak tersedia',
+                    'no_telp.unique' => 'Nomor Telepon tidak tersedia',
+                    'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
+                    'no_ktp.required' => 'NIK wajib diisi!',
+                    'no_ktp.digits' => 'NIK harus 16 digit!',
+                    'no_ktp.unique' => 'NIK sudah terdaftar!',
+                    'no_anggota.unique' => 'Nomor Anggota tidak tersedia'
+                ]
+            );
 
             $member->name = $request->name;
             $member->email = $request->email;
             $member->alamat = $request->alamat;
             $member->no_telp = $request->no_telp;
-            $member->password = Hash::make($request->password);
+            if ($request->has('password')) $member->password = Hash::make($request->password);
             $member->no_anggota = $request->no_anggota;
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = $request->jabatan_id;
             $member->status = $request->status;
+
+            $member->bloodtype = $request->bloodtype;
+            $member->birthday = $request->birthday;
+            $member->city_id = $request->city_id;
+
+
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
