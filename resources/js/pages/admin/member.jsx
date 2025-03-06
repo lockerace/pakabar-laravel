@@ -24,6 +24,12 @@ const initFormData = {
     birthday: "",
     city_id: "",
     state_id: "",
+    hometown_id: "",
+    homestate_id: "",
+    birthplace_id: "",
+    birthstate_id: "",
+    
+    
 }
 
 export default (props) => {
@@ -33,6 +39,11 @@ export default (props) => {
     const [deleteId, setDeleteId] = React.useState("");
     const [cities, setCities] = React.useState([]);
     const [states, setStates] = React.useState([]);
+    const [hometowns, setHometowns] = React.useState([]);
+    const [homestates, setHomestates] = React.useState([]);
+    const [birthplaces, setBirthplaces] = React.useState([]);
+    const [birthstates, setBirthstates] = React.useState([]);
+    
 
 
 
@@ -44,6 +55,10 @@ export default (props) => {
             if (res.data.deleteUrl) setDeleteUrl(res.data.deleteUrl)
             if (res.data.city) setCities(res.data.city)
             if (res.data.state) setStates(res.data.state)
+            if (res.data.hometown) setHometowns(res.data.hometown)
+            if (res.data.homestate) setHomestates(res.data.homestate)
+            if (res.data.birthplace) setBirthplaces(res.data.birthplace)
+            if (res.data.birthstate) setBirthstates(res.data.birthstate)
 
         }
     }
@@ -55,7 +70,7 @@ export default (props) => {
 
     return (
         <section className="full-height d-flex flex-column">
-            <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} states={states} cities={cities} />
+            <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} states={states} cities={cities} homestates={homestates} hometowns={hometowns} birthstates={birthstates} birthplaces={birthplaces}/>
             <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
         </section>
     )
@@ -69,6 +84,12 @@ const Member = (props) => {
     const [idNumber, setIdNumber] = React.useState(null);
     const modalRef = React.useRef();
     const [cities, setCities] = React.useState([]);
+    const [states, setStates] = React.useState([]);
+    const [hometowns, setHometowns] = React.useState([]);
+    const [homestates, setHomestates] = React.useState([]);
+    const [birthplaces, setBirthplaces] = React.useState([]);
+    const [birthstates, setBirthstates] = React.useState([]);
+
 
     const fetch = async () => {
         const res = await request.get('/admin/member?id=' + encodeURIComponent(id_jabatan))
@@ -101,6 +122,9 @@ const Member = (props) => {
         data.append('foto_selfie_ktp', formData.foto_selfie_ktp)
         data.append('id', formData.id)
         data.append('city_id', formData.city_id)
+        data.append('hometown_id', formData.hometown_id)
+        data.append('birthplace_id', formData.birthplace_id)
+        
 
         try {
             const res = await request.post('/admin/member', data)
@@ -142,6 +166,22 @@ const Member = (props) => {
             } else {
                 setCities([])
             }
+        } else if (id == 'homestate_id') {  
+            temp[id] = value
+            if (value) {  
+                const res = props.hometowns.filter((hometown) => hometown.state_id == value)
+                setHometowns(res)
+            } else {
+                setHometowns([])
+            }
+        } else if (id == 'birthstate_id') {
+            temp[id] = value
+            if (value) {
+                const res = props.birthplaces.filter((birthplace) => birthplace.state_id == value)
+                setBirthplaces(res)
+            } else {
+                setBirthplaces([])
+            }
         }
 
 
@@ -174,6 +214,21 @@ const Member = (props) => {
             } else {
                 setCities([])
             }
+             temp.homestate_id = form.hometown?.homestate_id ?? ''
+            if (temp.homestate_id) {
+                const res = props.hometowns.filter((hometown) => hometown.homestate_id == temp.homestate_id)
+                setHometowns(res)
+            } else {    
+                setHometowns([])
+            }
+            temp.birthstate_id = form.birthplace?.state_id ?? ''
+            if (temp.birthstate_id) {
+                const res = props.birthplaces.filter((birthplace) => birthplace.birthstate_id == temp.birthstate_id)
+                setBirthplaces(res)
+            } else {
+                setBirthplaces([])
+            }
+
         } else {
             temp.email = ''
             temp.name = ''
@@ -191,6 +246,10 @@ const Member = (props) => {
             temp.bloodtype = "1"
             temp.city_id = ''
             temp.state_id = ''
+            temp.homestate_id = ''
+            temp.birthstate_id = ''
+            temp.hometown_id = ''
+            temp.birthplace_id = ''
 
         }
         setFormData(temp)
@@ -317,6 +376,24 @@ const Member = (props) => {
                                 <div className="mb-3">
                                     <label htmlFor="memberNoKtp" className="form-label">No KTP: </label>
                                     <input id="memberNoKtp" className="form-control" value={formData.no_ktp} placeholder="Nomor KTP" required="required" onChange={(e) => inputChange("no_ktp", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberbirthState" className="form-label">Provinsi Lahir: </label>
+                                    <select id="memberbirthState" required="required" className="form-select" value={formData.birthstate_id} onChange={(e) => inputChange("birthstate_id", e.target.value)}>
+                                        <option>Pilih Provinsi Lahir</option>
+                                        {props.states.length > 0 && props.states.map((d, i) => (
+                                            <option key={i} value={d.id} >{d.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberCity" className="form-label">Kota: </label>
+                                    <select id="memberCity" required="required" className="form-select" value={formData.city_id} onChange={(e) => inputChange("city_id", e.target.value)}>
+                                        <option>Pilih Kota</option>
+                                        {cities.length > 0 && cities.map((d, i) => (
+                                            <option key={i} value={d.id} >{d.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="birthday" className="form-label">Tanggal Lahir: </label>
