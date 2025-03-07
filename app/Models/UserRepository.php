@@ -2,32 +2,51 @@
 
 namespace App\Models;
 
-class UserRepository {
-    function getAll() {
-        return User::orderBy('created_at', 'desc')->with(['jabatan','city'])->get();
+class UserRepository
+{
+    function getAll()
+    {
+        return User::orderBy('created_at', 'desc')->with(['jabatan', 'city'])->get();
     }
-    function getById($id) {
+    function getById($id)
+    {
         return User::where('id', $id)->with(['jabatan', 'notifications', 'unreadNotifications'])->first();
     }
-    function getLastUser(){
+    function getLastUser()
+    {
         return User::orderBy('id', 'desc')->first();
     }
-    function getByJabatan($id){
-        return User::where('jabatan_id', $id)->orderBy('created_at', 'desc')->with(['jabatan','city'])->get();
+    function getByJabatan($id)
+    {
+        return User::where('jabatan_id', $id)->orderBy('created_at', 'desc')->with(['jabatan', 'city'])->get();
     }
-    function getFounder(){
+    function getFounder()
+    {
         return User::where('jabatan_id', 3)->get();
     }
-    function getAdmin(){
+    function getAdmin()
+    {
         return User::where('jabatan_id', 1)->get();
     }
-    function getAllMember(){
+    function getAllMember()
+    {
         return User::where('jabatan_id', '!=', '1')->get();
     }
-    function getCity(){
+    function getCity()
+    {
         return City::all();
     }
-    function getState(){
+    function getState()
+    {
         return State::all();
+    }
+
+    function getHometown()
+    {
+        return City::all(); // Return all cities
+    }
+    function getBirthplace()
+    {
+        return City::all(); // Return all cities
     }
 }

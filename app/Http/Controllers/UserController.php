@@ -30,6 +30,7 @@ class UserController extends Controller
     {
         $myOption = $request->id;
         $members = [];
+
         if (!empty($myOption))
             $members = $this->users->getByJabatan($myOption);
         else
@@ -40,6 +41,9 @@ class UserController extends Controller
             'deleteUrl' => route('admin-member-delete'),
             'city' => $this->users->getCity(),
             'state' => $this->users->getState(),
+            'hometown' => $this->users->getHometown(),
+            'birthplace' => $this->users->getBirthplace(),
+
         ];
 
         if ($request->wantsJson()) {
@@ -86,6 +90,12 @@ class UserController extends Controller
             $member->bloodtype = $request->bloodtype;
             $member->birthday = $request->birthday;
             $member->city_id = $request->city_id;
+
+            $member->birthplace_id = $request->birthplace_id;
+            $member->hometown_id = $request->hometown_id;
+            $member->birthstate_id = $request->birthstate_id;
+            $member->homestate_id = $request->homestate_id;
+
 
 
             $member->password = Hash::make($request->password);
