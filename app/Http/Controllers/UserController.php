@@ -43,6 +43,8 @@ class UserController extends Controller
             'state' => $this->users->getState(),
             'hometown' => $this->users->getHometown(),
             'birthplace' => $this->users->getBirthplace(),
+            'homestate' => $this->users->getHomestate(),
+            //'birthstate' => $this->users->getBirthstate(),
 
         ];
 
@@ -93,10 +95,6 @@ class UserController extends Controller
 
             $member->birthplace_id = $request->birthplace_id;
             $member->hometown_id = $request->hometown_id;
-            $member->birthstate_id = $request->birthstate_id;
-            $member->homestate_id = $request->homestate_id;
-
-
 
             $member->password = Hash::make($request->password);
             if (!$request->has('no_anggota')) {
@@ -146,6 +144,8 @@ class UserController extends Controller
             $member->bloodtype = $request->bloodtype;
             $member->birthday = $request->birthday;
             $member->city_id = $request->city_id;
+            $member->birthplace_id = $request->birthplace_id;
+            $member->hometown_id = $request->hometown_id;
 
 
             if ($request->hasFile('foto')) {

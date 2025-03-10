@@ -250,7 +250,7 @@ const Member = (props) => {
             temp.city_id = ''
             temp.state_id = '2'
             temp.homestate_id = '12'
-            temp.birthstate_id = ''
+            temp.birthstate_id = '12'
             temp.hometown_id = ''
             temp.birthplace_id = ''
 

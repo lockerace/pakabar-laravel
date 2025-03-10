@@ -49,4 +49,12 @@ class UserRepository
     {
         return City::all(); 
     }
+    function getHomestate()
+    {
+        return State::all(); 
+    }
+    // function getBirthstate()
+    // {
+    //     return State::all(); 
+    // }
 }
