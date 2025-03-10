@@ -52,4 +52,10 @@ class User extends Authenticatable
     function city(){
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
+    function hometown(){
+        return $this->belongsTo(City::class, 'hometown_id', 'id');
+    }
+    function birthplace(){
+        return $this->belongsTo(City::class, 'birthplace_id', 'id');
+    }
 }

@@ -25,7 +25,7 @@ const initFormData = {
     city_id: "",
     state_id: "2",
     hometown_id: "",
-    homestate_id: "",
+    homestate_id: "12",
     birthplace_id: "",
     birthstate_id: "",
 
@@ -166,24 +166,19 @@ const Member = (props) => {
             } else {
                 setCities([])
             }
-        }
-        else if (id === 'birthstate_id') {
+        } else if (id === 'birthstate_id') {
             temp[id] = value;
-            setFormData(temp);
 
             if (value) {
-                // Force React to update state by creating a new array
                 setBirthplaces(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == value))));
             } else {
                 setBirthplaces([]);
             }
-        }
-        else if (id === 'homestate_id') {
+        } else if (id === 'homestate_id') {
             temp[id] = value;
-            setFormData(temp);
+
 
             if (value) {
-                // Force React to update state by creating a new array
                 setHometowns(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == value))));
             } else {
                 setHometowns([]);
@@ -211,6 +206,7 @@ const Member = (props) => {
             temp.id = form.id
             temp.birthday = form.birthday ? new Date(form.birthday) : ''
             temp.bloodtype = form.bloodtype ?? "1"
+
             temp.city_id = form.city_id
             temp.state_id = form.city?.state_id ?? ''
             if (temp.state_id) {
@@ -219,17 +215,19 @@ const Member = (props) => {
             } else {
                 setCities([])
             }
-            temp.homestate_id = form.hometown?.homestate_id ?? ''
+
+            temp.hometown_id = form.hometown_id
+            temp.homestate_id = form.hometown?.state_id ?? ''
             if (temp.homestate_id) {
-                const res = props.hometowns.filter((hometown) => hometown.homestate_id == temp.homestate_id)
-                setHometowns(res)
+                setHometowns(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == temp.homestate_id))));
             } else {
                 setHometowns([])
             }
-            temp.birthstate_id = form.birthplace?.birthstate_id ?? ''
+            
+            temp.birthplace_id = form.birthplace_id
+            temp.birthstate_id = form.birthplace?.state_id ?? ''
             if (temp.birthstate_id) {
-                const res = props.birthplaces.filter((birthplace) => birthplace.birthstate_id == temp.birthstate_id)
-                setBirthplaces(res)
+                setBirthplaces(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == temp.birthstate_id))));
             } else {
                 setBirthplaces([])
             }
@@ -250,8 +248,8 @@ const Member = (props) => {
             temp.birthday = ''
             temp.bloodtype = "1"
             temp.city_id = ''
-            temp.state_id = ''
-            temp.homestate_id = ''
+            temp.state_id = '2'
+            temp.homestate_id = '12'
             temp.birthstate_id = ''
             temp.hometown_id = ''
             temp.birthplace_id = ''

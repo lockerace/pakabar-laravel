@@ -6,7 +6,7 @@ class UserRepository
 {
     function getAll()
     {
-        return User::orderBy('created_at', 'desc')->with(['jabatan', 'city'])->get();
+        return User::orderBy('created_at', 'desc')->with(['jabatan', 'city','hometown','birthplace'])->get();
     }
     function getById($id)
     {
@@ -43,10 +43,10 @@ class UserRepository
 
     function getHometown()
     {
-        return City::all(); // Return all cities
+        return City::all(); 
     }
     function getBirthplace()
     {
-        return City::all(); // Return all cities
+        return City::all(); 
     }
 }
