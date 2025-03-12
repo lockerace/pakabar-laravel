@@ -43,7 +43,7 @@ class UserController extends Controller
             'state' => $this->users->getState(),
             'hometown' => $this->users->getHometown(),
             'birthplace' => $this->users->getBirthplace(),
-            'homestate' => $this->users->getHomestate(),
+            //'homestate' => $this->users->getHomestate(),
             //'birthstate' => $this->users->getBirthstate(),
 
         ];
@@ -90,6 +90,18 @@ class UserController extends Controller
             $member->alamat = $request->alamat;
             $member->no_telp = $request->no_telp;
             $member->bloodtype = $request->bloodtype;
+            $member->religion = $request->religion;
+            $member->marriage = $request->marriage;
+
+            $member->job = $request->job;
+            $member->sosmed_fb = $request->sosmed_fb;
+            $member->sosmed_ig = $request->sosmed_ig;
+            $member->sosmed_twitter = $request->sosmed_twitter;
+            $member->familymember = $request->familymember;
+            $member->emergency_name = $request->emergency_name;
+            $member->emergency_phone = $request->emergency_phone;
+            $member->emergency_relation = $request->emergency_relation;
+            
             $member->birthday = $request->birthday;
             $member->city_id = $request->city_id;
 
@@ -142,6 +154,22 @@ class UserController extends Controller
             $member->status = $request->status;
 
             $member->bloodtype = $request->bloodtype;
+            $member->religion = $request->religion;
+            $member->marriage = $request->marriage;
+            $member->gender = $request->gender;
+
+            
+            $member->job = $request->job;
+            $member->sosmed_fb = $request->sosmed_fb;
+            $member->sosmed_ig = $request->sosmed_ig;
+            $member->sosmed_twitter = $request->sosmed_twitter;
+            $member->familymember = $request->familymember;
+            $member->emergency_name = $request->emergency_name;
+            $member->emergency_phone = $request->emergency_phone;
+            $member->emergency_relation = $request->emergency_relation;
+
+
+
             $member->birthday = $request->birthday;
             $member->city_id = $request->city_id;
             $member->birthplace_id = $request->birthplace_id;

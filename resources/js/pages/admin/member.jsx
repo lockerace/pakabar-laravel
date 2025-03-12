@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import ImageInput from '../../components/imageinput'
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
-import { el } from 'date-fns/locale';
+import { el, te } from 'date-fns/locale';
+import { some } from 'lodash';
 
 const initFormData = {
     email: "",
@@ -21,13 +22,27 @@ const initFormData = {
     jabatan_id: "",
     status: "",
     bloodtype: "1",
+    religion: "",
     birthday: "",
     city_id: "",
     state_id: "2",
     hometown_id: "",
     homestate_id: "12",
-    birthplace_id: "",
+    birthplace_id: "12",
     birthstate_id: "",
+    marriage: "",
+    gender: "",
+
+    job: "",
+    sosmed_fb: "",
+    sosmed_ig: "",
+    sosmed_twitter: "",
+    familymember: "",
+    emergency_name: "",
+    emergency_phone: "",
+    emergency_relation: "",
+
+
 
 
 }
@@ -89,6 +104,16 @@ const Member = (props) => {
     const [homestates, setHomestates] = React.useState([]);
     const [birthplaces, setBirthplaces] = React.useState([]);
     const [birthstates, setBirthstates] = React.useState([]);
+    const marriageOptions = [
+        {value: "1", label: "Single" },
+        {value: "2", label: "Menikah" },
+        {value: "3", label: "Cerai" },
+        {value: "4", label: "Lainnya" }
+        ];
+    const genderOptions = [
+        {value: "1", label: "Laki-laki" },
+        {value: "2", label: "Perempuan" }
+        ];    
 
 
     const fetch = async () => {
@@ -114,6 +139,10 @@ const Member = (props) => {
         if (formData.password) data.append('password', formData.password)
 
         data.append('bloodtype', formData.bloodtype)
+        data.append('religion', formData.religion)
+        data.append('marriage', formData.marriage)
+        data.append('gender', formData.gender )
+
 
         data.append('birthday', formData.birthday ? format(formData.birthday, 'yyyy-MM-dd') : '')
         data.append('jabatan_id', formData.jabatan_id)
@@ -124,6 +153,16 @@ const Member = (props) => {
         data.append('city_id', formData.city_id)
         data.append('hometown_id', formData.hometown_id)
         data.append('birthplace_id', formData.birthplace_id)
+
+        data.append('job', formData.job)
+        data.append('sosmed_fb', formData.sosmed_fb)    
+        data.append('sosmed_ig', formData.sosmed_ig)
+        data.append('sosmed_twitter', formData.sosmed_twitter)
+        data.append('familymember', formData.familymember)
+        data.append('emergency_name', formData.emergency_name)
+        data.append('emergency_phone', formData.emergency_phone)
+        data.append('emergency_relation', formData.emergency_relation)
+
 
 
         try {
@@ -206,6 +245,19 @@ const Member = (props) => {
             temp.id = form.id
             temp.birthday = form.birthday ? new Date(form.birthday) : ''
             temp.bloodtype = form.bloodtype ?? "1"
+            temp.religion = form.religion ?? ""
+            temp.marriage = form.marriage ?? ""
+            temp.gender = form.gender ?? ""
+
+            temp.job = form.job ?? ""
+            temp.sosmed_fb = form.sosmed_fb ?? ""
+            temp.sosmed_ig = form.sosmed_ig ?? ""
+            temp.sosmed_twitter = form.sosmed_twitter ?? ""
+            temp.familymember = form.familymember ?? ""
+            temp.emergency_name = form.emergency_name ?? ""
+            temp.emergency_phone = form.emergency_phone ?? ""
+            temp.emergency_relation = form.emergency_relation ?? ""
+
 
             temp.city_id = form.city_id
             temp.state_id = form.city?.state_id ?? ''
@@ -223,7 +275,7 @@ const Member = (props) => {
             } else {
                 setHometowns([])
             }
-            
+
             temp.birthplace_id = form.birthplace_id
             temp.birthstate_id = form.birthplace?.state_id ?? ''
             if (temp.birthstate_id) {
@@ -247,10 +299,40 @@ const Member = (props) => {
             temp.id = ''
             temp.birthday = ''
             temp.bloodtype = "1"
+            temp.religion = ""
+            temp.marriage = ""
+            temp.gender = ""
+
+            temp.job = ""
+            temp.sosmed_fb = ""
+            temp.sosmed_ig = ""
+            temp.sosmed_twitter = ""
+            temp.familymember = ""
+            temp.emergency_name = ""
+            temp.emergency_phone = ""
+            temp.emergency_relation = ""
+
+
             temp.city_id = ''
             temp.state_id = '2'
+            if (temp.state_id) {
+                const res = props.cities.filter((city) => city.state_id == temp.state_id)
+                setCities(res)
+            } else {
+                setCities([])
+            }
             temp.homestate_id = '12'
+            if (temp.homestate_id) {
+                setHometowns(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == temp.homestate_id))));
+            } else {
+                setHometowns([])
+            }
             temp.birthstate_id = '12'
+            if (temp.birthstate_id) {
+                setBirthplaces(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == temp.birthstate_id))));
+            } else {
+                setBirthplaces([])
+            }
             temp.hometown_id = ''
             temp.birthplace_id = ''
 
@@ -344,7 +426,7 @@ const Member = (props) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberState" className="form-label">Provinsi: </label>
-                                    <select id="memberState" required="required" className="form-select" value={formData.state_id} onChange={(e) => inputChange("state_id", e.target.value)}>
+                                    <select id="memberState" required="required" className="form-select" disabled value={formData.state_id} onChange={(e) => inputChange("state_id", e.target.value)}>
                                         <option>Pilih Provinsi</option>
                                         {props.states.length > 0 && props.states.map((d, i) => (
                                             <option key={i} value={d.id} >{d.name}</option>
@@ -384,6 +466,60 @@ const Member = (props) => {
                                     </select>
                                 </div>
 
+                                <div className="mb-3">
+                                    <label className="form-label">Status Pernikahan:</label>
+                                    {marriageOptions.map((option) => (
+                                        <div key={option.value} className="form-check form-check-inline">
+                                            <input
+                                                type="radio"
+                                                id={`marriage-${option.value}`}
+                                                name="marriage"
+                                                value={option.value}
+                                                checked={formData.marriage == option.value}
+                                                onChange={(e) => inputChange("marriage", e.target.value)}
+                                                className="form-check-input"
+                                            />
+                                            <label htmlFor={`marriage-${option.value}`} className="form-check-label">
+                                                {option.label}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Jenis Kelamin:</label>
+                                    {genderOptions.map((option) => (
+                                        <div key={option.value} className="form-check form-check-inline">
+                                            <input
+                                                type="radio"
+                                                id={`gender-${option.value}`}
+                                                name="gender"
+                                                value={option.value}
+                                                checked={formData.gender == option.value}
+                                                onChange={(e) => inputChange("gender", e.target.value)}
+                                                className="form-check-input"
+                                            />
+                                            <label htmlFor={`gender-${option.value}`} className="form-check-label">
+                                                {option.label}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+
+
+                                <div className="mb-3">
+                                    <label htmlFor="religion" className="form-label">Agama: </label>
+                                    <select id="religion" required="required" className="form-select" value={formData.religion} onChange={(e) => inputChange("religion", e.target.value)}>
+                                        <option>Pilih Agama</option>
+                                        <option value="1">Islam</option>
+                                        <option value="2">Kristen Protestan</option>
+                                        <option value="3">Kristen Katolik</option>
+                                        <option value="4">Hindu</option>
+                                        <option value="5">Buddha</option>
+                                        <option value="6">Konghucu</option>
+                                        <option value="7">Lainnya</option>
+                                    </select>
+                                </div>
 
                                 <div className="mb-3">
                                     <label htmlFor="memberNoTelp" className="form-label">No Telpon: </label>
@@ -433,6 +569,7 @@ const Member = (props) => {
                                 <div className="mb-3">
                                     <label htmlFor="bloodType" className="form-label">Golongan Darah: </label>
                                     <select id="bloodType" required="required" className="form-select" value={formData.bloodtype} onChange={(e) => inputChange("bloodtype", e.target.value)}>
+                                        <option>Pilih Golongan Darah</option>
                                         <option value="1">O -</option>
                                         <option value="2">A -</option>
                                         <option value="3">B -</option>
@@ -452,6 +589,46 @@ const Member = (props) => {
                                         ))}
                                     </select>
                                 </div>
+                                
+                                <div className="mb-3">
+                                    <label htmlFor="memberJob" className="form-label">Pekerjaan: </label>
+                                    <input id="memberJob" className="form-control" value={formData.job} placeholder="Pekerjaan" required="required" onChange={(e) => inputChange("job", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberSosmedFb" className="form-label">Facebook: </label>
+                                    <input id="memberSosmedFb" className="form-control" value={formData.sosmed_fb} placeholder="Facebook" required="required" onChange={(e) => inputChange("sosmed_fb", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberSosmedIg" className="form-label">Instagram: </label>
+                                    <input id="memberSosmedIg" className="form-control" value={formData.sosmed_ig} placeholder="Instagram" required="required" onChange={(e) => inputChange("sosmed_ig", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberSosmedTwitter" className="form-label">Twitter: </label>
+                                    <input id="memberSosmedTwitter" className="form-control" value={formData.sosmed_twitter} placeholder="Twitter" required="required" onChange={(e) => inputChange("sosmed_twitter", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberFamilyMember" className="form-label">Jumlah Anggota Keluarga di Bali: </label>
+                                    <input id="memberFamilyMember" className="form-control" value={formData.familymember} placeholder="Anggota Keluarga" required="required" onChange={(e) => inputChange("familymember", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberEmergencyName" className="form-label">Nama Kontak Darurat: </label>
+                                    <input id="memberEmergencyName" className="form-control" value={formData.emergency_name} placeholder="Nama Kontak Darurat
+                                    " required="required" onChange={(e) => inputChange("emergency_name", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberEmergencyPhone" className="form-label">Nomor Kontak Darurat: </label>
+                                    <input id="memberEmergencyPhone" className="form-control" value={formData.emergency_phone} placeholder="Nomor Kontak Darurat
+                                    " required="required" onChange={(e) => inputChange("emergency_phone", e.target.value)} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="memberEmergencyRelation" className="form-label">Hubungan Kontak Darurat: </label>
+                                    <input id="memberEmergencyRelation" className="form-control" value={formData.emergency_relation} placeholder="Hubungan Kontak Darurat
+                                    " required="required" onChange={(e) => inputChange("emergency_relation", e.target.value)} />
+                                </div>
+                                
+
+                                
+                                
                                 <div className="mb-3">
                                     <label htmlFor="memberStatus" className="form-label">Status: </label>
                                     <select id="memberStatus" required="required" className="form-select" value={formData.status} onChange={(e) => inputChange("status", e.target.value)}>
