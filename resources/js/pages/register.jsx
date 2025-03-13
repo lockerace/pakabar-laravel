@@ -59,7 +59,7 @@ export default (props) => {
 
 
     const fetch = async () => {
-        const res = await request.get('/react/register')
+        const res = await request.get('/register')
         if (res.status == 200 && res.data) {
             //if (res.data.members) setMembers(res.data.members)
             //if (res.data.jabatan) setJabatans(res.data.jabatan)
@@ -67,7 +67,7 @@ export default (props) => {
             if (res.data.city) setCities(res.data.city)
             if (res.data.state) setStates(res.data.state)
             if (res.data.hometown) setHometowns(res.data.hometown)
-           // if (res.data.homestate) setHomestates(res.data.homestate)
+            // if (res.data.homestate) setHomestates(res.data.homestate)
             if (res.data.birthplace) setBirthplaces(res.data.birthplace)
             //if (res.data.birthstate) setBirthstates(res.data.birthstate)
 
@@ -209,7 +209,119 @@ const Register = (props) => {
         }
         setFormData(temp)
     }
+    const onEdit = (form) => () => {
+        const temp = { ...formData }
+        if (form) {
+            temp.email = form.email
+            temp.name = form.name
+            temp.password = ''
+            temp.foto = ''
+            temp.foto_selfie_ktp = ''
+            temp.alamat = form.alamat
+            temp.no_telp = form.no_telp
+            temp.no_anggota = form.no_anggota
+            temp.no_ktp = form.no_ktp
+            temp.jabatan_id = form.jabatan_id
+            temp.status = form.status
+            temp.fotoUrl = form.foto ? '/member/' + form.foto : ''
+            temp.fotoSelfieUrl = form.foto_selfie_ktp ? '/member/' + form.foto_selfie_ktp : ''
+            temp.id = form.id
+            temp.birthday = form.birthday ? new Date(form.birthday) : ''
+            temp.bloodtype = form.bloodtype ?? "1"
+            temp.religion = form.religion ?? ""
+            temp.marriage = form.marriage ?? ""
+            temp.gender = form.gender ?? ""
 
+            temp.job = form.job ?? ""
+            temp.sosmed_fb = form.sosmed_fb ?? ""
+            temp.sosmed_ig = form.sosmed_ig ?? ""
+            temp.sosmed_twitter = form.sosmed_twitter ?? ""
+            temp.familymember = form.familymember ?? ""
+            temp.emergency_name = form.emergency_name ?? ""
+            temp.emergency_phone = form.emergency_phone ?? ""
+            temp.emergency_relation = form.emergency_relation ?? ""
+
+
+            temp.city_id = form.city_id
+            temp.state_id = form.city?.state_id ?? ''
+            if (temp.state_id) {
+                const res = props.cities.filter((city) => city.state_id == temp.state_id)
+                setCities(res)
+            } else {
+                setCities([])
+            }
+
+            temp.hometown_id = form.hometown_id
+            temp.homestate_id = form.hometown?.state_id ?? ''
+            if (temp.homestate_id) {
+                setHometowns(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == temp.homestate_id))));
+            } else {
+                setHometowns([])
+            }
+
+            temp.birthplace_id = form.birthplace_id
+            temp.birthstate_id = form.birthplace?.state_id ?? ''
+            if (temp.birthstate_id) {
+                setBirthplaces(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == temp.birthstate_id))));
+            } else {
+                setBirthplaces([])
+            }
+
+        } else {
+            temp.email = ''
+            temp.name = ''
+            temp.password = ''
+            temp.alamat = ''
+            temp.no_telp = ''
+            temp.no_anggota = ''
+            temp.no_ktp = ''
+            temp.jabatan_id = 2
+            temp.status = "1"
+            temp.fotoUrl = ''
+            temp.fotoSelfieUrl = ''
+            temp.id = ''
+            temp.birthday = ''
+            temp.bloodtype = "1"
+            temp.religion = ""
+            temp.marriage = ""
+            temp.gender = ""
+
+            temp.job = ""
+            temp.sosmed_fb = ""
+            temp.sosmed_ig = ""
+            temp.sosmed_twitter = ""
+            temp.familymember = ""
+            temp.emergency_name = ""
+            temp.emergency_phone = ""
+            temp.emergency_relation = ""
+
+
+            temp.city_id = ''
+            temp.state_id = '2'
+            if (temp.state_id) {
+                const res = props.cities.filter((city) => city.state_id == temp.state_id)
+                setCities(res)
+            } else {
+                setCities([])
+            }
+            temp.homestate_id = '12'
+            if (temp.homestate_id) {
+                setHometowns(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == temp.homestate_id))));
+            } else {
+                setHometowns([])
+            }
+            temp.birthstate_id = '12'
+            if (temp.birthstate_id) {
+                setBirthplaces(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == temp.birthstate_id))));
+            } else {
+                setBirthplaces([])
+            }
+            temp.hometown_id = ''
+            temp.birthplace_id = ''
+
+        }
+        setFormData(temp)
+    }
     return (
         <div className="container">
             <div className="col-md-8 card m-auto my-5">
@@ -226,45 +338,45 @@ const Register = (props) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberState" className="form-label">Provinsi: </label>
-                            <select id="memberState" required="required" className="form-select"  value={formData.state_id} onChange={(e) => inputChange("state_id", e.target.value)}>
+                            <select id="memberState" required="required" className="form-select" value={formData.state_id} onChange={(e) => inputChange("state_id", e.target.value)}>
                                 <option>Pilih Provinsi</option>
-                                {props.states?.length > 0 && props.states.map((d, i) => (
+                                {props.states.length > 0 && props.states.map((d, i) => (
                                     <option key={i} value={d.id} >{d.name}</option>
                                 ))}
                             </select>
                         </div>
-                        {/* <div className="mb-3">
-                                    <label htmlFor="memberCity" className="form-label">Kota di Bali: </label>
-                                    <select id="memberCity" required="required" className="form-select" value={formData.city_id} onChange={(e) => inputChange("city_id", e.target.value)}>
-                                        <option>Pilih Kota</option>
-                                        {cities.length > 0 && cities.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select>
-                                </div> */}
+                        <div className="mb-3">
+                            <label htmlFor="memberCity" className="form-label">Kota di Bali: </label>
+                            <select id="memberCity" required="required" className="form-select" value={formData.city_id} onChange={(e) => inputChange("city_id", e.target.value)}>
+                                <option>Pilih Kota</option>
+                                {cities.length > 0 && cities.map((d, i) => (
+                                    <option key={i} value={d.id} >{d.name}</option>
+                                ))}
+                            </select>
+                        </div>
                         <div className="mb-3">
                             <label htmlFor="memberAlamat" className="form-label">Alamat di Bali: </label>
                             <input id="memberAlamat" className="form-control" value={formData.alamat} placeholder="Alamat" required="required" onChange={(e) => inputChange("alamat", e.target.value)} />
                         </div>
 
-                        {/* <div className="mb-3">
-                                    <label htmlFor="memberhomeState" className="form-label">Provinsi Domisili: </label>
-                                    <select id="memberhomeState" required="required" className="form-select" value={formData.homestate_id} onChange={(e) => inputChange("homestate_id", e.target.value)}>
-                                        <option>Pilih Provinsi</option>
-                                        {props.states.length > 0 && props.states.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select>
-                                </div> */}
-                        {/* <div className="mb-3">
-                                    <label htmlFor="memberHometown" className="form-label">Kota Domisili: </label>
-                                    <select id="memberHometown" required="required" className="form-select" value={formData.hometown_id} onChange={(e) => inputChange("hometown_id", e.target.value)}>
-                                        <option>Pilih Kota</option>
-                                        {hometowns.length > 0 && hometowns.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select>
-                                </div> */}
+                        <div className="mb-3">
+                            <label htmlFor="memberhomeState" className="form-label">Provinsi Domisili: </label>
+                            <select id="memberhomeState" required="required" className="form-select" value={formData.homestate_id} onChange={(e) => inputChange("homestate_id", e.target.value)}>
+                                <option>Pilih Provinsi</option>
+                                {props.states.length > 0 && props.states.map((d, i) => (
+                                    <option key={i} value={d.id} >{d.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="memberHometown" className="form-label">Kota Domisili: </label>
+                            <select id="memberHometown" required="required" className="form-select" value={formData.hometown_id} onChange={(e) => inputChange("hometown_id", e.target.value)}>
+                                <option>Pilih Kota</option>
+                                {hometowns.length > 0 && hometowns.map((d, i) => (
+                                    <option key={i} value={d.id} >{d.name}</option>
+                                ))}
+                            </select>
+                        </div>
 
                         <div className="mb-3">
                             <label className="form-label">Status Pernikahan:</label>
@@ -337,24 +449,24 @@ const Register = (props) => {
                             <label htmlFor="memberNoKtp" className="form-label">No KTP: </label>
                             <input id="memberNoKtp" className="form-control" value={formData.no_ktp} placeholder="Nomor KTP" required="required" onChange={(e) => inputChange("no_ktp", e.target.value)} />
                         </div>
-                        {/* <div className="mb-3">
-                                    <label htmlFor="memberbirthState" className="form-label">Provinsi Lahir: </label>
-                                    <select id="memberbirthState" required="required" className="form-select" value={formData.birthstate_id} onChange={(e) => inputChange("birthstate_id", e.target.value)}>
-                                        <option>Pilih Provinsi Lahir</option>
-                                        {props.states.length > 0 && props.states.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select>
-                                </div> */}
-                        {/* <div className="mb-3">
-                                    <label htmlFor="memberbirthPlace" className="form-label">Kota Lahir: </label>
-                                    <select id="memberbirthPlace" required="required" className="form-select" value={formData.birthplace_id} onChange={(e) => inputChange("birthplace_id", e.target.value)}>
-                                        <option>Pilih Kota Lahir</option>
-                                        {birthplaces.length > 0 && birthplaces.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select>
-                                </div> */}
+                        <div className="mb-3">
+                            <label htmlFor="memberbirthState" className="form-label">Provinsi Lahir: </label>
+                            <select id="memberbirthState" required="required" className="form-select" value={formData.birthstate_id} onChange={(e) => inputChange("birthstate_id", e.target.value)}>
+                                <option>Pilih Provinsi Lahir</option>
+                                {props.states.length > 0 && props.states.map((d, i) => (
+                                    <option key={i} value={d.id} >{d.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="memberbirthPlace" className="form-label">Kota Lahir: </label>
+                            <select id="memberbirthPlace" required="required" className="form-select" value={formData.birthplace_id} onChange={(e) => inputChange("birthplace_id", e.target.value)}>
+                                <option>Pilih Kota Lahir</option>
+                                {birthplaces.length > 0 && birthplaces.map((d, i) => (
+                                    <option key={i} value={d.id} >{d.name}</option>
+                                ))}
+                            </select>
+                        </div>
                         <div className="mb-3">
                             <label htmlFor="birthday" className="form-label">Tanggal Lahir: </label>
                             <DatePicker

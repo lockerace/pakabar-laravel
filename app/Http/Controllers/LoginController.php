@@ -10,8 +10,11 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
-{
+{protected UserRepository $users;
+    
+    protected NotificationController $notification;
     function __construct(UserRepository $userRepository, NotificationController $notificationController) {
+       
         $this->users = $userRepository;
         $this->notification = $notificationController;
     }
@@ -20,8 +23,25 @@ class LoginController extends Controller
         return view('login');
     }
 
-    function getRegister(){
-        return view('register');
+    function getRegister(Request $request){
+        $data = [
+            
+            'city' => $this->users->getCity(),
+            'state' => $this->users->getState(),
+            'hometown' => $this->users->getHometown(),
+            'birthplace' => $this->users->getBirthplace(),
+            //'homestate' => $this->users->getHomestate(),
+            //'birthstate' => $this->users->getBirthstate(),
+
+        ];
+        if ($request->wantsJson()) {
+            return response()->json($data);
+        }
+
+        if (!empty($request->token)) {
+            $data['token'] = $request->token;
+        }
+        return view('register', $data);
     }
 
     function checkLogin(Request $request) {

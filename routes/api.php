@@ -30,7 +30,10 @@ Route::get('/home', [HomeController::class, 'index']);
 Route::get('/about', [HomeController::class, 'aboutUs']);
 Route::get('/news/{id}', [NewsController::class, 'getNewsDetail']);
 Route::post('/login', [LoginController::class, "submitLogin"]);
+
+Route::get('/register', [LoginController::class, "getRegister"])->name('register');
 Route::post('/register', [LoginController::class, "submitRegister"]);
+
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly']], function() {
     Route::get('/member', [UserController::class, 'getMember']);
