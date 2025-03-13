@@ -42,9 +42,6 @@ const initFormData = {
     emergency_phone: "",
     emergency_relation: "",
 
-
-
-
 }
 
 export default (props) => {
@@ -55,9 +52,9 @@ export default (props) => {
     const [cities, setCities] = React.useState([]);
     const [states, setStates] = React.useState([]);
     const [hometowns, setHometowns] = React.useState([]);
-    const [homestates, setHomestates] = React.useState([]);
-    const [birthplaces, setBirthplaces] = React.useState([]);
-    const [birthstates, setBirthstates] = React.useState([]);
+    //const [homestates, setHomestates] = React.useState([]);
+     const [birthplaces, setBirthplaces] = React.useState([]);
+    // const [birthstates, setBirthstates] = React.useState([]);
 
 
 
@@ -71,9 +68,9 @@ export default (props) => {
             if (res.data.city) setCities(res.data.city)
             if (res.data.state) setStates(res.data.state)
             if (res.data.hometown) setHometowns(res.data.hometown)
-            if (res.data.homestate) setHomestates(res.data.homestate)
+           // if (res.data.homestate) setHomestates(res.data.homestate)
             if (res.data.birthplace) setBirthplaces(res.data.birthplace)
-            if (res.data.birthstate) setBirthstates(res.data.birthstate)
+            //if (res.data.birthstate) setBirthstates(res.data.birthstate)
 
         }
     }
@@ -85,7 +82,7 @@ export default (props) => {
 
     return (
         <section className="full-height d-flex flex-column">
-            <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} states={states} cities={cities} homestates={homestates} hometowns={hometowns} birthstates={birthstates} birthplaces={birthplaces} />
+            <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} states={states} cities={cities} /* homestates={homestates} */ hometowns={hometowns}/*  birthstates={birthstates} */ birthplaces={birthplaces} />
             <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
         </section>
     )
@@ -97,23 +94,25 @@ const Member = (props) => {
     const [errorMessage, seterrorMessage] = React.useState(null)
     const [phoneNumber, setPhoneNumber] = React.useState(null);
     const [idNumber, setIdNumber] = React.useState(null);
+    const [familymember, setFamilymember] = React.useState(null);
+    const [emergencyphone, setEmergencyphone] = React.useState(null);
     const modalRef = React.useRef();
     const [cities, setCities] = React.useState([]);
     const [states, setStates] = React.useState([]);
     const [hometowns, setHometowns] = React.useState([]);
-    const [homestates, setHomestates] = React.useState([]);
+    //const [homestates, setHomestates] = React.useState([]);
     const [birthplaces, setBirthplaces] = React.useState([]);
-    const [birthstates, setBirthstates] = React.useState([]);
+    //const [birthstates, setBirthstates] = React.useState([]);
     const marriageOptions = [
-        {value: "1", label: "Single" },
-        {value: "2", label: "Menikah" },
-        {value: "3", label: "Cerai" },
-        {value: "4", label: "Lainnya" }
-        ];
+        { value: "1", label: "Single" },
+        { value: "2", label: "Menikah" },
+        { value: "3", label: "Cerai" },
+        { value: "4", label: "Lainnya" }
+    ];
     const genderOptions = [
-        {value: "1", label: "Laki-laki" },
-        {value: "2", label: "Perempuan" }
-        ];    
+        { value: "1", label: "Laki-laki" },
+        { value: "2", label: "Perempuan" }
+    ];
 
 
     const fetch = async () => {
@@ -141,7 +140,7 @@ const Member = (props) => {
         data.append('bloodtype', formData.bloodtype)
         data.append('religion', formData.religion)
         data.append('marriage', formData.marriage)
-        data.append('gender', formData.gender )
+        data.append('gender', formData.gender)
 
 
         data.append('birthday', formData.birthday ? format(formData.birthday, 'yyyy-MM-dd') : '')
@@ -155,7 +154,7 @@ const Member = (props) => {
         data.append('birthplace_id', formData.birthplace_id)
 
         data.append('job', formData.job)
-        data.append('sosmed_fb', formData.sosmed_fb)    
+        data.append('sosmed_fb', formData.sosmed_fb)
         data.append('sosmed_ig', formData.sosmed_ig)
         data.append('sosmed_twitter', formData.sosmed_twitter)
         data.append('familymember', formData.familymember)
@@ -196,6 +195,15 @@ const Member = (props) => {
         } else if (id == 'no_ktp') {
             value = value.replace(/\D/g, "").slice(0, 16);
             setIdNumber(value)
+            temp[id] = value
+        } else if (id == 'familymember') {
+            value = value.replace(/\D/g, "");
+            setFamilymember(value)
+            temp[id] = value
+        }
+        else if (id == 'emergency_phone') {
+            value = value.replace(/(?!^\+)\D/g, "")
+            setEmergencyphone(value)
             temp[id] = value
         } else if (id == 'state_id') {
             temp[id] = value
@@ -589,7 +597,7 @@ const Member = (props) => {
                                         ))}
                                     </select>
                                 </div>
-                                
+
                                 <div className="mb-3">
                                     <label htmlFor="memberJob" className="form-label">Pekerjaan: </label>
                                     <input id="memberJob" className="form-control" value={formData.job} placeholder="Pekerjaan" required="required" onChange={(e) => inputChange("job", e.target.value)} />
@@ -625,10 +633,10 @@ const Member = (props) => {
                                     <input id="memberEmergencyRelation" className="form-control" value={formData.emergency_relation} placeholder="Hubungan Kontak Darurat
                                     " required="required" onChange={(e) => inputChange("emergency_relation", e.target.value)} />
                                 </div>
-                                
 
-                                
-                                
+
+
+
                                 <div className="mb-3">
                                     <label htmlFor="memberStatus" className="form-label">Status: </label>
                                     <select id="memberStatus" required="required" className="form-select" value={formData.status} onChange={(e) => inputChange("status", e.target.value)}>
