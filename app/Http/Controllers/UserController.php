@@ -43,8 +43,6 @@ class UserController extends Controller
             'state' => $this->users->getState(),
             'hometown' => $this->users->getHometown(),
             'birthplace' => $this->users->getBirthplace(),
-            //'homestate' => $this->users->getHomestate(),
-            //'birthstate' => $this->users->getBirthstate(),
 
         ];
 

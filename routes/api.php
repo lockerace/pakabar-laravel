@@ -31,7 +31,7 @@ Route::get('/about', [HomeController::class, 'aboutUs']);
 Route::get('/news/{id}', [NewsController::class, 'getNewsDetail']);
 Route::post('/login', [LoginController::class, "submitLogin"]);
 
-Route::get('/register', [LoginController::class, "getRegister"])->name('register');
+Route::get('/register', [LoginController::class, "getRegister"]);
 Route::post('/register', [LoginController::class, "submitRegister"]);
 
 

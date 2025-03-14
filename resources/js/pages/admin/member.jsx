@@ -28,8 +28,8 @@ const initFormData = {
     state_id: "2",
     hometown_id: "",
     homestate_id: "12",
-    birthplace_id: "12",
-    birthstate_id: "",
+    birthplace_id: "",
+    birthstate_id: "12",
     marriage: "",
     gender: "",
 
@@ -52,9 +52,7 @@ export default (props) => {
     const [cities, setCities] = React.useState([]);
     const [states, setStates] = React.useState([]);
     const [hometowns, setHometowns] = React.useState([]);
-    //const [homestates, setHomestates] = React.useState([]);
-     const [birthplaces, setBirthplaces] = React.useState([]);
-    // const [birthstates, setBirthstates] = React.useState([]);
+    const [birthplaces, setBirthplaces] = React.useState([]);
 
 
 
@@ -68,9 +66,7 @@ export default (props) => {
             if (res.data.city) setCities(res.data.city)
             if (res.data.state) setStates(res.data.state)
             if (res.data.hometown) setHometowns(res.data.hometown)
-           // if (res.data.homestate) setHomestates(res.data.homestate)
             if (res.data.birthplace) setBirthplaces(res.data.birthplace)
-            //if (res.data.birthstate) setBirthstates(res.data.birthstate)
 
         }
     }
@@ -82,7 +78,7 @@ export default (props) => {
 
     return (
         <section className="full-height d-flex flex-column">
-            <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} states={states} cities={cities} /* homestates={homestates} */ hometowns={hometowns}/*  birthstates={birthstates} */ birthplaces={birthplaces} />
+            <Member data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} states={states} cities={cities} hometowns={hometowns} birthplaces={birthplaces} />
             <Confirm deleteUrl={deleteUrl} id={deleteId} callBack={fetch} />
         </section>
     )
@@ -100,9 +96,7 @@ const Member = (props) => {
     const [cities, setCities] = React.useState([]);
     const [states, setStates] = React.useState([]);
     const [hometowns, setHometowns] = React.useState([]);
-    //const [homestates, setHomestates] = React.useState([]);
     const [birthplaces, setBirthplaces] = React.useState([]);
-    //const [birthstates, setBirthstates] = React.useState([]);
     const marriageOptions = [
         { value: "1", label: "Single" },
         { value: "2", label: "Menikah" },

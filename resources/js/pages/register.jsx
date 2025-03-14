@@ -25,8 +25,8 @@ const initFormData = {
     state_id: "2",
     hometown_id: "",
     homestate_id: "12",
-    birthplace_id: "12",
-    birthstate_id: "",
+    birthplace_id: "",
+    birthstate_id: "12",
     marriage: "",
     gender: "",
 
@@ -43,16 +43,10 @@ const initFormData = {
 
 export default (props) => {
 
-    const [members, setMembers] = React.useState([]);
-    const [jabatan, setJabatans] = React.useState([]);
-    const [deleteUrl, setDeleteUrl] = React.useState("");
-    const [deleteId, setDeleteId] = React.useState("");
     const [cities, setCities] = React.useState([]);
     const [states, setStates] = React.useState([]);
     const [hometowns, setHometowns] = React.useState([]);
-    //const [homestates, setHomestates] = React.useState([]);
     const [birthplaces, setBirthplaces] = React.useState([]);
-    // const [birthstates, setBirthstates] = React.useState([]);
 
 
     const { fetchAuth } = useOutletContext();
@@ -61,26 +55,23 @@ export default (props) => {
     const fetch = async () => {
         const res = await request.get('/register')
         if (res.status == 200 && res.data) {
-            //if (res.data.members) setMembers(res.data.members)
-            //if (res.data.jabatan) setJabatans(res.data.jabatan)
-            //if (res.data.deleteUrl) setDeleteUrl(res.data.deleteUrl)
+            
             if (res.data.city) setCities(res.data.city)
             if (res.data.state) setStates(res.data.state)
             if (res.data.hometown) setHometowns(res.data.hometown)
-            // if (res.data.homestate) setHomestates(res.data.homestate)
             if (res.data.birthplace) setBirthplaces(res.data.birthplace)
-            //if (res.data.birthstate) setBirthstates(res.data.birthstate)
 
         }
     }
     React.useEffect(() => {
+        
         fetch()
     }, [])
 
 
     return (
         <section className="full-height d-flex flex-column">
-            <Register /* data={members} setMembers={setMembers} jabatan={jabatan} setDeleteId={setDeleteId} */ states={states} cities={cities} /* homestates={homestates} */ hometowns={hometowns}/*  birthstates={birthstates} */ birthplaces={birthplaces} />
+            <Register  states={states} cities={cities} hometowns={hometowns} birthplaces={birthplaces} />
             <Footer />
         </section>
     )
@@ -99,9 +90,8 @@ const Register = (props) => {
     const [cities, setCities] = React.useState([]);
     const [states, setStates] = React.useState([]);
     const [hometowns, setHometowns] = React.useState([]);
-    //const [homestates, setHomestates] = React.useState([]);
     const [birthplaces, setBirthplaces] = React.useState([]);
-    //const [birthstates, setBirthstates] = React.useState([]);
+    
     const marriageOptions = [
         { value: "1", label: "Single" },
         { value: "2", label: "Menikah" },
@@ -113,6 +103,17 @@ const Register = (props) => {
         { value: "2", label: "Perempuan" }
     ];
 
+    React.useEffect(() => {
+        if (props.cities.length > 0 && formData.state_id) {
+            setCities(props.cities.filter(city => city.state_id == formData.state_id));
+        }
+        if (props.hometowns.length > 0 && formData.homestate_id) {
+            setHometowns(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == formData.homestate_id))));
+        }
+        if (props.birthplaces.length > 0 && formData.birthstate_id) {
+            setBirthplaces(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == formData.birthstate_id))));
+        }
+    })
     const onSubmit = async (event) => {
         event.preventDefault()
         const data = new FormData()
@@ -191,7 +192,6 @@ const Register = (props) => {
             }
         } else if (id === 'birthstate_id') {
             temp[id] = value;
-
             if (value) {
                 setBirthplaces(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == value))));
             } else {
@@ -199,8 +199,6 @@ const Register = (props) => {
             }
         } else if (id === 'homestate_id') {
             temp[id] = value;
-
-
             if (value) {
                 setHometowns(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == value))));
             } else {
