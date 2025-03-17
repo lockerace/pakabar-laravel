@@ -95,39 +95,66 @@ class LoginController extends Controller
         if($request->wantsJson()){
             $request->validate(
                 [
-               'foto' => 'required',
-               'fotoSelfie' => 'required',
-               'email' => 'required|email|unique:users,email,',
-               'no_telp' => 'required|regex:/^\+?\d{10,15}$/|unique:users,no_telp,' ,
-               'no_ktp' => 'required|digits:16|unique:users,no_ktp,',
-            ],
-            [
-                'foto.required' => 'Foto KTP belum terisi',
-                'fotoSelfie.required' => 'Foto Selfie KTP belum terisi',
-                'email.unique' => 'Email sudah terdaftar!',
-                'email.email' => 'Format Email tidak valid',
-                'no_telp.required' => 'Nomor Telepon wajib diisi!',
-                'no_telp.regex' => 'Nomor Telepon harus terdiri dari 10 hingga 15 angka dan bisa diawali dengan "+".',
-                'no_telp.unique' => 'Nomor Telepon sudah terdaftar!',
-                'no_ktp.required' => 'NIK wajib diisi!',
-                'no_ktp.digits' => 'NIK harus 16 digit!',
-                'no_ktp.unique' => 'NIK sudah terdaftar!',
-            ]);
-            $member->email = $request->email;
+                    'email' => 'unique:users,email,' . $member->id,
+                    'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
+                    'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
+                    
+                ],
+                [
+                    'foto.required' => 'Foto belum terisi',
+                    'email.unique' => 'Email tidak tersedia',
+                    'no_telp.unique' => 'Nomor Telepon tidak tersedia',
+                    'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
+                    'no_ktp.required' => 'NIK wajib diisi!',
+                    'no_ktp.digits' => 'NIK harus 16 digit!',
+                    'no_ktp.unique' => 'NIK sudah terdaftar!',
+                    
+                ]
+            );
             $member->name = $request->name;
+            $member->email = $request->email;
             $member->alamat = $request->alamat;
             $member->no_telp = $request->no_telp;
+            
             $member->password = Hash::make($request->password);
             $member->no_anggota = "PKB" . str_pad($lastUser->id, 3, "0", STR_PAD_LEFT);
+           
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = 2;
+            $member->status = 1;
+
+            $member->bloodtype = $request->bloodtype;
+            $member->religion = $request->religion;
+            $member->marriage = $request->marriage;
+            $member->gender = $request->gender;
+
+            
+            $member->job = $request->job;
+            $member->sosmed_fb = $request->sosmed_fb;
+            $member->sosmed_ig = $request->sosmed_ig;
+            $member->sosmed_twitter = $request->sosmed_twitter;
+            $member->familymember = $request->familymember;
+            $member->emergency_name = $request->emergency_name;
+            $member->emergency_phone = $request->emergency_phone;
+            $member->emergency_relation = $request->emergency_relation;
+
+
+
+            $member->birthday = $request->birthday;
+            $member->city_id = $request->city_id;
+            $member->birthplace_id = $request->birthplace_id;
+            $member->hometown_id = $request->hometown_id;
+
+
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
             if ($request->hasFile('fotoSelfie')) {
                 $member->foto_selfie_ktp = $request->fotoSelfie->store('fotoSelfie');
             }
+
             $member->save();
+            
             Auth::login($member);
 
             $title = "Verifikasi Member Baru (" . $member->name . ")";
@@ -139,17 +166,66 @@ class LoginController extends Controller
                 'url' => '/',
             ]);
         } else{
-            $member->email = $request->email;
+            $request->validate(
+                [
+                    'email' => 'unique:users,email,' . $member->id,
+                    'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
+                    'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
+                    
+                ],
+                [
+                    'foto.required' => 'Foto belum terisi',
+                    'email.unique' => 'Email tidak tersedia',
+                    'no_telp.unique' => 'Nomor Telepon tidak tersedia',
+                    'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
+                    'no_ktp.required' => 'NIK wajib diisi!',
+                    'no_ktp.digits' => 'NIK harus 16 digit!',
+                    'no_ktp.unique' => 'NIK sudah terdaftar!',
+                    
+                ]
+            );
             $member->name = $request->name;
+            $member->email = $request->email;
             $member->alamat = $request->alamat;
             $member->no_telp = $request->no_telp;
+            
             $member->password = Hash::make($request->password);
             $member->no_anggota = "PKB" . str_pad($lastUser->id, 3, "0", STR_PAD_LEFT);
+           
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = 2;
+            $member->status = 1;
+
+            $member->bloodtype = $request->bloodtype;
+            $member->religion = $request->religion;
+            $member->marriage = $request->marriage;
+            $member->gender = $request->gender;
+
+            
+            $member->job = $request->job;
+            $member->sosmed_fb = $request->sosmed_fb;
+            $member->sosmed_ig = $request->sosmed_ig;
+            $member->sosmed_twitter = $request->sosmed_twitter;
+            $member->familymember = $request->familymember;
+            $member->emergency_name = $request->emergency_name;
+            $member->emergency_phone = $request->emergency_phone;
+            $member->emergency_relation = $request->emergency_relation;
+
+
+
+            $member->birthday = $request->birthday;
+            $member->city_id = $request->city_id;
+            $member->birthplace_id = $request->birthplace_id;
+            $member->hometown_id = $request->hometown_id;
+
+
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
+            if ($request->hasFile('fotoSelfie')) {
+                $member->foto_selfie_ktp = $request->fotoSelfie->store('fotoSelfie');
+            }
+
             $member->save();
 
 

@@ -4,6 +4,8 @@ import request from '../axios';
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import ImageInput from '../components/imageinput'
 import DatePicker from 'react-datepicker';
+import { format } from 'date-fns';
+import { el, te } from 'date-fns/locale';
 
 const initFormData = {
     email: "",
@@ -14,9 +16,9 @@ const initFormData = {
     fotoSelfieUrl: "",
     alamat: "",
     no_telp: "",
-    no_anggota: "",
+    //no_anggota: "",
     no_ktp: "",
-    jabatan_id: "",
+    //jabatan_id: "",
     status: "",
     bloodtype: "1",
     religion: "",
@@ -55,7 +57,7 @@ export default (props) => {
     const fetch = async () => {
         const res = await request.get('/register')
         if (res.status == 200 && res.data) {
-            
+
             if (res.data.city) setCities(res.data.city)
             if (res.data.state) setStates(res.data.state)
             if (res.data.hometown) setHometowns(res.data.hometown)
@@ -64,14 +66,14 @@ export default (props) => {
         }
     }
     React.useEffect(() => {
-        
+
         fetch()
     }, [])
 
 
     return (
         <section className="full-height d-flex flex-column">
-            <Register  states={states} cities={cities} hometowns={hometowns} birthplaces={birthplaces} />
+            <Register states={states} cities={cities} hometowns={hometowns} birthplaces={birthplaces} />
             <Footer />
         </section>
     )
@@ -91,7 +93,7 @@ const Register = (props) => {
     const [states, setStates] = React.useState([]);
     const [hometowns, setHometowns] = React.useState([]);
     const [birthplaces, setBirthplaces] = React.useState([]);
-    
+
     const marriageOptions = [
         { value: "1", label: "Single" },
         { value: "2", label: "Menikah" },
@@ -103,7 +105,10 @@ const Register = (props) => {
         { value: "2", label: "Perempuan" }
     ];
 
+
+
     React.useEffect(() => {
+
         if (props.cities.length > 0 && formData.state_id) {
             setCities(props.cities.filter(city => city.state_id == formData.state_id));
         }
@@ -113,7 +118,8 @@ const Register = (props) => {
         if (props.birthplaces.length > 0 && formData.birthstate_id) {
             setBirthplaces(JSON.parse(JSON.stringify(props.cities.filter(city => city.state_id == formData.birthstate_id))));
         }
-    })
+    }, [props.cities, formData.state_id, props.hometowns, formData.homestate_id, props.birthplaces, formData.birthstate_id]);
+
     const onSubmit = async (event) => {
         event.preventDefault()
         const data = new FormData()
@@ -136,7 +142,7 @@ const Register = (props) => {
         data.append('status', formData.status)
         data.append('foto', formData.foto)
         data.append('foto_selfie_ktp', formData.foto_selfie_ktp)
-        data.append('id', formData.id)
+        //data.append('id', formData.id)
         data.append('city_id', formData.city_id)
         data.append('hometown_id', formData.hometown_id)
         data.append('birthplace_id', formData.birthplace_id)
@@ -217,13 +223,13 @@ const Register = (props) => {
             temp.foto_selfie_ktp = ''
             temp.alamat = form.alamat
             temp.no_telp = form.no_telp
-            temp.no_anggota = form.no_anggota
+            //temp.no_anggota = form.no_anggota
             temp.no_ktp = form.no_ktp
             temp.jabatan_id = form.jabatan_id
-            temp.status = form.status
+            temp.status = 0
             temp.fotoUrl = form.foto ? '/member/' + form.foto : ''
             temp.fotoSelfieUrl = form.foto_selfie_ktp ? '/member/' + form.foto_selfie_ktp : ''
-            temp.id = form.id
+            //temp.id = form.id
             temp.birthday = form.birthday ? new Date(form.birthday) : ''
             temp.bloodtype = form.bloodtype ?? "1"
             temp.religion = form.religion ?? ""
@@ -271,13 +277,13 @@ const Register = (props) => {
             temp.password = ''
             temp.alamat = ''
             temp.no_telp = ''
-            temp.no_anggota = ''
+            //temp.no_anggota = ''
             temp.no_ktp = ''
             temp.jabatan_id = 2
-            temp.status = "1"
+            temp.status = "0"
             temp.fotoUrl = ''
             temp.fotoSelfieUrl = ''
-            temp.id = ''
+            //temp.id = ''
             temp.birthday = ''
             temp.bloodtype = "1"
             temp.religion = ""
@@ -435,10 +441,10 @@ const Register = (props) => {
                             <label htmlFor="memberNoTelp" className="form-label">No Telpon: </label>
                             <input id="memberNoTelp" className="form-control" value={formData.no_telp} placeholder="Nomor Telepon" required="required" onChange={(e) => inputChange("no_telp", e.target.value)} />
                         </div>
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                             <label htmlFor="memberNoAnggota" className="form-label">No Anggota: </label>
                             <input id="memberNoAnggota" className="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" required="required" onChange={(e) => inputChange("no_anggota", e.target.value)} />
-                        </div>
+                        </div> */}
                         <div className="mb-3">
                             <label htmlFor="memberPassword" className="form-label">Password: </label>
                             <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" onChange={(e) => inputChange("password", e.target.value)} />
@@ -514,30 +520,27 @@ const Register = (props) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberEmergencyName" className="form-label">Nama Kontak Darurat: </label>
-                            <input id="memberEmergencyName" className="form-control" value={formData.emergency_name} placeholder="Nama Kontak Darurat
-                                    " required="required" onChange={(e) => inputChange("emergency_name", e.target.value)} />
+                            <input id="memberEmergencyName" className="form-control" value={formData.emergency_name} placeholder="Nama Kontak Darurat" required="required" onChange={(e) => inputChange("emergency_name", e.target.value)} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberEmergencyPhone" className="form-label">Nomor Kontak Darurat: </label>
-                            <input id="memberEmergencyPhone" className="form-control" value={formData.emergency_phone} placeholder="Nomor Kontak Darurat
-                                    " required="required" onChange={(e) => inputChange("emergency_phone", e.target.value)} />
+                            <input id="memberEmergencyPhone" className="form-control" value={formData.emergency_phone} placeholder="Nomor Kontak Darurat" required="required" onChange={(e) => inputChange("emergency_phone", e.target.value)} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberEmergencyRelation" className="form-label">Hubungan Kontak Darurat: </label>
-                            <input id="memberEmergencyRelation" className="form-control" value={formData.emergency_relation} placeholder="Hubungan Kontak Darurat
-                                    " required="required" onChange={(e) => inputChange("emergency_relation", e.target.value)} />
+                            <input id="memberEmergencyRelation" className="form-control" value={formData.emergency_relation} placeholder="Hubungan Kontak Darurat" required="required" onChange={(e) => inputChange("emergency_relation", e.target.value)} />
                         </div>
 
 
 
 
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                             <label htmlFor="memberStatus" className="form-label">Status: </label>
                             <select id="memberStatus" required="required" className="form-select" value={formData.status} onChange={(e) => inputChange("status", e.target.value)}>
                                 <option value="0">Belum Verifikasi</option>
                                 <option value="1">Diverifikasi</option>
                             </select>
-                        </div>
+                        </div> */}
                         <ImageInput id="fotoPlaceholder" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
                         <ImageInput id="fotoPlaceholder" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
                         <input id="memberId" name="id" type="hidden" value={formData.id} />
