@@ -172,7 +172,7 @@ const Register = (props) => {
         temp[id] = value
 
         if (id == 'no_telp') {
-            value = value.replace(/(?!^\+)\D/g, "")
+            value = value.replace(/(?!^\+)\D/g, "").slice(0, 16)
             setPhoneNumber(value)
             temp[id] = value
         } else if (id == 'no_ktp') {
@@ -185,7 +185,7 @@ const Register = (props) => {
             temp[id] = value
         }
         else if (id == 'emergency_phone') {
-            value = value.replace(/(?!^\+)\D/g, "")
+            value = value.replace(/(?!^\+)\D/g, "").slice(0, 16)
             setEmergencyphone(value)
             temp[id] = value
         } else if (id == 'state_id') {
@@ -441,10 +441,7 @@ const Register = (props) => {
                             <label htmlFor="memberNoTelp" className="form-label">No Telpon: </label>
                             <input id="memberNoTelp" className="form-control" value={formData.no_telp} placeholder="Nomor Telepon" required="required" onChange={(e) => inputChange("no_telp", e.target.value)} />
                         </div>
-                        {/* <div className="mb-3">
-                            <label htmlFor="memberNoAnggota" className="form-label">No Anggota: </label>
-                            <input id="memberNoAnggota" className="form-control" value={formData.no_anggota} placeholder="Nomor Anggota" required="required" onChange={(e) => inputChange("no_anggota", e.target.value)} />
-                        </div> */}
+
                         <div className="mb-3">
                             <label htmlFor="memberPassword" className="form-label">Password: </label>
                             <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" onChange={(e) => inputChange("password", e.target.value)} />
@@ -534,15 +531,9 @@ const Register = (props) => {
 
 
 
-                        {/* <div className="mb-3">
-                            <label htmlFor="memberStatus" className="form-label">Status: </label>
-                            <select id="memberStatus" required="required" className="form-select" value={formData.status} onChange={(e) => inputChange("status", e.target.value)}>
-                                <option value="0">Belum Verifikasi</option>
-                                <option value="1">Diverifikasi</option>
-                            </select>
-                        </div> */}
-                        <ImageInput id="fotoPlaceholder" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
-                        <ImageInput id="fotoPlaceholder" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
+
+                        <ImageInput id="foto" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
+                        <ImageInput id="foto_selfie_ktp" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
                         <input id="memberId" name="id" type="hidden" value={formData.id} />
                         <div className={"alert alert-danger alert-dismissible fade" + (errorMessage ? ' show' : ' hide p-0 m-0')} role="alert">
                             {errorMessage}

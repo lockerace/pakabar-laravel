@@ -98,10 +98,13 @@ class LoginController extends Controller
                     'email' => 'unique:users,email,' . $member->id,
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
+                    'foto' => 'required',
+                    'fotoSelfie' => 'required',
                     
                 ],
                 [
                     'foto.required' => 'Foto belum terisi',
+                    'fotoSelfie.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
                     'no_telp.unique' => 'Nomor Telepon tidak tersedia',
                     'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
@@ -121,7 +124,7 @@ class LoginController extends Controller
            
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = 2;
-            $member->status = 1;
+            $member->status = 0;
 
             $member->bloodtype = $request->bloodtype;
             $member->religion = $request->religion;
@@ -171,10 +174,13 @@ class LoginController extends Controller
                     'email' => 'unique:users,email,' . $member->id,
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
+                    'foto' => 'required',
+                    'fotoSelfie' => 'required',
                     
                 ],
                 [
                     'foto.required' => 'Foto belum terisi',
+                    'fotoSelfie.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
                     'no_telp.unique' => 'Nomor Telepon tidak tersedia',
                     'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
@@ -194,7 +200,7 @@ class LoginController extends Controller
            
             $member->no_ktp = $request->no_ktp;
             $member->jabatan_id = 2;
-            $member->status = 1;
+            $member->status = 0;
 
             $member->bloodtype = $request->bloodtype;
             $member->religion = $request->religion;

@@ -183,7 +183,7 @@ const Member = (props) => {
         temp[id] = value
 
         if (id == 'no_telp') {
-            value = value.replace(/(?!^\+)\D/g, "")
+            value = value.replace(/(?!^\+)\D/g, "").slice(0, 16)
             setPhoneNumber(value)
             temp[id] = value
         } else if (id == 'no_ktp') {
@@ -196,7 +196,7 @@ const Member = (props) => {
             temp[id] = value
         }
         else if (id == 'emergency_phone') {
-            value = value.replace(/(?!^\+)\D/g, "")
+            value = value.replace(/(?!^\+)\D/g, "").slice(0, 16)
             setEmergencyphone(value)
             temp[id] = value
         } else if (id == 'state_id') {
@@ -638,8 +638,8 @@ const Member = (props) => {
                                         <option value="1">Diverifikasi</option>
                                     </select>
                                 </div>
-                                <ImageInput id="fotoPlaceholder" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
-                                <ImageInput id="fotoPlaceholder" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
+                                <ImageInput id="foto" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
+                                <ImageInput id="foto_selfie_ktp" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
                                 <input id="memberId" name="id" type="hidden" value={formData.id} />
                                 <div className={"alert alert-danger alert-dismissible fade" + (errorMessage ? ' show' : ' hide p-0 m-0')} role="alert">
                                     {errorMessage}

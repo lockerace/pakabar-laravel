@@ -41,7 +41,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
     Route::get('/', [AdminController::class, "getDashboard"])->name('dashboard');
 
     Route::get('/member/foto/{path}', [UserController::class, "getFoto"])->name('admin-member-foto');
-    Route::get('/member/fotoSelfie/{path}', [UserController::class, "getFotoSelfie"])->name('admin-member-foto-selfie');
+    Route::get('/member/foto_selfie_ktp/{path}', [UserController::class, "getFotoSelfie"])->name('admin-member-foto-selfie');
 
     Route::get('/member', [UserController::class, "getMember"])->name('admin-member');
     Route::post('/member', [UserController::class, "editMember"])->name('admin-member-submit');
@@ -75,7 +75,7 @@ Route::get('/news/{id}', [NewsController::class, "getNewsDetail"])->name('news')
 Route::get('/aboutus', [HomeController::class, 'aboutUs'])->name('about-us');
 
 Route::get('/member/foto/{path}', [UserController::class, "getFoto"])->name('member-foto');
-Route::get('/member/fotoSelfie/{path}', [UserController::class, "getFotoSelfie"])->name('member-foto-selfie');
+Route::get('/member/foto_selfie_ktp/{path}', [UserController::class, "getFotoSelfie"])->name('member-foto-selfie');
 
 
 Route::group(['prefix' => '', 'middleware' => ['auth:sanctum']], function() {

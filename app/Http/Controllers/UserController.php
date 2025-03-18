@@ -65,6 +65,7 @@ class UserController extends Controller
             $request->validate(
                 [
                     'foto' => 'required',
+                    'foto_selfie_ktp' => 'required',
                     'email' => 'unique:users,email,',
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $request->user()->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $request->user()->id,
@@ -72,6 +73,7 @@ class UserController extends Controller
                 ],
                 [
                     'foto.required' => 'Foto belum terisi',
+                    'foto_selfie_ktp.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
                     'no_telp.unique' => 'Nomor Telepon tidak tersedia',
                     'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
@@ -120,6 +122,10 @@ class UserController extends Controller
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
             }
+            if ($request->hasFile('foto_selfie_ktp')) {
+                $member->fotoSelfie = $request->fotoSelfie->store('foto_selfie_ktp');
+            }
+
             $member->save();
         } else {
             $request->validate(
@@ -128,9 +134,12 @@ class UserController extends Controller
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
                     'no_anggota' => 'unique:users,no_anggota,' . $member->id,
+                    'foto' => 'required',
+                    'foto_selfie_ktp' => 'required',
                 ],
                 [
                     'foto.required' => 'Foto belum terisi',
+                    'foto_selfie_ktp.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
                     'no_telp.unique' => 'Nomor Telepon tidak tersedia',
                     'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
@@ -176,6 +185,9 @@ class UserController extends Controller
 
             if ($request->hasFile('foto')) {
                 $member->foto = $request->foto->store('foto');
+            }
+            if ($request->hasFile('foto_selfie_ktp')) {
+                $member->foto_selfie_ktp = $request->foto_selfie_ktp->store('foto_selfie_ktp');
             }
 
             $member->save();
@@ -265,7 +277,7 @@ class UserController extends Controller
 
     function getFotoSelfie($path)
     {
-        return Storage::download('fotoSelfie/' . $path);
+        return Storage::download('foto_selfie_ktp/' . $path);
     }
 
     function getProfile(Request $request)
