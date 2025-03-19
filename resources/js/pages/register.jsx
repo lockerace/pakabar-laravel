@@ -142,7 +142,7 @@ const Register = (props) => {
         data.append('status', formData.status)
         data.append('foto', formData.foto)
         data.append('foto_selfie_ktp', formData.foto_selfie_ktp)
-        //data.append('id', formData.id)
+       
         data.append('city_id', formData.city_id)
         data.append('hometown_id', formData.hometown_id)
         data.append('birthplace_id', formData.birthplace_id)
@@ -226,7 +226,7 @@ const Register = (props) => {
             //temp.no_anggota = form.no_anggota
             temp.no_ktp = form.no_ktp
             temp.jabatan_id = form.jabatan_id
-            temp.status = 0
+            temp.status = "0"
             temp.fotoUrl = form.foto ? '/member/' + form.foto : ''
             temp.fotoSelfieUrl = form.foto_selfie_ktp ? '/member/' + form.foto_selfie_ktp : ''
             //temp.id = form.id
@@ -342,7 +342,7 @@ const Register = (props) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberState" className="form-label">Provinsi: </label>
-                            <select id="memberState" required="required" className="form-select" value={formData.state_id} onChange={(e) => inputChange("state_id", e.target.value)}>
+                            <select id="memberState" required="required" disabled className="form-select" value={formData.state_id} onChange={(e) => inputChange("state_id", e.target.value)}>
                                 <option>Pilih Provinsi</option>
                                 {props.states.length > 0 && props.states.map((d, i) => (
                                     <option key={i} value={d.id} >{d.name}</option>
@@ -527,10 +527,6 @@ const Register = (props) => {
                             <label htmlFor="memberEmergencyRelation" className="form-label">Hubungan Kontak Darurat: </label>
                             <input id="memberEmergencyRelation" className="form-control" value={formData.emergency_relation} placeholder="Hubungan Kontak Darurat" required="required" onChange={(e) => inputChange("emergency_relation", e.target.value)} />
                         </div>
-
-
-
-
 
                         <ImageInput id="foto" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
                         <ImageInput id="foto_selfie_ktp" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />

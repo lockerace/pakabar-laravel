@@ -64,8 +64,9 @@ class UserController extends Controller
             $lastUser = $this->users->getLastUser();
             $request->validate(
                 [
-                    'foto' => 'required',
-                    'foto_selfie_ktp' => 'required',
+                    'foto' => 'required' ,
+                    'foto_selfie_ktp' => 'required' ,
+                    
                     'email' => 'unique:users,email,',
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $request->user()->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $request->user()->id,
@@ -120,10 +121,10 @@ class UserController extends Controller
             $member->status = $request->status;
 
             if ($request->hasFile('foto')) {
-                $member->foto = $request->foto->store('foto');
+                $member->foto = $request->file('foto')->store('foto');
             }
             if ($request->hasFile('foto_selfie_ktp')) {
-                $member->fotoSelfie = $request->fotoSelfie->store('foto_selfie_ktp');
+                $member->foto_selfie_ktp = $request->file('foto_selfie_ktp')->store('foto_selfie_ktp');
             }
 
             $member->save();
@@ -134,8 +135,9 @@ class UserController extends Controller
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
                     'no_anggota' => 'unique:users,no_anggota,' . $member->id,
-                    'foto' => 'required',
-                    'foto_selfie_ktp' => 'required',
+                    'foto' => ($request->hasFile('foto') || !$member->foto ? 'required' : 'nullable'),
+                    'foto_selfie_ktp' => ($request->hasFile('foto_selfie_ktp') || !$member->foto_selfie_ktp ? 'required' : 'nullable'),
+                
                 ],
                 [
                     'foto.required' => 'Foto belum terisi',
@@ -182,12 +184,11 @@ class UserController extends Controller
             $member->birthplace_id = $request->birthplace_id;
             $member->hometown_id = $request->hometown_id;
 
-
             if ($request->hasFile('foto')) {
-                $member->foto = $request->foto->store('foto');
+                $member->foto = $request->file('foto')->store('foto');
             }
             if ($request->hasFile('foto_selfie_ktp')) {
-                $member->foto_selfie_ktp = $request->foto_selfie_ktp->store('foto_selfie_ktp');
+                $member->foto_selfie_ktp = $request->file('foto_selfie_ktp')->store('foto_selfie_ktp');
             }
 
             $member->save();

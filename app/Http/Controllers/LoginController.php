@@ -99,12 +99,12 @@ class LoginController extends Controller
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
                     'foto' => 'required',
-                    'fotoSelfie' => 'required',
+                    'foto_selfie_ktp' => 'required',
                     
                 ],
                 [
                     'foto.required' => 'Foto belum terisi',
-                    'fotoSelfie.required' => 'Foto Selfie KTP belum terisi',
+                    'foto_selfie_ktp.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
                     'no_telp.unique' => 'Nomor Telepon tidak tersedia',
                     'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
@@ -150,10 +150,10 @@ class LoginController extends Controller
 
 
             if ($request->hasFile('foto')) {
-                $member->foto = $request->foto->store('foto');
+                $member->foto = $request->file('foto')->store('foto');
             }
-            if ($request->hasFile('fotoSelfie')) {
-                $member->foto_selfie_ktp = $request->fotoSelfie->store('fotoSelfie');
+            if ($request->hasFile('foto_selfie_ktp')) {
+                $member->foto_selfie_ktp = $request->file('foto_selfie_ktp')->store('foto_selfie_ktp');
             }
 
             $member->save();
@@ -175,12 +175,12 @@ class LoginController extends Controller
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
                     'foto' => 'required',
-                    'fotoSelfie' => 'required',
+                    'foto_selfie_ktp' => 'required',
                     
                 ],
                 [
                     'foto.required' => 'Foto belum terisi',
-                    'fotoSelfie.required' => 'Foto Selfie KTP belum terisi',
+                    'foto_selfie_ktp.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
                     'no_telp.unique' => 'Nomor Telepon tidak tersedia',
                     'no_telp.regex' => 'Format Nomor Telepon tidak valid (Gunakan angka, bisa diawali dengan + untuk kode negara)',
@@ -226,20 +226,20 @@ class LoginController extends Controller
 
 
             if ($request->hasFile('foto')) {
-                $member->foto = $request->foto->store('foto');
+                $member->foto = $request->file('foto')->store('foto');
             }
-            if ($request->hasFile('fotoSelfie')) {
-                $member->foto_selfie_ktp = $request->fotoSelfie->store('fotoSelfie');
+            if ($request->hasFile('foto_selfie_ktp')) {
+                $member->foto_selfie_ktp = $request->file('foto_selfie_ktp')->store('foto_selfie_ktp');
             }
 
             $member->save();
-
+            Auth::login($member);
 
             $title = "Verifikasi Member Baru (" . $member->name . ")";
             $message = $member->name . " telah bergabung. " . "Mohon segera diverifikasi.";
             $this->notification->sendVerifyMessage($title, $message);
 
-            Auth::login($member);
+          
 
             return redirect()->route('profile');
         }

@@ -7,6 +7,8 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { el, te } from 'date-fns/locale';
 import { some } from 'lodash';
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css"; // Import stylesheet
 
 const initFormData = {
     email: "",
@@ -107,6 +109,8 @@ const Member = (props) => {
         { value: "1", label: "Laki-laki" },
         { value: "2", label: "Perempuan" }
     ];
+
+    const [selectedMember, setSelectedMember] = React.useState(null); // Stores selected member
 
 
     const fetch = async () => {
@@ -419,6 +423,31 @@ const Member = (props) => {
                             </div>
                             <div className="modal-body">
                                 <div className="mb-3">
+                                    <Typeahead
+                                        id="member-search"
+                                        labelKey={(option) => `${option.no_anggota} - ${option.name}`} // Show "no_anggota - name"
+                                        options={props.members || []}  // List of all members from props
+                                        placeholder="Cari No Anggota..."
+                                        selected={selectedMember ? [selectedMember] : []} // Pre-select if already chosen
+                                        onChange={(selected) => {
+                                            if (selected.length > 0) {
+                                                setSelectedMember(selected[0]); // Store selected member
+                                                inputChange("no_anggota", selected[0].no_anggota); // Save to form
+                                            } else {
+                                                setSelectedMember(null);
+                                                inputChange("no_anggota", "");
+                                            }
+                                        }}
+                                        onBlur={() => {
+                                            if (!selectedMember) {
+                                                inputChange("no_anggota", ""); // Clear invalid input
+                                            }
+                                        }}
+                                        allowNew={false} // Prevents typing new values
+                                    />
+                                </div>
+
+                                <div className="mb-3">
                                     <label htmlFor="memberEmail" className="form-label">Email: </label>
                                     <input id="memberEmail" className="form-control" value={formData.email} placeholder="Email" type="email" required="required" onChange={(e) => inputChange("email", e.target.value)} />
                                 </div>
@@ -444,6 +473,29 @@ const Member = (props) => {
                                         ))}
                                     </select>
                                 </div>
+
+                                <div className="mb-3">
+                                    <Typeahead
+                                        id="state-select"
+                                        labelKey="name" // Display state name in dropdown
+                                        options={props.states} // List of states from props
+                                        placeholder="Pilih Provinsi..."
+                                        selected={props.states.filter((state) => state.id === formData.state_id)} // Pre-select current value
+                                        onChange={(selected) => {
+                                            if (selected.length > 0) {
+                                                inputChange("state_id", selected[0].id); // Update form state
+                                            } else {
+                                                inputChange("state_id", ""); // Allow clearing selection
+                                            }
+                                        }}
+                                    />
+                                </div>
+
+
+
+
+
+
                                 <div className="mb-3">
                                     <label htmlFor="memberAlamat" className="form-label">Alamat di Bali: </label>
                                     <input id="memberAlamat" className="form-control" value={formData.alamat} placeholder="Alamat" required="required" onChange={(e) => inputChange("alamat", e.target.value)} />
