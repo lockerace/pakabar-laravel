@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\FinanceController;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,10 @@ Route::post('/login', [LoginController::class, "submitLogin"]);
 Route::get('/register', [LoginController::class, "getRegister"]);
 Route::post('/register', [LoginController::class, "submitRegister"]);
 
+Route::get('/validate-ref/{ref_id}', function ($ref_id) {
+    $exists = User::where('no_anggota', $ref_id)->exists();
+    return response()->json(['valid' => $exists]);
+});
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly']], function() {
     Route::get('/member', [UserController::class, 'getMember']);

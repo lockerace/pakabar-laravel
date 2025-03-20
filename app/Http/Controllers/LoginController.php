@@ -100,9 +100,34 @@ class LoginController extends Controller
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
                     'foto' => 'required',
                     'foto_selfie_ktp' => 'required',
+                    'password' => 'required',
+
+                    'gender' => 'required',
+                    'name' => 'required',
+                    'religion' => 'required',
+                    'marriage' => 'required',
+                    'bloodtype' => 'required',
+                    'birthday' => 'required',
+                    'city_id' => 'required',
+                    'birthplace_id' => 'required',
+                    'hometown_id' => 'required',
+                    'alamat' => 'required',
                     
                 ],
                 [
+
+                    'gender.required' => 'Jenis Kelamin belum terisi',
+                    'name.required' => 'Nama belum terisi',
+                    'religion.required' => 'Agama belum terisi',
+                    'marriage.required' => 'Status Pernikahan belum terisi',
+                    'bloodtype.required' => 'Golongan Darah belum terisi',
+                    'birthday.required' => 'Tanggal Lahir belum terisi',
+                    'city_id.required' => 'Kota belum terisi',
+                    'birthplace_id.required' => 'Tempat Lahir belum terisi',
+                    'hometown_id.required' => 'Kota Asal belum terisi',
+                    'alamat.required' => 'Alamat belum terisi',
+                    'password.required' => 'Password belum terisi',
+                    
                     'foto.required' => 'Foto belum terisi',
                     'foto_selfie_ktp.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
@@ -148,6 +173,10 @@ class LoginController extends Controller
             $member->birthplace_id = $request->birthplace_id;
             $member->hometown_id = $request->hometown_id;
 
+            $refMember = User::where('no_anggota', $request->ref_id)->first();
+            if (!empty($refMember)) {
+                $member->ref_id = $refMember ? $refMember->id : null;
+            }
 
             if ($request->hasFile('foto')) {
                 $member->foto = $request->file('foto')->store('foto');
@@ -176,9 +205,35 @@ class LoginController extends Controller
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
                     'foto' => 'required',
                     'foto_selfie_ktp' => 'required',
+                    'password' => 'required',
+
+                    'gender' => 'required',
+                    'name' => 'required',
+                    'religion' => 'required',
+                    'marriage' => 'required',
+                    'bloodtype' => 'required',
+                    'birthday' => 'required',
+                    'city_id' => 'required',
+                    'birthplace_id' => 'required',
+                    'hometown_id' => 'required',
+                    'alamat' => 'required',
                     
                 ],
                 [
+
+                    'gender.required' => 'Jenis Kelamin belum terisi',
+                    'name.required' => 'Nama belum terisi',
+                    'religion.required' => 'Agama belum terisi',
+                    'marriage.required' => 'Status Pernikahan belum terisi',
+                    'bloodtype.required' => 'Golongan Darah belum terisi',
+                    'birthday.required' => 'Tanggal Lahir belum terisi',
+                    'city_id.required' => 'Kota belum terisi',
+                    'birthplace_id.required' => 'Tempat Lahir belum terisi',
+                    'hometown_id.required' => 'Kota Asal belum terisi',
+                    'alamat.required' => 'Alamat belum terisi',
+                    'password.required' => 'Password belum terisi',
+
+
                     'foto.required' => 'Foto belum terisi',
                     'foto_selfie_ktp.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',

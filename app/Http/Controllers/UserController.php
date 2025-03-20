@@ -66,6 +66,17 @@ class UserController extends Controller
                 [
                     'foto' => 'required' ,
                     'foto_selfie_ktp' => 'required' ,
+
+                    'gender' => 'required',
+                    'name' => 'required',
+                    'religion' => 'required',
+                    'marriage' => 'required',
+                    'bloodtype' => 'required',
+                    'birthday' => 'required',
+                    'city_id' => 'required',
+                    'birthplace_id' => 'required',
+                    'hometown_id' => 'required',
+                    'alamat' => 'required',
                     
                     'email' => 'unique:users,email,',
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $request->user()->id,
@@ -73,6 +84,17 @@ class UserController extends Controller
                     'no_anggota' => 'unique:users,no_anggota,',
                 ],
                 [
+                    'gender.required' => 'Jenis Kelamin belum terisi',
+                    'name.required' => 'Nama belum terisi',
+                    'religion.required' => 'Agama belum terisi',
+                    'marriage.required' => 'Status Pernikahan belum terisi',
+                    'bloodtype.required' => 'Golongan Darah belum terisi',
+                    'birthday.required' => 'Tanggal Lahir belum terisi',
+                    'city_id.required' => 'Kota belum terisi',
+                    'birthplace_id.required' => 'Tempat Lahir belum terisi',
+                    'hometown_id.required' => 'Kota Asal belum terisi',
+                    'alamat.required' => 'Alamat belum terisi',
+                    
                     'foto.required' => 'Foto belum terisi',
                     'foto_selfie_ktp.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
@@ -93,6 +115,7 @@ class UserController extends Controller
             $member->bloodtype = $request->bloodtype;
             $member->religion = $request->religion;
             $member->marriage = $request->marriage;
+            $member->ref_id = $request->ref_id;
 
             $member->job = $request->job;
             $member->sosmed_fb = $request->sosmed_fb;
@@ -131,6 +154,18 @@ class UserController extends Controller
         } else {
             $request->validate(
                 [
+                    
+                    'gender' => 'required',
+                    'name' => 'required',
+                    'religion' => 'required',
+                    'marriage' => 'required',
+                    'bloodtype' => 'required',
+                    'birthday' => 'required',
+                    'city_id' => 'required',
+                    'birthplace_id' => 'required',
+                    'hometown_id' => 'required',
+                    'alamat' => 'required',
+
                     'email' => 'unique:users,email,' . $member->id,
                     'no_telp' => 'required|regex:/^\+?\d{1,15}$/|unique:users,no_telp,' . $member->id,
                     'no_ktp' => 'required|digits:16|unique:users,no_ktp,' . $member->id,
@@ -140,6 +175,18 @@ class UserController extends Controller
                 
                 ],
                 [
+
+                    'gender.required' => 'Jenis Kelamin belum terisi',
+                    'name.required' => 'Nama belum terisi',
+                    'religion.required' => 'Agama belum terisi',
+                    'marriage.required' => 'Status Pernikahan belum terisi',
+                    'bloodtype.required' => 'Golongan Darah belum terisi',
+                    'birthday.required' => 'Tanggal Lahir belum terisi',
+                    'city_id.required' => 'Kota belum terisi',
+                    'birthplace_id.required' => 'Tempat Lahir belum terisi',
+                    'hometown_id.required' => 'Kota Asal belum terisi',
+                    'alamat.required' => 'Alamat belum terisi',
+                    
                     'foto.required' => 'Foto belum terisi',
                     'foto_selfie_ktp.required' => 'Foto Selfie KTP belum terisi',
                     'email.unique' => 'Email tidak tersedia',
@@ -151,7 +198,7 @@ class UserController extends Controller
                     'no_anggota.unique' => 'Nomor Anggota tidak tersedia'
                 ]
             );
-
+            $member->ref_id = $request->ref_id;
             $member->name = $request->name;
             $member->email = $request->email;
             $member->alamat = $request->alamat;

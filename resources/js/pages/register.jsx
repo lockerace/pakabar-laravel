@@ -16,6 +16,7 @@ const initFormData = {
     fotoSelfieUrl: "",
     alamat: "",
     no_telp: "",
+    ref_id: "",
     //no_anggota: "",
     no_ktp: "",
     //jabatan_id: "",
@@ -105,8 +106,7 @@ const Register = (props) => {
         { value: "2", label: "Perempuan" }
     ];
 
-
-
+  
     React.useEffect(() => {
 
         if (props.cities.length > 0 && formData.state_id) {
@@ -123,6 +123,7 @@ const Register = (props) => {
     const onSubmit = async (event) => {
         event.preventDefault()
         const data = new FormData()
+        data.append('ref_id', formData.ref_id)
         data.append('name', formData.name)
         data.append('alamat', formData.alamat)
         data.append('email', formData.email)
@@ -210,12 +211,13 @@ const Register = (props) => {
             } else {
                 setHometowns([]);
             }
-        }
+        } 
         setFormData(temp)
     }
     const onEdit = (form) => () => {
         const temp = { ...formData }
         if (form) {
+            temp.ref_id = form.ref_id
             temp.email = form.email
             temp.name = form.name
             temp.password = ''
@@ -272,6 +274,7 @@ const Register = (props) => {
             }
 
         } else {
+            temp.ref_id = ''
             temp.email = ''
             temp.name = ''
             temp.password = ''
@@ -332,10 +335,17 @@ const Register = (props) => {
                 <div className="card-header">Register</div>
                 <div className="card-body">
                     <form onSubmit={onSubmit} encType="multipart/form-data" method="post">
+                        
+                    <div className="mb-3">
+                            <label htmlFor="memberRefId" className="form-label">Kode Referensi: </label>
+                            <input id="memberRefId" className="form-control" value={formData.ref_id} placeholder="Kode Referensi"  onChange={(e) => inputChange("ref_id", e.target.value)} />
+                        </div>
+
                         <div className="mb-3">
                             <label htmlFor="memberEmail" className="form-label">Email: </label>
                             <input id="memberEmail" className="form-control" value={formData.email} placeholder="Email" type="email" required="required" onChange={(e) => inputChange("email", e.target.value)} />
                         </div>
+
                         <div className="mb-3">
                             <label htmlFor="memberName" className="form-label">Nama Anggota: </label>
                             <input id="memberName" className="form-control" value={formData.name} placeholder="Nama Anggota" required="required" onChange={(e) => inputChange("name", e.target.value)} />
