@@ -7,6 +7,9 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { el, te } from 'date-fns/locale';
 
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css"; // Import stylesheet
+
 const initFormData = {
     email: "",
     name: "",
@@ -17,9 +20,7 @@ const initFormData = {
     alamat: "",
     no_telp: "",
     ref_id: "",
-    //no_anggota: "",
     no_ktp: "",
-    //jabatan_id: "",
     status: "",
     bloodtype: "1",
     religion: "",
@@ -106,7 +107,7 @@ const Register = (props) => {
         { value: "2", label: "Perempuan" }
     ];
 
-  
+
     React.useEffect(() => {
 
         if (props.cities.length > 0 && formData.state_id) {
@@ -143,7 +144,7 @@ const Register = (props) => {
         data.append('status', formData.status)
         data.append('foto', formData.foto)
         data.append('foto_selfie_ktp', formData.foto_selfie_ktp)
-       
+
         data.append('city_id', formData.city_id)
         data.append('hometown_id', formData.hometown_id)
         data.append('birthplace_id', formData.birthplace_id)
@@ -211,7 +212,7 @@ const Register = (props) => {
             } else {
                 setHometowns([]);
             }
-        } 
+        }
         setFormData(temp)
     }
     const onEdit = (form) => () => {
@@ -225,13 +226,13 @@ const Register = (props) => {
             temp.foto_selfie_ktp = ''
             temp.alamat = form.alamat
             temp.no_telp = form.no_telp
-            //temp.no_anggota = form.no_anggota
+          
             temp.no_ktp = form.no_ktp
             temp.jabatan_id = form.jabatan_id
             temp.status = "0"
             temp.fotoUrl = form.foto ? '/member/' + form.foto : ''
             temp.fotoSelfieUrl = form.foto_selfie_ktp ? '/member/' + form.foto_selfie_ktp : ''
-            //temp.id = form.id
+         
             temp.birthday = form.birthday ? new Date(form.birthday) : ''
             temp.bloodtype = form.bloodtype ?? "1"
             temp.religion = form.religion ?? ""
@@ -280,13 +281,11 @@ const Register = (props) => {
             temp.password = ''
             temp.alamat = ''
             temp.no_telp = ''
-            //temp.no_anggota = ''
             temp.no_ktp = ''
             temp.jabatan_id = 2
             temp.status = "0"
             temp.fotoUrl = ''
             temp.fotoSelfieUrl = ''
-            //temp.id = ''
             temp.birthday = ''
             temp.bloodtype = "1"
             temp.religion = ""
@@ -335,10 +334,10 @@ const Register = (props) => {
                 <div className="card-header">Register</div>
                 <div className="card-body">
                     <form onSubmit={onSubmit} encType="multipart/form-data" method="post">
-                        
-                    <div className="mb-3">
+
+                        <div className="mb-3">
                             <label htmlFor="memberRefId" className="form-label">Kode Referensi: </label>
-                            <input id="memberRefId" className="form-control" value={formData.ref_id} placeholder="Kode Referensi"  onChange={(e) => inputChange("ref_id", e.target.value)} />
+                            <input id="memberRefId" className="form-control" value={formData.ref_id} placeholder="Kode Referensi" onChange={(e) => inputChange("ref_id", e.target.value)} />
                         </div>
 
                         <div className="mb-3">
@@ -351,22 +350,39 @@ const Register = (props) => {
                             <input id="memberName" className="form-control" value={formData.name} placeholder="Nama Anggota" required="required" onChange={(e) => inputChange("name", e.target.value)} />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="memberState" className="form-label">Provinsi: </label>
-                            <select id="memberState" required="required" disabled className="form-select" value={formData.state_id} onChange={(e) => inputChange("state_id", e.target.value)}>
-                                <option>Pilih Provinsi</option>
-                                {props.states.length > 0 && props.states.map((d, i) => (
-                                    <option key={i} value={d.id} >{d.name}</option>
-                                ))}
-                            </select>
+                            <Typeahead
+                                id="state-select"
+                                labelKey="name" // Display state name in dropdown
+                                options={props.states} // List of states from props
+                                placeholder="Pilih Provinsi..."
+                                selected={props.states.filter((state) => state.id === Number(formData.state_id))} // Pre-select current value
+                                inputProps={{ readOnly: true }}
+                                onChange={(selected) => {
+                                    if (selected.length > 0) {
+                                        inputChange("state_id", selected[0].id); // Update form state
+                                    } else {
+                                        inputChange("state_id", ""); // Allow clearing selection
+                                    }
+                                }}
+                            />
+
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberCity" className="form-label">Kota di Bali: </label>
-                            <select id="memberCity" required="required" className="form-select" value={formData.city_id} onChange={(e) => inputChange("city_id", e.target.value)}>
-                                <option>Pilih Kota</option>
-                                {cities.length > 0 && cities.map((d, i) => (
-                                    <option key={i} value={d.id} >{d.name}</option>
-                                ))}
-                            </select>
+                            <Typeahead
+                                id="city-select"
+                                labelKey="name" // Display city name in dropdown
+                                options={cities} // List of city from props
+                                placeholder="Pilih Kota..."
+                                selected={cities.filter((city) => city.id === formData.city_id)} // Pre-select current value
+                                onChange={(selected) => {
+                                    if (selected.length > 0) {
+                                        inputChange("city_id", selected[0].id); // Update form city
+                                    } else {
+                                        inputChange("city_id", ""); // Allow clearing selection
+                                    }
+                                }}
+                            />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberAlamat" className="form-label">Alamat di Bali: </label>
@@ -375,21 +391,39 @@ const Register = (props) => {
 
                         <div className="mb-3">
                             <label htmlFor="memberhomeState" className="form-label">Provinsi Domisili: </label>
-                            <select id="memberhomeState" required="required" className="form-select" value={formData.homestate_id} onChange={(e) => inputChange("homestate_id", e.target.value)}>
-                                <option>Pilih Provinsi</option>
-                                {props.states.length > 0 && props.states.map((d, i) => (
-                                    <option key={i} value={d.id} >{d.name}</option>
-                                ))}
-                            </select>
+      
+                            <Typeahead
+                                id="homestate-select"
+                                labelKey="name" // Display state name in dropdown
+                                options={props.states} // List of states from props
+                                placeholder="Pilih Provinsi..."
+                                selected={props.states.filter((homestate) => homestate.id ===  Number(formData.homestate_id))} // Pre-select current value
+                                onChange={(selected) => {
+                                    if (selected.length > 0) {
+                                        inputChange("homestate_id", selected[0].id); // Update form state
+                                    } else {
+                                        inputChange("homestate_id", ""); // Allow clearing selection
+                                    }
+                                }}
+                            />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberHometown" className="form-label">Kota Domisili: </label>
-                            <select id="memberHometown" required="required" className="form-select" value={formData.hometown_id} onChange={(e) => inputChange("hometown_id", e.target.value)}>
-                                <option>Pilih Kota</option>
-                                {hometowns.length > 0 && hometowns.map((d, i) => (
-                                    <option key={i} value={d.id} >{d.name}</option>
-                                ))}
-                            </select>
+                          
+                            <Typeahead
+                                id="hometown-select"
+                                labelKey="name" // Display city name in dropdown
+                                options={hometowns} // List of city from props
+                                placeholder="Pilih Kota..."
+                                selected={hometowns.filter((hometown) => hometown.id === formData.hometown_id)} // Pre-select current value
+                                onChange={(selected) => {
+                                    if (selected.length > 0) {
+                                        inputChange("hometown_id", selected[0].id); // Update form city
+                                    } else {
+                                        inputChange("hometown_id", ""); // Allow clearing selection
+                                    }
+                                }}
+                            />
                         </div>
 
                         <div className="mb-3">
@@ -462,21 +496,39 @@ const Register = (props) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberbirthState" className="form-label">Provinsi Lahir: </label>
-                            <select id="memberbirthState" required="required" className="form-select" value={formData.birthstate_id} onChange={(e) => inputChange("birthstate_id", e.target.value)}>
-                                <option>Pilih Provinsi Lahir</option>
-                                {props.states.length > 0 && props.states.map((d, i) => (
-                                    <option key={i} value={d.id} >{d.name}</option>
-                                ))}
-                            </select>
+                           
+                            <Typeahead
+                                id="birthstate-select"
+                                labelKey="name" // Display state name in dropdown
+                                options={props.states} // List of states from props
+                                placeholder="Pilih Provinsi..."
+                                selected={props.states.filter((birthstate) => birthstate.id ===Number( formData.birthstate_id))} // Pre-select current value
+                                onChange={(selected) => {
+                                    if (selected.length > 0) {
+                                        inputChange("birthstate_id", selected[0].id); // Update form state
+                                    } else {
+                                        inputChange("birthstate_id", ""); // Allow clearing selection
+                                    }
+                                }}
+                            />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberbirthPlace" className="form-label">Kota Lahir: </label>
-                            <select id="memberbirthPlace" required="required" className="form-select" value={formData.birthplace_id} onChange={(e) => inputChange("birthplace_id", e.target.value)}>
-                                <option>Pilih Kota Lahir</option>
-                                {birthplaces.length > 0 && birthplaces.map((d, i) => (
-                                    <option key={i} value={d.id} >{d.name}</option>
-                                ))}
-                            </select>
+                            
+                            <Typeahead
+                                id="birthplace-select"
+                                labelKey="name" // Display city name in dropdown
+                                options={birthplaces} // List of city from props
+                                placeholder="Pilih Kota..."
+                                selected={birthplaces.filter((birthplace) => birthplace.id === formData.birthplace_id)} // Pre-select current value
+                                onChange={(selected) => {
+                                    if (selected.length > 0) {
+                                        inputChange("birthplace_id", selected[0].id); // Update form city
+                                    } else {
+                                        inputChange("birthplace_id", ""); // Allow clearing selection
+                                    }
+                                }}
+                            />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="birthday" className="form-label">Tanggal Lahir: </label>

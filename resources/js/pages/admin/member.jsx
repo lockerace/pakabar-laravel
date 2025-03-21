@@ -501,18 +501,13 @@ const Member = (props) => {
 
                                 <div className="mb-3">
                                     <label htmlFor="memberhomeState" className="form-label">Provinsi Domisili: </label>
-                                    {/* <select id="memberhomeState" required="required" className="form-select" value={formData.homestate_id} onChange={(e) => inputChange("homestate_id", e.target.value)}>
-                                        <option>Pilih Provinsi</option>
-                                        {props.states.length > 0 && props.states.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select> */}
+                                   
                                     <Typeahead
                                         id="homestate-select"
                                         labelKey="name" // Display state name in dropdown
                                         options={props.states} // List of states from props
                                         placeholder="Pilih Provinsi..."
-                                        selected={props.states.filter((homestate) => homestate.id === formData.homestate_id)} // Pre-select current value
+                                        selected={props.states.filter((homestate) => homestate.id === Number(formData.homestate_id))} // Pre-select current value
                                         onChange={(selected) => {
                                             if (selected.length > 0) {
                                                 inputChange("homestate_id", selected[0].id); // Update form state
@@ -524,12 +519,7 @@ const Member = (props) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberHometown" className="form-label">Kota Domisili: </label>
-                                    {/* <select id="memberHometown" required="required" className="form-select" value={formData.hometown_id} onChange={(e) => inputChange("hometown_id", e.target.value)}>
-                                        <option>Pilih Kota</option>
-                                        {hometowns.length > 0 && hometowns.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select> */}
+                                    
                                     <Typeahead
                                         id="hometown-select"
                                         labelKey="name" // Display city name in dropdown
@@ -619,18 +609,13 @@ const Member = (props) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberbirthState" className="form-label">Provinsi Lahir: </label>
-                                    {/* <select id="memberbirthState" required="required" className="form-select" value={formData.birthstate_id} onChange={(e) => inputChange("birthstate_id", e.target.value)}>
-                                        <option>Pilih Provinsi Lahir</option>
-                                        {props.states.length > 0 && props.states.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select> */}
+                                   
                                     <Typeahead
                                         id="birthstate-select"
                                         labelKey="name" // Display state name in dropdown
                                         options={props.states} // List of states from props
                                         placeholder="Pilih Provinsi..."
-                                        selected={props.states.filter((birthstate) => birthstate.id === formData.birthstate_id)} // Pre-select current value
+                                        selected={props.states.filter((birthstate) => birthstate.id === Number(formData.birthstate_id))} // Pre-select current value
                                         onChange={(selected) => {
                                             if (selected.length > 0) {
                                                 inputChange("birthstate_id", selected[0].id); // Update form state
@@ -642,12 +627,7 @@ const Member = (props) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberbirthPlace" className="form-label">Kota Lahir: </label>
-                                    {/* <select id="memberbirthPlace" required="required" className="form-select" value={formData.birthplace_id} onChange={(e) => inputChange("birthplace_id", e.target.value)}>
-                                        <option>Pilih Kota Lahir</option>
-                                        {birthplaces.length > 0 && birthplaces.map((d, i) => (
-                                            <option key={i} value={d.id} >{d.name}</option>
-                                        ))}
-                                    </select> */}
+                                    
                                     <Typeahead
                                         id="birthplace-select"
                                         labelKey="name" // Display city name in dropdown
