@@ -63,6 +63,15 @@ const UserMenu = (props) => {
                             <hr className="dropdown-divider" />
                         </>
                       )}
+                      { props.user.jabatan_id == 2 && (
+                        <>
+                            <Link className="dropdown-item" to="/membership">Member</Link>
+                            <hr className="dropdown-divider" />
+                        </>
+                        )}
+
+
+
                       <Link className="dropdown-item d-flex flex-row align-items-center" to="/notification">
                           <span className="me-1">Notifikasi</span>
                           { props.user.unread_notifications && props.user.unread_notifications.length > 0 && (

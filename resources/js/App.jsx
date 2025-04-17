@@ -17,6 +17,7 @@ import Login from './pages/login'
 import Register from './pages/register'
 import Profile from './pages/profile'
 import Notification from './pages/notification'
+import Membership from './pages/membership'
 import Jabatan from './pages/admin/jabatan'
 import Member from './pages/admin/member'
 import Slider from './pages/admin/slider'
@@ -89,6 +90,11 @@ const router = createBrowserRouter([
         path: "notification",
         element: <Notification />
       },
+      {
+        path: "membership", 
+        element: <Membership />
+      },
+      
       {
         path: "admin",
         children: [

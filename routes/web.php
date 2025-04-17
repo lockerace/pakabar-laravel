@@ -84,4 +84,6 @@ Route::group(['prefix' => '', 'middleware' => ['auth:sanctum']], function() {
 
     Route::get('/notification', [NotificationController::class, 'getNotification'])->name('notification');
     Route::get('/notification/read/{id}', [NotificationController::class, 'readNotification'])->name('read-notification');
+
+    Route::get('/membership', [HomeController::class, 'getMembership'])->name('membership');
 });

@@ -72,4 +72,6 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::get('/notification', [NotificationController::class, 'getNotification']);
     Route::get('/notification/read/{id}', [NotificationController::class, 'readNotification']);
+
+    Route::get('/membership', [HomeController::class, 'getMembership']);
 });

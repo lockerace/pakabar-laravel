@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\NewsRepository;
 use App\Models\UserRepository;
 use App\Models\SliderRepository;
+
+use App\Models\JabatanRepository;
 use App\Models\News;
+
+use App\Models\Jabatan;
 
 class HomeController extends Controller
 {
@@ -15,11 +19,17 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    protected UserRepository $users;
+    protected NewsRepository $news;
+    protected SliderRepository $slider;
+    protected JabatanRepository $jabatan;
 
-    function __construct(NewsRepository $newsRepository, UserRepository $userRepository, SliderRepository $sliderRepository) {
+    function __construct(NewsRepository $newsRepository, UserRepository $userRepository, SliderRepository $sliderRepository, JabatanRepository $jabatanRepository)
+    {
         $this->news = $newsRepository;
-        $this->user = $userRepository;
+        $this->users = $userRepository;
         $this->slider = $sliderRepository;
+        $this->jabatan = new JabatanRepository();
     }
 
     public function index(Request $request)
@@ -31,21 +41,50 @@ class HomeController extends Controller
         if (!empty($request->token)) {
             $data['token'] = $request->token;
         }
-        if($request->wantsJson()){
+        if ($request->wantsJson()) {
             return response()->json($data);
         }
         return view('home', $data);
     }
 
-    public function aboutUs(Request $request){
+    public function aboutUs(Request $request)
+    {
         $data = [
             'founder' => $this->user->getFounder(),
         ];
 
-        if($request->wantsJson()){
+        if ($request->wantsJson()) {
             return response()->json($data);
         }
         return view('aboutus', $data);
     }
 
+    function getMembership(Request $request)
+    {
+        $myOption = $request->id;
+        $members = [];
+
+        if (!empty($myOption))
+            $members = $this->users->getByJabatan($myOption);
+        else
+            $members = $this->users->getAll();
+        $data = [
+            'members' => $members,
+            'jabatan' => $this->jabatan->getAll(),
+            'city' => $this->users->getCity(),
+            'state' => $this->users->getState(),
+            'hometown' => $this->users->getHometown(),
+            'birthplace' => $this->users->getBirthplace(),
+
+        ];
+
+        if ($request->wantsJson()) {
+            return response()->json($data);
+        }
+
+        if (!empty($request->token)) {
+            $data['token'] = $request->token;
+        }
+        return view('membership', $data);
+    }
 }
