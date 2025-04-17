@@ -340,6 +340,19 @@ class UserController extends Controller
         return view('profile', $data);
     }
 
+    function getProfileById($id, Request $request)
+    {
+        $data = [
+            'member' => $this->users->getById($id),
+            'jabatan' => $this->jabatan->getAll(),
+        ];
+        if ($request->wantsJson()) {
+            return response()->json($data);
+        }
+        return view('profile', $data);
+    }
+   
+
     function updateProfile(Request $request)
     {
         $member = $this->users->getById($request->user()->id);

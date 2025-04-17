@@ -2,32 +2,36 @@ import React from 'react';
 import Footer from '../components/footer';
 import request from '../axios'
 import { Link, Navigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const initFormData = {
-    email:"",
-    password:"",
-    conf_password:"",
+    email: "",
+    password: "",
+    conf_password: "",
 }
 
 export default (props) => {
+    const { id } = useParams(); // ambil id dari URL (jika ada)
     const [members, setMembers] = React.useState([]);
 
-    const fetch = async() => {
-      const res = await request.get('/profile')
-      if (res.status == 200 && res.data) {
-        if (res.data.member) setMembers(res.data.member)
-      }
+    const fetch = async () => {
+        //const res = await request.get('/profile')
+        const url = id ? `/profile/${id}` : `/profile`; // pilih endpoint tergantung URL
+        const res = await request.get(url);
+        if (res.status == 200 && res.data) {
+            if (res.data.member) setMembers(res.data.member)
+        }
     }
 
     React.useEffect(() => {
-      fetch()
-    }, [])
+        fetch()
+    }, [id])
 
     return (
-      <section className="full-height d-flex flex-column">
-          <Members data={members} fetch={fetch} />
-          <Footer />
-      </section>
+        <section className="full-height d-flex flex-column">
+            <Members data={members} fetch={fetch} id={id} />
+            <Footer />
+        </section>
     )
 }
 
@@ -36,30 +40,30 @@ const Members = (props) => {
     const [errorMessage, seterrorMessage] = React.useState("");
     const modalRef = React.useRef();
 
-    const onSubmit = async(event) =>{
+    const onSubmit = async (event) => {
         event.preventDefault()
 
         try {
             const res = await request.post('/profile', formData)
             if (res.status == 200 && res.data) {
-                if(modalRef.current)
+                if (modalRef.current)
                     modalRef.current.click()
                 props.fetch()
             }
         } catch (err) {
             seterrorMessage(err.response.data.message)
         }
-        
+
     }
-    const inputChange = (id, value) =>{
-        const temp = {...formData}
+    const inputChange = (id, value) => {
+        const temp = { ...formData }
         temp[id] = value
         setFormData(temp)
     }
 
-    React.useEffect(()=> {
-        if(props.data){
-            const temp = {...formData}
+    React.useEffect(() => {
+        if (props.data) {
+            const temp = { ...formData }
             temp.email = props.data.email
             setFormData(temp)
         }
@@ -69,12 +73,15 @@ const Members = (props) => {
     return (
         <div className="container py-5">
             <h1 className="display-4">Profil Anggota</h1>
-            <div className="d-flex flex-row justify-content-end" >
-                <Link className="btn btn-primary mb-3 d-flex flex-row" data-bs-toggle="modal" data-bs-target="#editMemberModal" >
-                    <i className="material-icons d-block">edit</i>
-                    <span>Edit</span>
-                </Link>
-            </div>
+
+            {!props.id && (
+                <div className="d-flex flex-row justify-content-end" >
+                    <Link className="btn btn-primary mb-3 d-flex flex-row" data-bs-toggle="modal" data-bs-target="#editMemberModal" >
+                        <i className="material-icons d-block">edit</i>
+                        <span>Edit</span>
+                    </Link>
+                </div>
+            )}
 
             <div className="row">
                 <div className="col col-md-4">
@@ -85,12 +92,12 @@ const Members = (props) => {
                                     <i className="material-icons d-block display-1">person</i>
                                 </div>
                             </div>
-                            )}
-                            {props.data.foto && (
-                                <img src={"/member/" + props.data.foto} className="card-img-top" alt="..."></img>
-                            )}
+                        )}
+                        {props.data.foto && (
+                            <img src={"/member/" + props.data.foto} className="card-img-top" alt="..."></img>
+                        )}
                         <div className="card-body">
-                            <h5 className="card-title text-center">{ props.data.name } - Foto KTP</h5>
+                            <h5 className="card-title text-center">{props.data.name} - Foto KTP</h5>
                         </div>
                     </div>
                 </div>
@@ -102,12 +109,12 @@ const Members = (props) => {
                                     <i className="material-icons d-block display-1">person</i>
                                 </div>
                             </div>
-                            )}
-                            {props.data.foto_selfie_ktp && (
-                                <img src={"/member/" + props.data.foto_selfie_ktp} className="card-img-top" alt="..."></img>
-                            )}
+                        )}
+                        {props.data.foto_selfie_ktp && (
+                            <img src={"/member/" + props.data.foto_selfie_ktp} className="card-img-top" alt="..."></img>
+                        )}
                         <div className="card-body">
-                            <h5 className="card-title text-center">{ props.data.name } - Foto Selfie KTP</h5>
+                            <h5 className="card-title text-center">{props.data.name} - Foto Selfie KTP</h5>
                         </div>
                     </div>
                 </div>
@@ -147,7 +154,7 @@ const Members = (props) => {
                     </div>
                 </div>
             </div>
-
+            {!props.id && (
             <form onSubmit={onSubmit} method="post">
                 <div id="editMemberModal" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
@@ -159,30 +166,32 @@ const Members = (props) => {
                             <div className="modal-body">
                                 <div className="mb-3">
                                     <label htmlFor="memberEmail" className="form-label">Email: </label>
-                                    <input id="memberEmail" className="form-control" value={formData.email} placeholder="Email" type="email" required="required" onChange={(e)=>inputChange("email", e.target.value)} />
+                                    <input id="memberEmail" className="form-control" value={formData.email} placeholder="Email" type="email" required="required" onChange={(e) => inputChange("email", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberPassword" className="form-label">Password: </label>
-                                    <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" required="required" onChange={(e)=>inputChange("password", e.target.value)} />
+                                    <input id="memberPassword" className="form-control" value={formData.password} placeholder="Password" type="password" required="required" onChange={(e) => inputChange("password", e.target.value)} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberConfPassword" className="form-label">Confirm Password: </label>
-                                    <input id="memberConfPassword" className="form-control" value={formData.conf_password} placeholder="Password" type="password" required="required" onChange={(e)=>inputChange("conf_password", e.target.value)} />
+                                    <input id="memberConfPassword" className="form-control" value={formData.conf_password} placeholder="Password" type="password" required="required" onChange={(e) => inputChange("conf_password", e.target.value)} />
                                 </div>
-                                <input id="memberId" name="id" type="hidden" value=""/>
-                                <div className={"alert alert-danger alert-dismissible fade" + (errorMessage?' show' : ' hide p-0 m-0')} role="alert">
+                                <input id="memberId" name="id" type="hidden" value="" />
+                                <div className={"alert alert-danger alert-dismissible fade" + (errorMessage ? ' show' : ' hide p-0 m-0')} role="alert">
                                     {errorMessage}
                                     <button type="button" className="btn-close" onClick={() => seterrorMessage("")} aria-label="Close"></button>
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button  className="btn btn-primary">Simpan</button>
+                                <button className="btn btn-primary">Simpan</button>
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
+)}
+
         </div>
     )
 }

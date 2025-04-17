@@ -68,6 +68,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'backendonly
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('/profile', [UserController::class, 'getProfile']);
+    Route::get('/profile/{id}', [UserController::class, 'getProfileById']);
     Route::post('/profile', [UserController::class, "updateProfile"]);
 
     Route::get('/notification', [NotificationController::class, 'getNotification']);

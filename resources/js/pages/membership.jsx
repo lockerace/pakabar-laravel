@@ -304,9 +304,9 @@ const Members = (props) => {
                             {/* <td>{d.status == 1 ? 'Diverifikasi' : (d.status == 2 ? 'Tidak Aktif' : 'Belum Verifikasi')}</td> */}
                             <td>
                                 <div className="d-flex flex-row gap-2">
-                                    <Link className="btn btn-link text-primary text-decoration-none d-flex flex-row" onClick={(onEdit(d))} data-bs-toggle="modal" data-bs-target="#editMemberModal">
-                                        <i className="material-icons d-block">edit</i>
-                                        <span>Edit</span>
+                                    <Link className="btn btn-link text-primary text-decoration-none d-flex flex-row" to={`/profile/${d.id}`}>
+                                        <i className="material-icons d-block">visibility</i>
+                                        <span>View Profile</span>
                                     </Link>
 {/*                                     <Link className="btn btn-link text-danger text-decoration-none d-flex flex-row" onClick={(onDelete(d.id))} data-bs-toggle="modal" data-bs-target="#deleteModal">
                                         <i className="material-icons d-block">delete</i>
