@@ -61,16 +61,12 @@ class HomeController extends Controller
 
     function getMembership(Request $request)
     {
-        $myOption = $request->id;
-        $members = [];
 
-        if (!empty($myOption))
-            $members = $this->users->getByJabatan($myOption);
-        else
-            $members = $this->users->getAll();
+        $members = $this->users->getByJabatan(2);
+
         $data = [
             'members' => $members,
-            'jabatan' => $this->jabatan->getAll(),
+
             'city' => $this->users->getCity(),
             'state' => $this->users->getState(),
             'hometown' => $this->users->getHometown(),
@@ -78,13 +74,7 @@ class HomeController extends Controller
 
         ];
 
-        if ($request->wantsJson()) {
-            return response()->json($data);
-        }
 
-        if (!empty($request->token)) {
-            $data['token'] = $request->token;
-        }
-        return view('membership', $data);
+        return response()->json($data);
     }
 }

@@ -42,7 +42,7 @@ const Sliders = (props) => {
         { props.data.map((d, i) => {
           return <div key={i} className={'carousel-item slider' + (i == 0 ? ' active' : '')}>
               <div className="slider-content">
-                <Link to={d.url}><img src={'/storage/' + d.foto} className="d-block w-100" alt="..." /></Link>
+                <Link to={d.url}><img src={'/storage/' + d.foto} className="d-block h-100 w-100" style={{objectFit:"contain"}} alt="..." /></Link>
               </div>
           </div>
         })}

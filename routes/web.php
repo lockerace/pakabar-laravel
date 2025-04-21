@@ -81,7 +81,7 @@ Route::get('/member/foto_selfie_ktp/{path}', [UserController::class, "getFotoSel
 Route::group(['prefix' => '', 'middleware' => ['auth:sanctum']], function() {
     Route::get('/changeprofile', [UserController::class, "getProfile"])->name('profile');
     Route::post('/changeprofile', [UserController::class, "updateProfile"])->name('profile-submit');
-    Route::get('/profile/{id}', [UserController::class, 'getProfileById']);
+   // Route::get('/profile/{id}', [UserController::class, 'getProfileById']);
 
 
     Route::get('/notification', [NotificationController::class, 'getNotification'])->name('notification');
