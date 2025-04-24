@@ -10,6 +10,9 @@ use App\Models\News;
 
 class NewsController extends Controller
 {
+    protected NewsRepository $news;
+    protected JabatanRepository $jabatan;
+    protected NotificationController $notification;
     function __construct(NewsRepository $newsRepository, JabatanRepository $jabatanRepository, NotificationController $notificationController) {
         $this->news = $newsRepository;
         $this->jabatan = $jabatanRepository;
@@ -32,8 +35,9 @@ class NewsController extends Controller
     }
 
     function getNews(Request $request) {
+        $perPage = $request->input('per_page', 10);    
         $data = [
-            'news' => $this->news->getAll(),
+            'news' => $this->news->paginate($perPage),
             'jabatan' => $this->jabatan->getAll(),
             'deleteUrl' => route('admin-news-delete'),
         ];

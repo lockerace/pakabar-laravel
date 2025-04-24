@@ -34,8 +34,10 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
+        $perPage = $request->input('per_page', 5);
         $data = [
-            'news' => $this->news->getAll(),
+            // 'news' => $this->news->getAll(),
+            'news'   => News::orderByDesc('created_at')->paginate($perPage), // ← here
             'slider' => $this->slider->getActive(),
         ];
         if (!empty($request->token)) {
@@ -50,7 +52,7 @@ class HomeController extends Controller
     public function aboutUs(Request $request)
     {
         $data = [
-            'founder' => $this->user->getFounder(),
+            'founder' => $this->users->getFounder(),
         ];
 
         if ($request->wantsJson()) {

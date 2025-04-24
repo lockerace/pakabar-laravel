@@ -28,7 +28,8 @@ const About = (props) => {
     return (
         <div className="flex-fill container pt-5">
             <h1 className="display-1">About Us</h1>
-            <div>Description goes here...</div>
+            <div>PERKUMPULAN ABADI KALIMANTAN BARAT BALI
+            Diresmikan 09 Februari 2014</div>
 
             <div className="row pt-5">
                 { props.data.length > 0 && props.data.map((d, i) => (
