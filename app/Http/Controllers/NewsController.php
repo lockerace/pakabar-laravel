@@ -37,7 +37,8 @@ class NewsController extends Controller
     function getNews(Request $request) {
         $perPage = $request->input('per_page', 10);    
         $data = [
-            'news' => $this->news->paginate($perPage),
+            'news' => $this->news->getAll(),
+            //'news' => $this->news->paginate($perPage),
             'jabatan' => $this->jabatan->getAll(),
             'deleteUrl' => route('admin-news-delete'),
         ];
@@ -47,6 +48,8 @@ class NewsController extends Controller
         }
         return view('admin.news', $data);
     }
+
+   
 
     function editNews(Request $request){
         // dd($request->all());

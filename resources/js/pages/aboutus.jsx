@@ -24,6 +24,37 @@ export default (props) => {
     )
 }
 
+// const About = (props) => {
+//     return (
+//         <div className="flex-fill container pt-5">
+//             <h1 className="display-1">About Us</h1>
+//             <div>PERKUMPULAN ABADI KALIMANTAN BARAT BALI
+//             Diresmikan 09 Februari 2014</div>
+
+//             <div className="row pt-5">
+//                 { props.data.length > 0 && props.data.map((d, i) => (
+//                     <div key={i} className="col col-md-4">
+//                         <div className="card">
+//                             {!d.foto && (
+//                                 <div className="w-100 ratio-1 position-relative">
+//                                     <div className="slider-content d-flex justify-content-center align-items-center">
+//                                         <i className="material-icons d-block display-1">person</i>
+//                                     </div>
+//                                 </div>
+//                             )}
+//                             {d.foto && (
+//                                 <img src={"/member/" + d.foto} className="card-img-top" alt="..."></img>
+//                             )}
+//                             <div className="card-body">
+//                                 <h5 className="card-title text-center">{ d.name }</h5>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 )) }
+//             </div>
+//         </div>
+//     )
+// }.
 const About = (props) => {
     return (
         <div className="flex-fill container pt-5">
@@ -32,26 +63,46 @@ const About = (props) => {
             Diresmikan 09 Februari 2014</div>
 
             <div className="row pt-5">
-                { props.data.length > 0 && props.data.map((d, i) => (
-                    <div key={i} className="col col-md-4">
-                        <div className="card">
-                            {!d.foto && (
-                                <div className="w-100 ratio-1 position-relative">
-                                    <div className="slider-content d-flex justify-content-center align-items-center">
-                                        <i className="material-icons d-block display-1">person</i>
-                                    </div>
-                                </div>
-                            )}
-                            {d.foto && (
-                                <img src={"/member/" + d.foto} className="card-img-top" alt="..."></img>
-                            )}
+                {props.data.length > 0 && props.data.map((d, i) => (
+                    <div key={i} className="col col-md-4 mb-4">
+                        <div className="card h-100">
+                            <div className="ratio ratio-1x1 d-flex justify-content-center align-items-center bg-light overflow-hidden position-relative group">
+                                {!d.foto ? (
+                                    <i className="material-icons display-1 text-muted">person</i>
+                                ) : (
+                                    <picture>
+                                        <img
+                                            src={`/member/${d.foto}`}
+                                            alt={d.name}
+                                            className="img-fluid rounded-3 transition-zoom"
+                                            style={{
+                                                maxHeight: '100%',
+                                                maxWidth: '100%',
+                                                objectFit: 'contain',
+                                            }}
+                                        />
+                                    </picture>
+                                )}
+                            </div>
                             <div className="card-body">
-                                <h5 className="card-title text-center">{ d.name }</h5>
+                                <h5 className="card-title text-center">{d.name}</h5>
                             </div>
                         </div>
                     </div>
-                )) }
+                ))}
             </div>
+
+            {/* Extra CSS for zoom effect */}
+            <style jsx>{`
+                .transition-zoom {
+                    transition: transform 0.5s ease;
+                }
+                .group:hover .transition-zoom {
+                    transform: scale(1.1);
+                }
+            `}</style>
         </div>
-    )
+    );
 }
+
+
