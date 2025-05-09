@@ -43,6 +43,8 @@ const initFormData = {
     emergency_name: "",
     emergency_phone: "",
     emergency_relation: "",
+    profile_pic: "",
+    profile_pic_url: "",
 
 }
 
@@ -159,6 +161,8 @@ const Member = (props) => {
         data.append('emergency_name', formData.emergency_name)
         data.append('emergency_phone', formData.emergency_phone)
         data.append('emergency_relation', formData.emergency_relation)
+
+        data.append('profile_pic', formData.profile_pic)
 
         try {
             const res = await request.post('/admin/member', data)
@@ -722,8 +726,12 @@ const Member = (props) => {
                                         <option value="1">Diverifikasi</option>
                                     </select>
                                 </div>
+                                
                                 <ImageInput id="foto" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
                                 <ImageInput id="foto_selfie_ktp" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
+                                <ImageInput id="profile_pic" name="profile_pic" label="Foto Profil" value={formData.profile_pic_url} placeholder="Pilih Foto Profil" onChange={(e) => inputChange('profile_pic', e)} />
+                               
+
                                 <input id="memberId" name="id" type="hidden" value={formData.id} />
                                 <div className={"alert alert-danger alert-dismissible fade" + (errorMessage ? ' show' : ' hide p-0 m-0')} role="alert">
                                     {errorMessage}

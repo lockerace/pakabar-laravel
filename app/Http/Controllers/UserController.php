@@ -66,6 +66,7 @@ class UserController extends Controller
                 [
                     'foto' => 'required' ,
                     'foto_selfie_ktp' => 'required' ,
+                    'profile_pic' => 'required',
 
                     'gender' => 'required',
                     'name' => 'required',
@@ -103,7 +104,9 @@ class UserController extends Controller
                     'no_ktp.required' => 'NIK wajib diisi!',
                     'no_ktp.digits' => 'NIK harus 16 digit!',
                     'no_ktp.unique' => 'NIK sudah terdaftar!',
-                    'no_anggota.unique' => 'Nomor Anggota tidak tersedia'
+                    'no_anggota.unique' => 'Nomor Anggota tidak tersedia',
+                    
+                    'profile_pic.required' => 'Foto Profil belum terisi'
                 ]
             );
 
@@ -149,6 +152,9 @@ class UserController extends Controller
             if ($request->hasFile('foto_selfie_ktp')) {
                 $member->foto_selfie_ktp = $request->file('foto_selfie_ktp')->store('foto_selfie_ktp');
             }
+            if ($request->hasFile('profile_pic')) {
+                $member->profile_pic = $request->file('profile_pic')->store('profile_pic');
+            }
 
             $member->save();
         } else {
@@ -172,7 +178,7 @@ class UserController extends Controller
                     'no_anggota' => 'unique:users,no_anggota,' . $member->id,
                     'foto' => ($request->hasFile('foto') || !$member->foto ? 'required' : 'nullable'),
                     'foto_selfie_ktp' => ($request->hasFile('foto_selfie_ktp') || !$member->foto_selfie_ktp ? 'required' : 'nullable'),
-                
+            'profile_pic' => ($request->hasFile('profile_pic') || !$member->profile_pic ? 'required' : 'nullable'),
                 ],
                 [
 
@@ -236,6 +242,9 @@ class UserController extends Controller
             }
             if ($request->hasFile('foto_selfie_ktp')) {
                 $member->foto_selfie_ktp = $request->file('foto_selfie_ktp')->store('foto_selfie_ktp');
+            }
+            if ($request->hasFile('profile_pic')) {
+                $member->profile_pic = $request->file('profile_pic')->store('profile_pic');
             }
 
             $member->save();
@@ -326,6 +335,11 @@ class UserController extends Controller
     function getFotoSelfie($path)
     {
         return Storage::download('foto_selfie_ktp/' . $path);
+    }
+
+    function getProfilePic($path)
+    {
+        return Storage::download('profile_pic/' . $path);
     }
 
     function getProfile(Request $request)
