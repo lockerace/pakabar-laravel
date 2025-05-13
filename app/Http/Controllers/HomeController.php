@@ -64,11 +64,13 @@ class HomeController extends Controller
     function getMembership(Request $request)
     {
 
-        $members = $this->users->getByJabatan(2);
+        $members = $this->users->getByJabatan4Member(2);
+
 
         $data = [
             'members' => $members,
 
+            
             'city' => $this->users->getCity(),
             'state' => $this->users->getState(),
             'hometown' => $this->users->getHometown(),

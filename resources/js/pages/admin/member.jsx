@@ -101,7 +101,7 @@ const Member = (props) => {
     const [states, setStates] = React.useState([]);
     const [hometowns, setHometowns] = React.useState([]);
     const [birthplaces, setBirthplaces] = React.useState([]);
-    
+
     const marriageOptions = [
         { value: "1", label: "Single" },
         { value: "2", label: "Menikah" },
@@ -113,7 +113,7 @@ const Member = (props) => {
         { value: "2", label: "Perempuan" }
     ];
 
-    
+
     const fetch = async () => {
         const res = await request.get('/admin/member?id=' + encodeURIComponent(id_jabatan))
         if (res.status == 200 && res.data) {
@@ -251,6 +251,7 @@ const Member = (props) => {
             temp.status = form.status
             temp.fotoUrl = form.foto ? '/member/' + form.foto : ''
             temp.fotoSelfieUrl = form.foto_selfie_ktp ? '/member/' + form.foto_selfie_ktp : ''
+            temp.profile_pic_url = form.profile_pic ? '/member/' + form.profile_pic : ''
             temp.id = form.id
             temp.birthday = form.birthday ? new Date(form.birthday) : ''
             temp.bloodtype = form.bloodtype ?? "1"
@@ -269,9 +270,9 @@ const Member = (props) => {
 
 
             temp.city_id = form.city_id
-           
+
             temp.state_id = form.city?.state_id ?? ''
-             
+
             if (temp.state_id) {
                 const res = props.cities.filter((city) => city.state_id == temp.state_id)
                 setCities(res)
@@ -308,6 +309,7 @@ const Member = (props) => {
             temp.status = "1"
             temp.fotoUrl = ''
             temp.fotoSelfieUrl = ''
+            temp.profile_pic_url = ''
             temp.id = ''
             temp.birthday = ''
             temp.bloodtype = "1"
@@ -429,8 +431,8 @@ const Member = (props) => {
                             </div>
                             <div className="modal-body">
                                 <div className="mb-3">
-                                <label htmlFor="refmember-select" className="form-label">Refensi Member: </label>
-                                <Typeahead
+                                    <label htmlFor="refmember-select" className="form-label">Refensi Member: </label>
+                                    <Typeahead
                                         id="refmember-select"
                                         labelKey={(option) => `${option.no_anggota} - ${option.name}`} // Show both No Anggota & Name
                                         options={props.data || []} // Ensure it's always an array
@@ -505,7 +507,7 @@ const Member = (props) => {
 
                                 <div className="mb-3">
                                     <label htmlFor="memberhomeState" className="form-label">Provinsi Domisili: </label>
-                                   
+
                                     <Typeahead
                                         id="homestate-select"
                                         labelKey="name" // Display state name in dropdown
@@ -523,7 +525,7 @@ const Member = (props) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberHometown" className="form-label">Kota Domisili: </label>
-                                    
+
                                     <Typeahead
                                         id="hometown-select"
                                         labelKey="name" // Display city name in dropdown
@@ -613,7 +615,7 @@ const Member = (props) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberbirthState" className="form-label">Provinsi Lahir: </label>
-                                   
+
                                     <Typeahead
                                         id="birthstate-select"
                                         labelKey="name" // Display state name in dropdown
@@ -631,7 +633,7 @@ const Member = (props) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="memberbirthPlace" className="form-label">Kota Lahir: </label>
-                                    
+
                                     <Typeahead
                                         id="birthplace-select"
                                         labelKey="name" // Display city name in dropdown
@@ -726,11 +728,11 @@ const Member = (props) => {
                                         <option value="1">Diverifikasi</option>
                                     </select>
                                 </div>
-                                
+
                                 <ImageInput id="foto" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
                                 <ImageInput id="foto_selfie_ktp" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
                                 <ImageInput id="profile_pic" name="profile_pic" label="Foto Profil" value={formData.profile_pic_url} placeholder="Pilih Foto Profil" onChange={(e) => inputChange('profile_pic', e)} />
-                               
+
 
                                 <input id="memberId" name="id" type="hidden" value={formData.id} />
                                 <div className={"alert alert-danger alert-dismissible fade" + (errorMessage ? ' show' : ' hide p-0 m-0')} role="alert">

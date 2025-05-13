@@ -72,7 +72,7 @@ const About = (props) => {
                                 ) : (
                                     <picture>
                                         <img
-                                            src={`/member/${d.foto}`}
+                                            src={`/member/${d.profile_pic}`}
                                             alt={d.name}
                                             className="img-fluid rounded-3 transition-zoom"
                                             style={{

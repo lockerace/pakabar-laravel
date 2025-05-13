@@ -17,6 +17,8 @@ const initFormData = {
     fotoUrl: "",
     foto_selfie_ktp: "",
     fotoSelfieUrl: "",
+    profile_pic: "",
+    profile_pic_url: "",
     alamat: "",
     no_telp: "",
     ref_id: "",
@@ -144,6 +146,7 @@ const Register = (props) => {
         data.append('status', formData.status)
         data.append('foto', formData.foto)
         data.append('foto_selfie_ktp', formData.foto_selfie_ktp)
+        data.append('profile_pic', formData.profile_pic)
 
         data.append('city_id', formData.city_id)
         data.append('hometown_id', formData.hometown_id)
@@ -224,15 +227,17 @@ const Register = (props) => {
             temp.password = ''
             temp.foto = ''
             temp.foto_selfie_ktp = ''
+            temp.profile_pic = ''
             temp.alamat = form.alamat
             temp.no_telp = form.no_telp
-          
+
             temp.no_ktp = form.no_ktp
             temp.jabatan_id = form.jabatan_id
             temp.status = "0"
             temp.fotoUrl = form.foto ? '/member/' + form.foto : ''
             temp.fotoSelfieUrl = form.foto_selfie_ktp ? '/member/' + form.foto_selfie_ktp : ''
-         
+            temp.profile_pic_url = form.profile_pic ? '/member/' + form.profile_pic : ''
+
             temp.birthday = form.birthday ? new Date(form.birthday) : ''
             temp.bloodtype = form.bloodtype ?? "1"
             temp.religion = form.religion ?? ""
@@ -286,6 +291,7 @@ const Register = (props) => {
             temp.status = "0"
             temp.fotoUrl = ''
             temp.fotoSelfieUrl = ''
+            temp.profile_pic_url = ''
             temp.birthday = ''
             temp.bloodtype = "1"
             temp.religion = ""
@@ -391,13 +397,13 @@ const Register = (props) => {
 
                         <div className="mb-3">
                             <label htmlFor="memberhomeState" className="form-label">Provinsi Domisili: </label>
-      
+
                             <Typeahead
                                 id="homestate-select"
                                 labelKey="name" // Display state name in dropdown
                                 options={props.states} // List of states from props
                                 placeholder="Pilih Provinsi..."
-                                selected={props.states.filter((homestate) => homestate.id ===  Number(formData.homestate_id))} // Pre-select current value
+                                selected={props.states.filter((homestate) => homestate.id === Number(formData.homestate_id))} // Pre-select current value
                                 onChange={(selected) => {
                                     if (selected.length > 0) {
                                         inputChange("homestate_id", selected[0].id); // Update form state
@@ -409,7 +415,7 @@ const Register = (props) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberHometown" className="form-label">Kota Domisili: </label>
-                          
+
                             <Typeahead
                                 id="hometown-select"
                                 labelKey="name" // Display city name in dropdown
@@ -496,13 +502,13 @@ const Register = (props) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberbirthState" className="form-label">Provinsi Lahir: </label>
-                           
+
                             <Typeahead
                                 id="birthstate-select"
                                 labelKey="name" // Display state name in dropdown
                                 options={props.states} // List of states from props
                                 placeholder="Pilih Provinsi..."
-                                selected={props.states.filter((birthstate) => birthstate.id ===Number( formData.birthstate_id))} // Pre-select current value
+                                selected={props.states.filter((birthstate) => birthstate.id === Number(formData.birthstate_id))} // Pre-select current value
                                 onChange={(selected) => {
                                     if (selected.length > 0) {
                                         inputChange("birthstate_id", selected[0].id); // Update form state
@@ -514,7 +520,7 @@ const Register = (props) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="memberbirthPlace" className="form-label">Kota Lahir: </label>
-                            
+
                             <Typeahead
                                 id="birthplace-select"
                                 labelKey="name" // Display city name in dropdown
@@ -592,8 +598,8 @@ const Register = (props) => {
 
                         <ImageInput id="foto" name="foto" label="Foto KTP" value={formData.fotoUrl} placeholder="Pilih Foto KTP" onChange={(e) => inputChange('foto', e)} />
                         <ImageInput id="foto_selfie_ktp" name="foto_selfie_ktp" label="Foto Selfie KTP" value={formData.fotoSelfieUrl} placeholder="Pilih Foto Selfie KTP" onChange={(e) => inputChange('foto_selfie_ktp', e)} />
-                          <ImageInput id="profile_pic" name="profile_pic" label="Foto Profil" value={formData.profile_pic_url} placeholder="Pilih Foto Profil" onChange={(e) => inputChange('profile_pic', e)} />
-                                                       
+                        <ImageInput id="profile_pic" name="profile_pic" label="Foto Profil" value={formData.profile_pic_url} placeholder="Pilih Foto Profil" onChange={(e) => inputChange('profile_pic', e)} />
+
                         <input id="memberId" name="id" type="hidden" value={formData.id} />
                         <div className={"alert alert-danger alert-dismissible fade" + (errorMessage ? ' show' : ' hide p-0 m-0')} role="alert">
                             {errorMessage}

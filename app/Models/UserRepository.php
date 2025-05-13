@@ -6,7 +6,7 @@ class UserRepository
 {
     function getAll()
     {
-        return User::orderBy('created_at', 'desc')->with(['jabatan', 'city','hometown','birthplace'])->get();
+        return User::orderBy('created_at', 'desc')->with(['jabatan', 'city', 'hometown', 'birthplace'])->get();
     }
     function getById($id)
     {
@@ -19,6 +19,11 @@ class UserRepository
     function getByJabatan($id)
     {
         return User::where('jabatan_id', $id)->orderBy('created_at', 'desc')->with(['jabatan', 'city'])->get();
+    }
+    function getByJabatan4Member($id)
+    {
+        return User::select('id', 'name','no_anggota', 'jabatan_id', 'city_id','hometown_id','birthplace_id','job','profile_pic' ,'created_at')
+        ->where('jabatan_id', $id)->orderBy('created_at', 'desc')->with(['jabatan', 'city'])->get();
     }
     function getFounder()
     {
@@ -43,11 +48,11 @@ class UserRepository
 
     function getHometown()
     {
-        return City::all(); 
+        return City::all();
     }
     function getBirthplace()
     {
-        return City::all(); 
+        return City::all();
     }
     // function getHomestate()
     // {
