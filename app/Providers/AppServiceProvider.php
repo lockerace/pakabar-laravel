@@ -26,5 +26,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Paginator::useBootstrapFive();
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        \Midtrans\Config::$isProduction = false; // true saat live
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
     }
 }

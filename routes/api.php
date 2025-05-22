@@ -9,6 +9,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\DonasiController;
+
+
 use App\Models\User;
 
 /*
@@ -34,6 +37,9 @@ Route::post('/login', [LoginController::class, "submitLogin"]);
 
 Route::get('/register', [LoginController::class, "getRegister"]);
 Route::post('/register', [LoginController::class, "submitRegister"]);
+
+Route::post('/donasi', [DonasiController::class, "store"]);
+Route::post('/midtrans/callback', [DonasiController::class, 'callback']);
 
 Route::get('/validate-ref/{ref_id}', function ($ref_id) {
     $exists = User::where('no_anggota', $ref_id)->exists();

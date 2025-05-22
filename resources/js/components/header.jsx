@@ -48,7 +48,7 @@ const UserMenu = (props) => {
       return (
           <ul className="navbar-nav ms-auto">
               <li className="nav-item dropdown">
-                  <a id="navbarDropdown" className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                  <a id="navbarDropdown" className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                       {props.user.name}
                   </a>
 
@@ -66,6 +66,7 @@ const UserMenu = (props) => {
                       { props.user.jabatan_id == 2 && (
                         <>
                             <Link className="dropdown-item" to="/membership">Member</Link>
+                            <Link className="dropdown-item" to="/donasi">Donasi</Link>
                             <hr className="dropdown-divider" />
                         </>
                         )}

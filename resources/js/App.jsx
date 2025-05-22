@@ -18,6 +18,7 @@ import Register from './pages/register'
 import Profile from './pages/profile'
 import Notification from './pages/notification'
 import Membership from './pages/membership'
+import Donasi from './pages/donasiform'
 import Jabatan from './pages/admin/jabatan'
 import Member from './pages/admin/member'
 import Slider from './pages/admin/slider'
@@ -30,27 +31,27 @@ const App = () => {
   const error = useRouteError();
   const [auth, setAuth] = React.useState()
 
-  const fetchAuth = async() => {
-      try {
-          const res = await request.get('/user')
-          if(res.status == 200 && res.data) {
-              if(res.data) setAuth(res.data)
-          }
-      } catch (err) {
-          if (err.response && err.response.status == 401) {
-            setAuth(null)
-          }
+  const fetchAuth = async () => {
+    try {
+      const res = await request.get('/user')
+      if (res.status == 200 && res.data) {
+        if (res.data) setAuth(res.data)
       }
+    } catch (err) {
+      if (err.response && err.response.status == 401) {
+        setAuth(null)
+      }
+    }
   }
 
   React.useEffect(() => {
-      fetchAuth()
+    fetchAuth()
   }, [])
 
   return (
     <div>
       <Header fetch={fetchAuth} auth={auth} />
-      { !error && <Outlet context={{auth, fetchAuth}} /> }
+      {!error && <Outlet context={{ auth, fetchAuth }} />}
       <Error error={error} />
     </div>
   )
@@ -90,16 +91,20 @@ const router = createBrowserRouter([
         path: "profile/:id",
         element: <Profile />
       },
-      
+
       {
         path: "notification",
         element: <Notification />
       },
       {
-        path: "membership", 
+        path: "membership",
         element: <Membership />
       },
-      
+      {
+        path: "donasi",
+        element: <Donasi />
+      },
+
       {
         path: "admin",
         children: [
@@ -107,9 +112,9 @@ const router = createBrowserRouter([
             path: "jabatan",
             element: <Jabatan />,
           },
-            {
-              path: "member",
-              element: <Member />,
+          {
+            path: "member",
+            element: <Member />,
           },
           {
             path: "slider",
@@ -128,17 +133,17 @@ const router = createBrowserRouter([
     ]
   },
 ], {
-	basename: "/react"
+  basename: "/react"
 });
 
-if(document.getElementById('root')){
-	createRoot(document.getElementById("root")).render(
+if (document.getElementById('root')) {
+  createRoot(document.getElementById("root")).render(
     <RouterProvider
       router={router}
       fallbackElement={
         <div class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
-      }/>
-	);
+      } />
+  );
 }
