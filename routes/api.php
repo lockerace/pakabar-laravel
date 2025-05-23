@@ -40,6 +40,8 @@ Route::post('/register', [LoginController::class, "submitRegister"]);
 
 Route::post('/donasi', [DonasiController::class, "store"]);
 Route::post('/midtrans/callback', [DonasiController::class, 'callback']);
+Route::post('/donasi/check-status', [DonasiController::class, 'checkStatus']);
+
 
 Route::get('/validate-ref/{ref_id}', function ($ref_id) {
     $exists = User::where('no_anggota', $ref_id)->exists();
